@@ -10,7 +10,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "import:cases": "node scripts/import-cases.mjs",
     "lint:css": "stylelint \"src/**/*.{css,astro}\" --allow-empty-input",
     "lint:html": "html-validate -c .htmlvalidate.json \"dist/**/*.html\"",
     "check": "npm run lint:css && astro build && npm run lint:html",

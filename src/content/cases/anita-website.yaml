@@ -1,5 +1,3 @@
-# Generiert aus dem Prototyp (scripts/import-cases.mjs). Bis zum Umstieg hier nichts von Hand ändern,
-# der nächste Import überschreibt die Datei.
 head:
   kind: visual
   label: Anita

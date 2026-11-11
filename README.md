@@ -8,7 +8,6 @@ Portfolio von Sören Hädelt, gebaut mit Astro, gehostet auf GitHub Pages.
 | --- | --- |
 | `npm run dev` | Entwicklungsserver auf localhost:4321 |
 | `npm run check` | Lint CSS, Build mit Schema-Prüfung, Lint HTML. Läuft auch vor jedem Commit und beim Deployment. |
-| `npm run import:cases -- <prototyp.html>` | Überträgt die Cases aus dem Prototyp. Nur bis zum Umstieg. |
 
 ## Wo was liegt
 
@@ -18,7 +17,6 @@ Portfolio von Sören Hädelt, gebaut mit Astro, gehostet auf GitHub Pages.
 - `src/components/` – Case und Belege, gebaut aus der Collection.
 - `src/lib/url.ts` – alle internen Adressen laufen über `base`.
 - `src/data/projects.ts` – Projektliste.
-
 - `src/content/cases/` – ein Case pro YAML-Datei, Bilder in `media/` daneben.
 - `src/content.config.ts` – das Schema: welche Felder ein Case hat und welche Pflicht sind.
 - `public/media/` – Videos (werden nicht verarbeitet, nur ausgeliefert).
@@ -26,5 +24,4 @@ Portfolio von Sören Hädelt, gebaut mit Astro, gehostet auf GitHub Pages.
 
 ## Stand
 
-Bis zum Umstieg ist der Prototyp die Quelle für Startseite und Cases. Die YAML-Dateien sind generiert
-und werden beim nächsten Import überschrieben.
+Seit 11.11.2026 ist dieses Repo die Quelle für Seiten und Cases. Der Prototyp (second-brain, `website-redesign-2026.html`, Stand `486dc63`) ist eingefroren und nur noch Referenz.
