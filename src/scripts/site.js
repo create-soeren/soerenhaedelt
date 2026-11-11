@@ -1,11 +1,7 @@
 const q = new URLSearchParams(location.search);
 const PAGE = document.documentElement.dataset.p; // set per page in the layout
-// Icons: the signifier is a (pulse); b and c only on purpose via ?i=.
-const IV = ["a", "b", "c"].includes(q.get("i")) ? q.get("i") : "a";
-// Coffee or tea at the contact, see Cup; ?drink=tea starts with tea.
-// Nothing is chosen at first (?drink=coffee or tea starts with one): the visitor's pick turns the pointer.
-let DRINK = ["coffee", "tea"].includes(q.get("drink")) ? q.get("drink") : null;
-const DRINK0 = DRINK;
+// Coffee or tea at the contact, see Cup. Nothing is chosen at first: the visitor's pick turns the pointer.
+let DRINK = null;
 
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -875,26 +871,13 @@ function updateCalm(dt) {
 //     once; it stays played, the brackets go, and a counter under the row keeps score.
 // On touch the icons fall back to the scroll clock of ink.html. Set off once, every icon keeps its end state.
 
-const ICON_DUR = 1400, ICON_GAP = 700, ROW_TOTAL = ICON_DUR + 2 * ICON_GAP, NEAR = 240;
+const ICON_DUR = 1400, ICON_GAP = 700, ROW_TOTAL = ICON_DUR + 2 * ICON_GAP;
 const rows = [...document.querySelectorAll(".wins")];
 
 function buildIndicator(card, svg) {
   const g = svgEl("g", {}, svg);
-  if (IV === "a") {
-    card._ring = svgEl("circle", { cx: 46, cy: 2, r: 3, fill: "none", stroke: "var(--color-primary)", "stroke-width": 1 }, g);
-    card._dot = svgEl("circle", { cx: 46, cy: 2, r: 3, fill: "var(--color-primary)", stroke: "none" }, g);
-  } else if (IV === "b") {
-    svgEl("circle", { cx: 24, cy: 24, r: 34, fill: "none", stroke: "var(--color-rule)", "stroke-width": 1 }, g);
-    card._arc = svgEl("circle", { cx: 24, cy: 24, r: 34, fill: "none", stroke: "var(--color-primary)", "stroke-width": 1.5, pathLength: 1,
-      "stroke-dasharray": "0 1", transform: "rotate(-90 24 24)", "stroke-linecap": "round" }, g);
-  } else {
-    // Four corners, Figma's frame handles reduced to brackets.
-    card._br = svgEl("g", { stroke: "var(--color-bracket)", "stroke-width": 1.2 }, g);
-    for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-      const x = 24 + sx * 32, y = 24 + sy * 32;
-      svgEl("path", { d: `M ${x} ${y - sy * 9} V ${y} H ${x - sx * 9}`, fill: "none" }, card._br);
-    }
-  }
+  card._ring = svgEl("circle", { cx: 46, cy: 2, r: 3, fill: "none", stroke: "var(--color-primary)", "stroke-width": 1 }, g);
+  card._dot = svgEl("circle", { cx: 46, cy: 2, r: 3, fill: "var(--color-primary)", stroke: "none" }, g);
 }
 
 function buildIcons() {
@@ -909,19 +892,10 @@ function buildIcons() {
     card.classList.remove("won");
     card._upd(0);
   }
-  document.querySelectorAll(".found").forEach((el) => el.remove());
-  if (IV === "c" && !touch) rows.forEach((row) => { row._found = h("div", "found"); row.after(row._found); });
 }
 
 function iconProgress(card, dt) {
   const r = card.getBoundingClientRect(), hit = pointerIn(r);
-  if (IV === "b") {
-    const d = Math.hypot(P.x - clamp(P.x, r.left, r.right), P.y - clamp(P.y, r.top, r.bottom));
-    const target = card._p === 1 ? 1 : P.inside ? clamp(1 - d / NEAR) : 0;
-    card._p = reduced ? target : lerp(card._p, target, ease(dt, 0.86));
-    if (Math.abs(card._p - target) < 0.002) card._p = target;
-    return card._p;
-  }
   if (hit) card._go = true;
   if (card._go) card._c = reduced ? ICON_DUR : Math.min(ICON_DUR, card._c + dt);
   card._done = card._c === ICON_DUR;
@@ -929,22 +903,11 @@ function iconProgress(card, dt) {
 }
 
 function updateIndicator(card, p, t) {
-  if (IV === "a") {
-    // The dot breathes while the icon is unplayed and fades as soon as it plays.
-    const op = 1 - seg(p, 0, 0.15), beat = (t % 1800) / 1800;
-    card._dot.setAttribute("opacity", op.toFixed(3));
-    card._ring.setAttribute("r", (3 + 7 * easeOut(beat)).toFixed(2));
-    card._ring.setAttribute("opacity", ((1 - beat) * 0.6 * op).toFixed(3));
-  } else if (IV === "b") {
-    card._arc.setAttribute("stroke-dasharray", `${p.toFixed(3)} 1`);
-  } else {
-    // Idle the brackets breathe; once set off they close in on the icon in orange, then go.
-    const go = card._go ? easeOut(clamp(card._c / 400)) : 0, idle = 1 + 0.035 * Math.sin(t / 520);
-    const s = lerp(idle, 0.8, go);
-    card._br.setAttribute("transform", `translate(24 24) scale(${s.toFixed(3)}) translate(-24 -24)`);
-    card._br.setAttribute("stroke", card._go ? "var(--color-primary)" : "var(--color-bracket)");
-    card._br.setAttribute("opacity", (1 - seg(card._c / ICON_DUR, 0.7, 1)).toFixed(3));
-  }
+  // The dot breathes while the icon is unplayed and fades as soon as it plays.
+  const op = 1 - seg(p, 0, 0.15), beat = (t % 1800) / 1800;
+  card._dot.setAttribute("opacity", op.toFixed(3));
+  card._ring.setAttribute("r", (3 + 7 * easeOut(beat)).toFixed(2));
+  card._ring.setAttribute("opacity", ((1 - beat) * 0.6 * op).toFixed(3));
 }
 
 function updateIcons(dt, t) {
@@ -963,10 +926,6 @@ function updateIcons(dt, t) {
       card.classList.toggle("won", p === 1);
       if (!touch) updateIndicator(card, p, t);
     });
-    if (row._found) {
-      const n = cs.filter((c) => c._done).length;
-      row._found.innerHTML = n === cs.length ? `<b>${n} / ${cs.length}</b> discovered` : `${n} / ${cs.length} discovered`;
-    }
   }
 }
 
@@ -1192,9 +1151,8 @@ function start() {
   document.querySelectorAll(".num").forEach((n) => (n.textContent = n.dataset.to));
   rows.forEach((r) => Object.assign(r, { _r: 0, _go: false }));
   phrases.forEach((ph) => { ph.c = 0; ph.hold = 0; });
-  DRINK = DRINK0; syncDrink();
+  DRINK = null; syncDrink();
   Cup.build();
-  if (q.has("cur")) drawCursor();
 }
 // A theme change (dark mode, 10.11.): the colours JS holds as values are read again from the variables, and what was
 // drawn with them is drawn again. The icons start unplayed, like after a restart.
@@ -1247,8 +1205,7 @@ if (PAGE === "home") Obj.init();
 // ?present: for captures, shared links and user tests; the key r does nothing then.
 if (q.has("present")) document.documentElement.classList.add("present");
 
-// Key r restarts, not under ?present: nobody in a test should set it off. The signifier is the pulse (?i= still picks b or c for a comparison, no key does: a letter typed
-// into a dev control used to switch it).
+// Key r restarts, not under ?present: nobody in a test should set it off.
 addEventListener("keydown", (e) => {
   // Typing in a dev control must not set off the shortcut.
   if (e.target.closest?.("input, select, button") || document.documentElement.classList.contains("present")) return;
@@ -1272,12 +1229,6 @@ if (PAGE === "home") {
     quoteIdx = (quoteIdx + 1) % quotes.length;
     quotes[quoteIdx].classList.add("is-on");
   });
-}
-
-// ?cur draws a stand-in arrow, because headless screenshots do not show the system cursor.
-let cursorMark = null;
-function drawCursor() {
-  cursorMark = svgEl("path", { d: "M0 0 L0 17 L4.5 12.5 L7.5 19 L10 18 L7 11.5 L13 11.5 Z", fill: "#000", stroke: "#fff", "stroke-width": 1 }, fx);
 }
 
 // On a case page every part of the case (head, chapter, showcase, quote) counts as a section of its own.
@@ -1307,8 +1258,6 @@ function frame(t) {
   if (PAGE === "home") updateIcons(dt, t);
   Cup.update(dt, t);
 
-  // Hide the stand-in arrow where the cup replaces the cursor.
-  if (cursorMark) { fx.appendChild(cursorMark); cursorMark.setAttribute("transform", `translate(${P.x} ${P.y})`); cursorMark.setAttribute("opacity", 1 - Cup.op); }
   requestAnimationFrame(frame);
 }
 
@@ -1360,7 +1309,6 @@ document.querySelectorAll('.project[href="#"], .cpage .btn[href="#"]').forEach((
 document.fonts.ready.then(() => {
   start();
   document.querySelectorAll(".was").forEach((el) => strokeWatch.observe(el));
-  if (q.has("y")) scrollTo({ top: +q.get("y"), behavior: "instant" });
   requestAnimationFrame(frame);
   document.documentElement.dataset.ready = "1";
   requestAnimationFrame(() => requestAnimationFrame(() => { document.documentElement.dataset.live = "1"; }));

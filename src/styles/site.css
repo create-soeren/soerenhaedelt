@@ -509,5 +509,3 @@
   /* Touch: opened by a tap on the pin, to its left; the sharp corner and the growth sit on the pin's side. */
   .chat.left { border-radius: 12px 2px 12px 12px; transform-origin: 100% 0; }
 
-  .found { margin-top: 6px; text-align: center; font: 11px var(--mono); letter-spacing: .04em; color: var(--color-muted); }
-  .found b { color: var(--color-ink); font-weight: 600; }
