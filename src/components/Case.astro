@@ -1,0 +1,58 @@
+---
+// Ein Case aus der Collection. Markup und Klassen wie im Prototyp (renderCase und BLOCKS), vom Server gebaut.
+import Evidence from "./Evidence.astro";
+import { asset } from "../lib/url";
+
+const { head, blocks } = Astro.props.data;
+const of = blocks.filter((b) => b.type === "chapter").length;
+const visual = head.kind === "visual";
+let no = 0;
+const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "0");
+---
+<section class="case" id="case" data-page="case">
+  <header class={visual ? "vhero" : undefined}>
+    <p class="no"><span>Case study</span><span>{head.label}</span></p>
+    {visual ? (
+      <Fragment>
+        <h1 class="stmt vtitle">{head.title}</h1>
+        <figure>
+          {head.media.video
+            ? <video src={asset(`media/${head.media.video}`)} poster={head.media.poster.src} aria-label={head.media.alt} controls muted loop playsinline preload="metadata"></video>
+            : <img src={head.media.poster.src} alt={head.media.alt}>}
+          {head.caption && <figcaption>{head.caption}</figcaption>}
+        </figure>
+      </Fragment>
+    ) : (
+      <Fragment>
+        <p class="ctitle">{head.title}</p>
+        <h1 class="stmt"><span class="was"><span class="sr-only">Before, struck: </span><span class="pen">{head.from}</span></span><span>{head.to}</span></h1>
+      </Fragment>
+    )}
+    {head.impact && <Evidence e={{ kind: "stat", value: head.impact.value, label: head.impact.label }} />}
+    <dl class="meta">{head.meta.map(({ label, value }) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+  </header>
+  {blocks.map((b) => (
+    <Fragment>
+      {b.type === "chapter" && (
+        <article class="block decision"><div class="dhead">
+          <p class="no"><span>{num(++no)}</span></p>
+          {b.struck && <p class="was"><span class="sr-only">{b.struck.label}, struck: </span><span class="pen">{b.struck.text}</span></p>}
+          <h2>{b.decision}</h2></div>
+          <div class="dbody"><div class="why">{b.why.map((p) => <p>{p}</p>)}</div>
+          {b.evidence && <div class="evidence">{b.evidence.map((e) => <Evidence e={e} />)}</div>}</div></article>
+      )}
+      {b.type === "showcase" && (
+        <div class:list={["block showcase", `is-${b.width}`, { "is-portrait": b.portrait, "is-row": b.items.length > 2 }]} style={`--n: ${b.items.length}`}>
+          <div class="items">{b.items.map((e) => <Evidence e={e} />)}</div></div>
+      )}
+      {b.type === "learnings" && (
+        <article class="block decision learnings"><div class="dhead"><h2>Key learnings</h2></div>
+          <ol>{b.items.map(({ title, text }) => <li><h3>{title}</h3><p>{text}</p></li>)}</ol></article>
+      )}
+      {b.type === "quote" && (
+        <figure class="block cquote"><img class="photo" src={b.photo.src} alt={b.who.split(",")[0]} style={`object-position: ${b.position}`}>
+          <div><blockquote>“{b.text}”</blockquote><footer class="who">{b.who}</footer></div></figure>
+      )}
+    </Fragment>
+  ))}
+</section>

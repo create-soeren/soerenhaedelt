@@ -1,15 +1,67 @@
 ---
-// Platzhalter, bis die Startseite aus dem Prototyp portiert ist.
+import Base from "../layouts/Base.astro";
+import { asset, url } from "../lib/url";
 ---
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bis zum Umzug auf soerenhaedelt.com nicht indexieren. -->
-    <meta name="robots" content="noindex">
-    <title>Sören Hädelt</title>
-  </head>
-  <body>
-    <h1>Sören Hädelt</h1>
-  </body>
-</html>
+<Base page="home" title="Sören Hädelt">
+  <section class="hero" data-page="home">
+    <div class="obj-slot" aria-hidden="true"></div>
+    <h1><span class="line">Complex Systems</span><span class="line">need <span class="ink" data-ink="hero">tailored</span></span><span class="line"><span class="ink" data-ink="hero">Product Design.</span></span></h1>
+    <p class="lead">I judge your product from where your users stand. Then I design from there.</p>
+    <!-- aria-hidden: the object is decoration beside the headline, it carries no content. -->
+    <canvas id="obj3d" aria-hidden="true"></canvas>
+  </section>
+
+  <section id="anita" data-page="home">
+    <h2>Concepts need to be <span class="ink eol" data-ink="anita">understood by the user.</span><br>Systems ship their value to the user<br>when the design is leading them through it.</h2>
+    <p class="intro">My first client was Anita. They let me challenge their software concepts and its characteristics. Our collaboration never ended.</p>
+    <div class="wins">
+      <div class="win"><div class="icon" data-icon="simplify"></div><p>Radically simplified the product for the user</p></div>
+      <div class="win"><div class="icon" data-icon="satisfaction"></div><p>+ <span class="num" data-to="79">79</span>% Usability Satisfaction in the first 12 weeks</p></div>
+      <div class="win"><div class="icon" data-icon="customers"></div><p>From 0 to <span class="num" data-to="700">700</span> Customers</p></div>
+    </div>
+    <div class="actions"><a class="btn primary" href={url("cases/anita-app/")}>Read Case Study</a><a class="btn" href={url("projects/")}>Show all Case Studies</a></div>
+  </section>
+
+  <section id="quote" data-page="home">
+    <div class="quotes">
+      <figure class="quote is-on">
+        <img class="photo" src={asset("assets/people/til.jpg")} alt="Til Bußmann-Welsch" style="object-position: 52% 35%">
+        <div>
+          <blockquote>"Sören hat unser SaaS-Produkt einmal komplett auf links gedreht. Die Identifikation der Schwachstellen, wie auch der Stärken, war schonungslos ehrlich, aber genau dieser Input war nötig, um das Produkt auf das nächste Level zu heben. Sören hatte dabei immer die technische und die Businessperspektive im Blick. Die Fortschritte der letzten zwei Jahre sprechen für sich."</blockquote>
+          <footer class="who">Til Bußmann-Welsch, Co-Founder Anita</footer>
+        </div>
+      </figure>
+      <figure class="quote">
+        <img class="photo" src={asset("assets/people/khaled.jpg")} alt="Khaled Mahd" style="object-position: 50% 12%">
+        <div>
+          <blockquote>"I've had the pleasure of working with Sören on multiple projects, including the relaunch of our website to Webflow. He handled the migration fully preserving our existing SEO visibility. His ability to anticipate risks and proactively solve complex problems made the transition smooth and stress-free. Integral work ethic and technical precision! I look forward to continuing our collaboration."</blockquote>
+          <footer class="who">Khaled Mahd, Creative Director at Silicon Allee</footer>
+        </div>
+      </figure>
+      <button class="next" id="nextQuote" type="button" aria-label="Next testimonial"><svg viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7 H26 M20 1 L26 7 L20 13"/></svg></button>
+    </div>
+  </section>
+
+  <section id="skills" data-page="home">
+    <div class="logos" role="group" aria-label="Clients">
+      <div class="logos-track">
+        <div class="logos-set">
+          <img src={asset("assets/logos/anita.png")} alt="Anita">
+          <img src={asset("assets/logos/silicon-allee.svg")} alt="Silicon Allee" style="--h: 44px">
+          <img src={asset("assets/logos/paxa.png")} alt="Paxa">
+          <img src={asset("assets/logos/hdt.png")} alt="HDT Systems" style="--h: 36px">
+          <img src={asset("assets/logos/amendio.png")} alt="amendio" style="--h: 24px">
+          <img src={asset("assets/logos/fraunhofer.svg")} alt="Fraunhofer" style="--h: 34px">
+          <img src={asset("assets/logos/neptune.png")} alt="neptune" style="--h: 28px">
+        </div>
+      </div>
+    </div>
+    <h2>My business and frontend skills allow me<br>to&nbsp;look at products <span class="ink eol" data-ink="skills">from every perspective.</span></h2>
+    <p class="intro">I have multiple years of experience in business and marketing. I switched fields, but I kept my skills.</p>
+    <div class="wins">
+      <div class="win"><div class="icon" data-icon="marketing"></div><p>Multiple years working experience in marketing</p></div>
+      <div class="win"><div class="icon" data-icon="certificates"></div><p>Various certificates in frontend development and business</p></div>
+      <div class="win"><div class="icon" data-icon="mindset"></div><p>State of mind tool using</p></div>
+    </div>
+  </section>
+</Base>

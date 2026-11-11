@@ -1,0 +1,25 @@
+---
+// Ein Beleg in einem Kapitel oder Showcase. Markup wie im Prototyp (EVIDENCE in renderCase).
+import { asset } from "../lib/url";
+const { e } = Astro.props;
+---
+{e.kind === "image" && (
+  <figure><img src={e.src.src} alt={e.alt} loading="lazy">{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
+)}
+{e.kind === "pair" && (
+  <div class="pair">{e.items.map((i) => (
+    <figure><img src={i.src.src} alt={i.alt} loading="lazy">{i.caption && <figcaption>{i.caption}</figcaption>}</figure>
+  ))}</div>
+)}
+{e.kind === "video" && (
+  <figure><video src={asset(`media/${e.src}`)} poster={e.poster.src} aria-label={e.alt} controls muted loop playsinline preload="metadata"></video>{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
+)}
+{e.kind === "stat" && (
+  <p class="stat"><b>{e.value}</b><span>{e.label.map((l, i) => <Fragment>{i > 0 && <br>}{l}</Fragment>)}</span></p>
+)}
+{e.kind === "quote" && (
+  <div><blockquote>“{e.text}”</blockquote><p class="who">{e.who}</p></div>
+)}
+{e.kind === "finding" && (
+  <p class="finding">{e.text}<span>{e.who}</span></p>
+)}

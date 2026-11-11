@@ -1,0 +1,51 @@
+---
+import "../styles/tokens.css";
+import "../styles/site.css";
+import { url } from "../lib/url";
+
+interface Props { page: "home" | "about" | "projects" | "case" | "contact"; title: string }
+const { page, title } = Astro.props;
+const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects", "projects/", "Projects"], ["contact", "contact/", "Contact"]];
+---
+<html lang="en" data-p={page}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bis zum Umzug auf soerenhaedelt.com nicht indexieren. -->
+    <meta name="robots" content="noindex">
+    <title>{title}</title>
+    <script is:inline>
+      // Light or dark before the first paint (10.11.): the visitor's own choice from the switch, else the system's. Set on
+      // <html> always, so the page's dark rules only ever ask data-theme.
+      (() => {
+        let t = null;
+        try { t = localStorage.getItem("theme"); } catch {}
+        document.documentElement.dataset.theme = t === "light" || t === "dark" ? t : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="glow" id="glow"></div>
+    <nav class="nav glass">{links.map(([key, href, label]) => <a href={url(href)} aria-current={page === key ? "page" : undefined}>{label}</a>)}</nav>
+    <div class="themebar glass"><button class="theme" type="button" aria-label="Dark mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 4.5a7.5 7.5 0 0 0 0 15z" fill="currentColor"/></svg></button></div>
+    <div class="ticks"></div>
+
+    <slot />
+
+    <section class="contact" id="contact">
+      <h2>Let's get <span class="ink">together.</span></h2>
+      <p class="intro">We can talk about your product, design or whatever is on your mind.</p>
+      <p class="intro ask">Make a choice.</p>
+      <div><div class="drink glass" role="group" aria-label="Coffee or tea">
+        <button type="button" data-drink="coffee" aria-pressed="true" aria-label="Coffee" title="Coffee"></button>
+        <button type="button" data-drink="tea" aria-pressed="false" aria-label="Tea" title="Tea"></button>
+      </div></div>
+      <div class="actions"><a class="btn brew" id="chat" href="https://cal.com/create-soeren/coffee-or-tea" target="_blank" rel="noopener"><span class="lbl">Let's have a chat</span><span class="cof" aria-hidden="true"><span class="lbl">Let's have a chat</span></span></a></div>
+    </section>
+
+    <svg id="fx"></svg>
+    <script>
+      import "../scripts/site.js";
+    </script>
+  </body>
+</html>

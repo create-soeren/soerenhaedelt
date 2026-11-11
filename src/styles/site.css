@@ -1,0 +1,513 @@
+  :root {
+    --mono: ui-monospace, "SF Mono", menlo, monospace;
+    /* The glow's diameter: 510 px on a 1920 screen, a quarter less on a 1440 laptop. */
+    --glow: clamp(320px, 26.5vw, 560px);
+    /* The page's side margin: the gutter, and above the 1920 anchor whatever keeps the content at layout.maxWidth, centred
+       (10.11.). Up to 1920 the two are equal or the gutter is larger, so nothing changes there. */
+    --side: max(var(--space-gutter), calc((100vw - var(--layout-max-width)) / 2));
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--color-neutral); }
+  /* Colors, spacing and type are tokens from design.md (tokens.css, written by the kit). The page only reads the variables;
+     Inter stays in the fallback stacks as the placeholder while the fonts load. */
+  body { margin: 0; background: var(--color-neutral); color: var(--color-ink); font-family: var(--font-body); font-weight: var(--w-body); -webkit-font-smoothing: antialiased; }
+  /* --ws-head: the headline word space on top of the font's own, in em (the dev bar sets it in %, set 03.11. at 5 %). */
+  h1, h2, h3 { font-family: var(--font-head); word-spacing: var(--ws-head, .05em); }
+
+  /* Glass after Sören's Figma settings: 80 % light, frost 4, depth 20. Refraction and dispersion have no CSS
+     equivalent; the lit edge, the sheen and the inner depth carry the effect. The light falls straight from above, as
+     with Apple's Liquid Glass (Figma had it at -45°, top left): a faint ring all round, the top edge lit on top of it
+     (together 80 %, the rest 30 %), the sheen running top to bottom. The variables are the Navbar panel's (see Nav
+     look). Set 02.11.: a 2 px radius and a shadow at half strength that sits straight under the bar, no offset. */
+  /* Glass: the navbar's look, shared with the contact toolbar; the Navbar panel tunes both at once. */
+  .glass { --r: 2px; --light: 255,255,255; --edge: 1; --sheen: 1; --frost: 4px; --tint: .28; --shadow: .5; --sb: 24px; --sy: 0px;
+    border-radius: var(--r);
+    background: linear-gradient(180deg, rgb(var(--light), calc(.45 * var(--sheen))), rgb(var(--light), calc(.06 * var(--sheen))) 60%), color-mix(in srgb, var(--color-neutral) calc(var(--tint) * 100%), transparent);
+    -webkit-backdrop-filter: blur(var(--frost)) saturate(1.6); backdrop-filter: blur(var(--frost)) saturate(1.6);
+    box-shadow:
+      inset 0 1px 0 rgb(var(--light), calc(.71 * var(--edge))),
+      inset 0 0 0 1px rgb(var(--light), calc(.3 * var(--edge))),
+      inset 0 0 20px rgb(var(--light), calc(.2 * var(--sheen))),
+      0 var(--sy) var(--sb) rgb(0,0,0,calc(.08 * var(--shadow))),
+      0 1px 2px rgb(0,0,0,calc(.06 * var(--shadow))); }
+  /* Hit areas by padding, not by the gap (11.11.): each link is navbar-height tall and --nav-px wider than its word on
+     both sides, so the targets stay large when the space between them shrinks. Seen from outside nothing moves: word to
+     word is still navbar-gap (--nav-px + --g + --nav-px), word to the glass's edge still navbar-padding-x. Only --g gives
+     way on a narrow screen (fitNav(), after the margin beside the bar has run down to --side), down to 0. */
+  .nav { --nav-px: 8px; --nav-pb: calc((var(--navbar-height) - var(--type-caption-lh)) / 2); --g: calc(var(--navbar-gap) - 2 * var(--nav-px));
+    position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 5; display: flex; align-items: center; gap: var(--g); width: max-content;
+    padding: 0 calc(var(--navbar-padding-x) - var(--nav-px));
+    font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); }
+  .nav a { position: relative; padding: var(--nav-pb) var(--nav-px); color: var(--color-muted); text-decoration: none; transition: color .2s; }
+  .nav a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -4px; }
+  /* The current page (Home, aria-current) and hover read differently, and the current page by more than colour:
+     the others in grey; hover turns one black and draws a thin ink rule from the middle; the current page is black
+     with a short orange bar. */
+  /* Hover only without touch (10.11.): the script marks html[data-touch] where it sees touch (?touch, hover: none), so a
+     tap does not leave a hover state standing, and the kit's touch switch shows the CSS as a phone does. */
+  .nav a[aria-current], :root:not([data-touch]) .nav a:hover { color: var(--color-ink); }
+  .nav a::after { content: ""; position: absolute; left: var(--nav-px); right: var(--nav-px); bottom: calc(var(--nav-pb) - 4px); height: 1px; background: var(--color-ink);
+    transform: scaleX(0); transition: transform .25s cubic-bezier(.3, 1, .4, 1); }
+  :root:not([data-touch]) .nav a:hover::after { transform: none; }
+  .nav a[aria-current]::after { height: 2px; bottom: calc(var(--nav-pb) - 5px); background: var(--color-primary); transform: none; }
+  /* Light/dark switch (10.11.), one button: a circle half filled, the filled half turns over with the theme. Its place
+     follows the width (11.11.): from the 744 anchor its own glass at the top right, in line with the navbar; below it the
+     last item in the navbar (script), apart from the links because it acts and they go somewhere: a hairline (chosen
+     11.11. over more space), in the middle of the space before the switch, which stays when --g gives way. */
+  .themebar { position: fixed; top: 24px; right: var(--side); z-index: 5; width: var(--navbar-height); height: var(--navbar-height); display: grid; }
+  .theme { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; background: none; color: var(--color-muted); cursor: pointer; transition: color .2s; }
+  .themebar .theme { width: 100%; height: 100%; }
+  @media (max-width: 743px) { .themebar { display: none; } }
+  .nav .theme { --sep: var(--nav-px); position: relative; width: calc(16px + 2 * var(--nav-px)); height: var(--navbar-height); margin-left: var(--sep); }
+  .nav .theme::before { content: ""; position: absolute; left: calc(-1 * (var(--g) + var(--sep)) / 2); top: 12px; bottom: 12px; width: 1px; background: var(--color-rule); }
+  :root:not([data-touch]) .theme:hover { color: var(--color-ink); }
+  .theme:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  .theme svg { width: 16px; height: 16px; transition: transform .4s cubic-bezier(.3, 1, .4, 1); }
+  [data-theme="dark"] .theme svg { transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) { .theme svg { transition: none; } }
+  /* Over the ink head of a visual case (hero J) the grey links would vanish: while the bar overlaps it (script, after
+     renderCase) the links take the light text colours. */
+  /* Centred between the end of the section dividers (the gutter) and the window edge. Half size, the hairline
+     stays at 1 px. */
+  .ticks { position: fixed; right: calc(var(--space-gutter) / 2); top: 50%; transform: translate(50%, -50%); z-index: 5; display: grid; gap: 8px; }
+  .ticks i { display: block; width: 14px; height: 1px; background: var(--color-rule); transition: background .3s; }
+  .ticks i.on { height: 2px; background: var(--color-tick-on); }
+  /* From the 744 anchor on only (10.11.): on the phone the ticks stand in the gutter, over the text. */
+  @media (max-width: 743px) { .ticks { display: none; } }
+
+  section { min-height: 100vh; padding: var(--space-xxl) var(--side); position: relative; }
+  section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-rule-strong); }
+
+  /* Own size step since 11.11.: display × 1.15, the case headlines stay on display.
+     Safety net under the smallest anchor (11.11.): the lines do not break, so below about 375 px the headline shrinks to the
+     column (WCAG 1.4.10, no sideways scroll at 320). .1113 = 36 px / 323 px, the width of "Complex Systems" in Clash
+     Display 700: measure again when the copy or the font changes. From 390 up the token wins. The line height shrinks
+     with it at 40/36 of the size (.1237), never down to the size itself (line height above font size, 11.11.).
+     position/z-index: under about 918 the object slides over the headline, the text stays on top. */
+  .hero h1 { font-family: var(--font-display-hero); font-weight: var(--w-display-hero); letter-spacing: var(--type-display-hero-ls); margin: var(--space-l) 0 0;
+    font-size: min(var(--type-display-hero-size), calc((100vw - 2 * var(--space-gutter)) * .1113));
+    line-height: min(var(--type-display-hero-lh), calc((100vw - 2 * var(--space-gutter)) * .1237));
+    position: relative; z-index: 3; }
+  .hero h1 .line { display: block; width: max-content; }
+  .lead { font-size: 16px; margin: var(--space-s) 0 0; }
+  /* Text blocks hug their content, so a selection frames the words and not the column. Looks the same. */
+  h1, h2, .lead, .intro { width: fit-content; }
+  /* The large headlines are something the glow plays over, not text to select: the pointer stays an arrow. */
+  h1, h2 { cursor: default; }
+
+  /* Prototype 2 pins the hero for a short stretch, so the margin notes have room to play. The first frame is
+     the same as without the pin. */
+  [data-v="2"] .hero { height: 170vh; min-height: 0; padding: 0; }
+  [data-v="2"] .stage { position: sticky; top: 0; height: 100vh; padding: var(--space-xxl) var(--side); }
+  .note { position: absolute; left: 0; top: 0; font-size: 20px; font-weight: 600; white-space: nowrap; text-decoration: none; opacity: 0; }
+  .note::after { content: ""; position: absolute; left: -.08em; right: -.08em; top: 54%; height: 2px; background: var(--color-primary);
+    transform-origin: 0 50%; transform: rotate(-1.5deg) scaleX(var(--s, 0)); }
+
+  /* Ink: the accent is orange from the first frame (--p: 1; it stresses a phrase, on the home page some carry an editor's
+     entry and its pin, the About page and the contact have none). --p once ran 0..1 with the scroll, from black to orange
+     (0..1 slides the gradient); no script sets it any more. The gradient is twice as wide as the text.
+     On top sits the glow's knockout: a background-coloured spot at the cursor (--gx/--gy relative to the span,
+     radius --gr). The parent of an ink span must not be clipped itself, or its black shows as a fringe. */
+  /* eol: the phrase does not break and ends its line, so its note pin (top right of the phrase's box) sits at its end
+     with room beside it. */
+  .ink.eol { white-space: nowrap; }
+  /* Under the smallest anchor the phrase may break (at 320 "from every perspective." is wider than the column). Not a
+     layout step, a safety net below the anchors. */
+  @media (max-width: 359px) { .ink.eol { white-space: normal; } }
+  .ink {
+    --p: 1;
+    background-image:
+      radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%),
+      linear-gradient(90deg, var(--color-primary) 0 50%, var(--color-ink) 50% 100%);
+    background-size: 100% 100%, 200% 100%;
+    background-position: 0 0, calc((1 - var(--p, 0)) * 100%) 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* Every other text gets the same knockout under the glow, over its own colour (--c, read once by JS). */
+  .knock {
+    background-image:
+      radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%),
+      linear-gradient(var(--c), var(--c));
+    background-repeat: no-repeat;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* The cursor glow from the first sketch. Sits behind all content; text in its core is knocked out. */
+  .glow { position: fixed; left: 0; top: 0; width: var(--glow); height: var(--glow); margin: calc(var(--glow) / -2) 0 0 calc(var(--glow) / -2); z-index: 0; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 95%, transparent) 0%, color-mix(in srgb, var(--color-primary) 55%, transparent) 26%, color-mix(in srgb, var(--color-primary) 16%, transparent) 50%, transparent 68%); }
+
+  h2, .about h1, .cpage h1 { font-family: var(--font-headline); font-size: var(--type-headline-size); line-height: var(--type-headline-lh); font-weight: var(--w-headline); letter-spacing: var(--type-headline-ls); margin: 0; max-width: calc(var(--space-measure-headline) * 1ch); }
+  /* Sublines, and the About page's body text in the same style. */
+  .intro, .about .prose p { font-size: var(--type-body-size); line-height: var(--type-body-lh); max-width: calc(var(--space-measure) * 1ch); margin: var(--space-s) 0 0; }
+
+  .wins { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-l); margin: var(--space-xl) 0 0; text-align: center; }
+  .win { position: relative; padding: var(--win-padding-y) var(--win-padding-x); }
+  .win .icon { width: var(--win-size); height: var(--win-size); margin: 0 auto; }
+  .win .icon svg { width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--color-ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+  .win p { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; }
+  .win.won .icon { animation: land .5s cubic-bezier(.3, 1.7, .5, 1); }
+  @keyframes land { 50% { transform: scale(1.22); } }
+
+  .actions { display: flex; gap: var(--space-xs); justify-content: center; margin-top: var(--space-xl); }
+  a.btn { text-decoration: none; }
+  /* Phone (below the 744 anchor, 10.11.): win and skill cards become rows of a list (icon left, text beside it, on the
+     left axis of the headline and the intro), a pair of buttons stacks at the column's full width, so no label breaks
+     inside its button. A single button (contact, chat) keeps its own width. */
+  @media (max-width: 743px) {
+    .wins { grid-template-columns: 1fr; gap: var(--space-m); text-align: left; }
+    .win { display: grid; grid-template-columns: var(--win-size) 1fr; column-gap: var(--space-s); align-items: center; padding: 0; }
+    .win .icon { margin: 0; }
+    .win p { margin: 0; }
+    .actions:has(.btn + .btn) { flex-direction: column; align-items: stretch; }
+    .actions:has(.btn + .btn) .btn { text-align: center; }
+  }
+  /* Buttons reflect the glow in their orange, not in the black label: the knockout spot sits on the fill (primary)
+     or only shows in the border ring (secondary, whose inside is covered by a background-coloured padding box). */
+  /* The height sits on the grid (--button-height), the padding above and below follows from it: height minus line
+     height minus the two 1 px borders, halved. A label that wraps (390 px) grows by whole lines instead of being cut. */
+  .btn { font-family: var(--font-label); font-weight: var(--w-label); font-size: var(--type-label-size); line-height: var(--type-label-lh);
+    padding: calc((var(--button-height) - var(--type-label-lh) - 2px) / 2) var(--button-padding-x); border: 1px solid transparent; border-radius: var(--button-rounded);
+    --spot: radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%); }
+  /* Primary: solid orange; the glow's spot shows only in its 1 px edge, as a light rim where the glow stands behind
+     it, the way the filled chat button shows it. */
+  .btn.primary { color: var(--button-primary-text-color); background: linear-gradient(var(--button-primary-background-color), var(--button-primary-background-color)) padding-box, var(--spot) border-box, linear-gradient(var(--button-primary-background-color), var(--button-primary-background-color)) border-box; }
+  .btn:not(.primary) { color: var(--button-secondary-text-color); background: linear-gradient(var(--button-secondary-background-color), var(--button-secondary-background-color)) padding-box, var(--spot) border-box, linear-gradient(var(--button-secondary-border-color), var(--button-secondary-border-color)) border-box; }
+
+  /* Testimonials: stacked in one grid cell, one visible at a time, the arrow switches. Photo and quote grow with the
+     window (as at 1440 px: 340 px and 20 px); below the 744 anchor the photo sits above the quote. */
+  .quotes { position: relative; display: grid; --photo: var(--photo-width); --who-lh: 20px; }
+  .quote { grid-area: 1 / 1; display: grid; grid-template-columns: var(--photo) 1fr; gap: var(--space-l); align-items: start; margin: 0; opacity: 0; visibility: hidden; transition: opacity .5s, visibility .5s; }
+  .quote.is-on { opacity: 1; visibility: visible; }
+  /* Multiply lets the glow behind the page show through the photo, as light falling on it; elsewhere the near-white
+     ground leaves the photo as it is. */
+  .photo { width: var(--photo); aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1); mix-blend-mode: multiply; opacity: var(--opacity-quote-photo); }
+  blockquote { margin: 0; max-width: calc(var(--space-measure) * 1ch); font-family: var(--font-quote); font-style: italic; font-weight: var(--w-quote); font-size: var(--type-quote-size); line-height: var(--type-quote-lh); }
+  .who { font-size: 13px; line-height: var(--who-lh); margin-top: var(--space-s); color: var(--color-muted); }
+  /* The box is the hit area (44 × 30); its padding reaches out past the corner, so the arrow itself sits flush with the
+     content edge and, beside the photo, with the photo's bottom. Stacked, it centres on the name's line. */
+  .next { position: absolute; right: -8px; bottom: -8px; border: 0; background: none; padding: 8px; cursor: pointer; color: var(--color-ink); }
+  .next svg { width: 28px; height: 14px; display: block; }
+  @media (max-width: 743px) {
+    .quotes { --photo: min(280px, 60vw); }
+    .quote { grid-template-columns: 1fr; gap: var(--space-l); }
+    .next { bottom: calc(var(--who-lh) / 2 - 15px); }
+  }
+
+  /* Client logos: one-tone silhouettes in an endless row that fades out at both edges. Two identical sets,
+     the track moves by exactly one set, so the loop has no seam. */
+  /* Test 30.10.: quote and logos read as one block. No divider between them, the quote section ends with the
+     quote, and the logos sit the section's 20vh below it, the same distance the quote keeps from its divider. */
+  #quote { min-height: 0; padding-bottom: 0; }
+  #skills::before { content: none; }
+  /* 10.11.: the case block and the skills end with their content, at every width; a screen's height left a space under
+     the cards and the buttons before the padding. The hero keeps the full screen. */
+  #anita, #skills { min-height: 0; }
+  .logos { overflow: hidden; margin: 0 0 var(--space-xl); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .logos-track { display: flex; width: max-content; animation: marquee 42s linear infinite; }
+  :root:not([data-touch]) .logos:hover .logos-track { animation-play-state: paused; }
+  .logos-set { display: flex; align-items: center; gap: var(--space-l); padding-right: var(--space-l); }
+  .logos img { display: block; height: var(--h, 30px); width: auto; filter: brightness(0); opacity: .55; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .logos-track { animation: none; } }
+
+  /* Pages: one file, ?p=about or ?p=projects shows that page instead of the home sections; the contact closes all. */
+  html:not([data-p="home"]) [data-page="home"], html:not([data-p="about"]) [data-page="about"],
+  html:not([data-p="projects"]) [data-page="projects"], html:not([data-p="case"]) [data-page="case"],
+  html:not([data-p="contact"]) [data-page="contact"] { display: none; }
+  /* The contact page is the contact: no closing section under it. */
+  html[data-p="contact"] #contact { display: none; }
+  /* The editor's pins and entries belong to the home's orange phrases. */
+  html:not([data-p="home"]) .pin, html:not([data-p="home"]) .entry { display: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* Projects: the old page's list in the new language. Each project is one link: its title like a section headline,
+     a line with category, client and year (the year at the right edge), the tags as small labels, a tick line
+     between projects. The list runs between the gutters like the section dividers. xs from the title to the line
+     and to the tags, m above and below each tick line. Hover draws a thin ink rule under the title, as in the
+     navbar. */
+  .projects { min-height: 0; padding: var(--space-xxl) var(--side); }
+  .projects::before { display: none; }
+  .projects > ol { list-style: none; margin: 0; padding: 0; }
+  .projects > ol > li + li { border-top: 1px solid var(--color-rule); }
+  .projects .head { display: flex; justify-content: space-between; margin: 0 0 var(--space-m); font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+  .project { display: block; padding: var(--space-m) 0; color: inherit; text-decoration: none; }
+  .projects > ol > li:first-child .project { padding-top: 0; }
+  .projects > ol > li:last-child .project { padding-bottom: 0; }
+  .project h2 { max-width: none; cursor: pointer; }
+  /* Hover: the title fills primary from left to right, like the scroll ink. Its colour layer (the glow knockout sits on
+     top, see .knock) is twice as wide as the text, primary on the left half and the title's own colour (--c) on the
+     right; sliding it moves the primary in. */
+  .project h2.knock {
+    background-image:
+      radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%),
+      linear-gradient(90deg, var(--color-primary) 0 50%, var(--c) 50% 100%);
+    background-size: 100% 100%, 200% 100%;
+    background-position: 0 0, 100% 0; }
+  /* The transition waits for data-live (set two frames after the setup). JS adds .knock to the title after its first
+     style pass, and with the transition on, the fill would slide from the default position out to rest: the orange
+     draining from every title on load, as if all were hovered. */
+  html[data-live] .project h2.knock { transition: background-position .25s cubic-bezier(.3, 1, .4, 1); }
+  :root:not([data-touch]) .project:hover h2.knock { background-position: 0 0, 0 0; }
+  .project:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 6px; }
+  .project .meta { display: flex; gap: var(--space-m); margin: var(--space-xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+  .project .year { margin-left: auto; }
+  /* Figma 09.11.: border in muted and 4 px radius; neither is in design.md yet (tag there: rule, rounded.sm 2 px). */
+  .project .tags { --tag-border-color: var(--color-muted); --tag-rounded: 4px; display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin: var(--space-xs) 0 0; padding: 0; list-style: none; }
+  .project .tags li { padding: calc((var(--tag-height) - var(--type-tag-lh) - 2px) / 2) var(--tag-padding-x); border: 1px solid var(--tag-border-color); border-radius: var(--tag-rounded);
+    font-family: var(--font-tag); font-weight: var(--w-tag); font-size: var(--type-tag-size); line-height: var(--type-tag-lh); color: var(--tag-text-color); }
+  /* About: text and photo as one group in the middle, the photo's foot on the text's last line. xl between text and
+     photo (two blocks in a section), what is left goes outside, never less than the gutter. Section space above and
+     below, s from the headline to the text and between paragraphs. The
+     photo takes the quote's size and, like there, multiplies onto the page, so the glow shows through it. The text
+     column grows with the width like the headline, so it keeps its three lines, and stops at its 1920 width (45vw = 864
+     px) like the headline; the body text is set like the sublines (see .intro). */
+  .about { min-height: 0; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: minmax(0, min(45vw, 864px)) var(--photo);
+    grid-template-rows: 1fr auto; justify-content: center; align-items: end; column-gap: var(--about-gap); --photo: var(--photo-width); }
+  .about::before { display: none; }
+  .about > div { grid-area: 1 / 1 / 3; }
+  /* The LinkedIn mark stands above the photo at its right edge, m above it (10.11.): as tall as the headline's "d" (its
+     ascender is about .72 of the headline size, 30 px at 1440), never under 24 px, the smallest target WCAG 2.5.8 allows.
+     Its font size is the headline's, so em counts in it. */
+  .about h1 { margin: 0; }
+  .about .social { grid-area: 1 / 2; justify-self: end; margin-bottom: var(--space-m); font-size: var(--type-headline-size); width: max(24px, .72em); aspect-ratio: 1;
+    color: var(--color-muted); transition: color .2s; }
+  :root:not([data-touch]) .about .social:hover { color: var(--color-ink); }
+  .about .social:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  .about .social svg { display: block; width: 100%; height: 100%; }
+  .about .prose { margin-top: var(--space-s); }
+  .about .prose p { margin: 0; text-wrap: pretty; }
+  .about .prose p + p { margin-top: var(--space-s); }
+  .about img { grid-area: 2 / 2; display: block; width: var(--photo); aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
+  /* Phone (10.11.): text and photo stack; the LinkedIn mark stands at the photo's top right, outside it. The text blocks
+     dissolve into the grid (display: contents), so headline and prose take a row each. From the 744 anchor text and photo
+     stand side by side, the gap narrower there (about.gap) and growing to xl's size by 1020. */
+  @media (max-width: 743px) {
+    .about { --portrait: min(280px, 60vw); grid-template-columns: 1fr; grid-template-rows: none; row-gap: 0; }
+    .about > div, .about header { display: contents; }
+    .about h1 { grid-row: 1; }
+    .about .prose { grid-row: 2; }
+    .about img { grid-area: 3 / 1; width: var(--portrait); margin-top: var(--space-xl); }
+    .about .social { grid-area: 3 / 1; place-self: start; margin: var(--space-xl) 0 0 calc(var(--portrait) + var(--space-xs)); }
+  }
+  /* Contact page: photo and text as one group in the middle like About, xl between, the text centred in its column.
+     Headline, xs, subline, m, button | l, tick line, l | label, 2xs, address. The tick line is as wide as the column and has the
+     project list's colour (rule); subline and label are muted (tried in the kit, 09.11.). */
+  .cpage { min-height: 100vh; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: var(--photo) minmax(0, calc(var(--space-measure) * 1ch));
+    justify-content: center; align-items: center; column-gap: var(--space-xl); --photo: var(--photo-width); }
+  .cpage::before { display: none; }
+  .cpage img { display: block; width: var(--photo); aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
+  .cpage .cbody { text-align: center; }
+  .cpage h1, .cpage .intro { margin-left: auto; margin-right: auto; }
+  .cpage .intro { margin-top: var(--space-xs); color: var(--color-muted); }
+  .cpage .actions { margin-top: var(--space-m); }
+  .cpage .btn { display: inline-block; text-decoration: none; }
+  .cpage .mail-block { margin-top: var(--space-l); padding-top: var(--space-l); border-top: 1px solid var(--color-rule); }
+  .cpage .mlabel { margin: 0; color: var(--color-muted); font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); }
+  .cpage .mail { display: inline-block; margin-top: var(--space-2xs); color: var(--color-ink); text-decoration: none; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+  :root:not([data-touch]) .cpage .mail:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+  .cpage .mail:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  @media (max-width: 743px) {
+    .cpage { grid-template-columns: 1fr; row-gap: var(--space-xl); justify-items: center; }
+    .cpage img { width: min(280px, 60vw); }
+  }
+
+  /* Case study (?p=case&c=<slug>), rendered from CASES in the script. Protocol layout (B, set 03.11.): the head of a
+     chapter (number, struck assumption, decision) sticks on the left while why and evidence scroll by on the right;
+     the next chapter's head pushes it out. Blocks: chapter, showcase (full or half), learnings, quote. Evidence:
+     image, pair, video, stat, quote. The stroke is static (element before motion). Below the 1020 anchor the
+     decision runs in the text flow and the notes follow inline. */
+  .case { min-height: 0; padding: var(--space-xxl) var(--side); }
+  /* Pages start the same (10.11.): case, about and projects keep at least the l spacing clear under the fixed nav
+     (24 px from the top plus its height); xxl stays where it is larger, from the 1020 anchor on. */
+  .case, .about, .projects { padding-top: max(var(--space-xxl), calc(24px + var(--navbar-height) + var(--space-l))); }
+  .case::before { display: none; }
+  .case > header { margin-bottom: var(--space-xl); }
+  .case h1 { font-family: var(--font-headline); font-size: var(--type-headline-size); line-height: var(--type-headline-lh); font-weight: var(--w-headline); letter-spacing: var(--type-headline-ls); margin: var(--space-xs) 0 0; max-width: calc(var(--space-measure-headline) * 1ch); }
+  .case .no { display: flex; gap: var(--space-xs); margin: 0; font-family: var(--font-ui); font-weight: var(--w-ui); font-size: 13px; color: var(--color-muted); }
+  /* Head (hero G, 04.11.): the case's before, struck like the assumptions below, and its after, in the home's H1; the figure
+     follows like the home's subline. Without from/to the title is the H1. */
+  .case .ctitle { margin: var(--space-xs) 0 0; font-family: var(--font-headline-sm); font-weight: var(--w-headline-sm); font-size: var(--type-headline-sm-size); line-height: var(--type-headline-sm-lh); letter-spacing: var(--type-headline-sm-ls); }
+  .case h1.stmt { max-width: 100%; margin-top: var(--space-l); font-family: var(--font-display); font-size: var(--type-display-size); line-height: var(--type-display-lh); font-weight: var(--w-display); letter-spacing: var(--type-display-ls); }
+  .case .stmt > span { display: block; width: max-content; max-width: 100%; }
+  .case .stmt .was { color: var(--color-muted); }
+  .case .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-m) var(--space-l); margin: var(--space-xl) 0 0; padding-top: var(--space-s); border-top: 1px solid var(--color-rule); }
+  .case .meta > div { margin: 0; }
+  .case .meta dt { font-size: 13px; line-height: 1.45; color: var(--color-muted); }
+  .case .meta dd { margin: var(--space-2xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+  /* Visual head (hero J, 05.11.): for cases that carry through the delivered work, not through decisions (Silicon Allee,
+     Paxa). Title, then the screen over the full width, then the meta; on the page colours like every other head. The
+     video replaces the poster on the same spot. The h1 takes .stmt for the display tokens and stays out of the mobile
+     title override below. */
+  .case h1.vtitle { max-width: calc(var(--space-measure-headline) * 1ch); margin-top: var(--space-s); }
+  .case .vhero figure { margin: var(--space-xl) 0 0; }
+  .case .vhero img, .case .vhero video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: #fff; }
+  /* Images multiply onto the page like the photos, so the glow shows through them and does not vanish behind the
+     white ground. Videos stay opaque; the glow fades out over them instead (see updateGlow). */
+  .case .vhero img, .block img { mix-blend-mode: multiply; }
+  .case .vhero figcaption { margin-top: var(--space-2xs); font-size: 13px; line-height: 1.45; color: var(--color-muted); }
+  .block { padding: var(--space-xl) 0; border-top: 1px solid var(--color-rule); }
+  .block:last-child { padding-bottom: 0; }
+  .block figure { margin: 0; }
+  .block img, .block video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: #fff; }
+  .block figcaption { margin-top: var(--space-2xs); font-size: 13px; line-height: 1.45; color: var(--color-muted); }
+  .decision { display: grid; grid-template-columns: 5fr 6fr; column-gap: var(--space-xl); align-items: start; }
+  .dhead { position: sticky; top: 112px; }
+  .decision .was, .decision h2 { margin: 0; max-width: none; font-family: var(--font-headline-sm); font-weight: var(--w-headline-sm); font-size: var(--type-headline-sm-size);
+    line-height: var(--type-headline-sm-lh); letter-spacing: var(--type-headline-sm-ls); }
+  .decision .was { margin-top: var(--space-xs); color: var(--color-muted); word-spacing: var(--ws-head, .05em); }
+  /* The case's strike, "Bogen" from strich-varianten.html (11.11.): one orange stroke per line, drawn by JS as a path over
+     every line box of .pen. Even width, round ends, a little past the words, a slight sag and a slightly higher end. At 43 %
+     of the glyph box it lies on the F's middle arm; lower, it met the stem under the arm and the F read as an E. */
+  .case .was { position: relative; }
+  .was .stroke { position: absolute; pointer-events: none; }
+  .was .stroke svg { position: absolute; left: 0; top: 0; overflow: visible; }
+  .decision .no + h2 { margin-top: var(--space-xs); }
+  .decision .was + h2 { margin-top: var(--space-s); }
+  .why p, .learnings li p { margin: 0; max-width: calc(var(--space-measure) * 1ch); font-size: var(--type-body-size); line-height: var(--type-body-lh); text-wrap: pretty; }
+  .why p + p { margin-top: var(--space-s); }
+  .evidence { margin-top: var(--space-xl); }
+  .case .evidence > * + * { margin-top: var(--space-l); }
+  .pair { display: grid; gap: var(--space-m); }
+  .stat { margin: 0; }
+  .case > header .stat { margin-top: var(--space-m); }
+  .stat b { display: block; font-family: var(--font-headline); font-weight: var(--w-headline); font-size: var(--type-headline-size); line-height: 1; }
+  .stat span { display: block; margin-top: var(--space-2xs); font-size: 13px; line-height: 1.45; color: var(--color-muted); }
+  .case blockquote { font-size: var(--type-quote-size); }
+  .finding { margin: 0; font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-quote-size); line-height: var(--type-quote-lh); max-width: calc(var(--space-measure) * 1ch); }
+  .finding span { display: block; margin-top: var(--space-2xs); font-family: var(--font-body); font-weight: var(--w-body); font-size: 13px; line-height: 1.45; color: var(--color-muted); }
+  .showcase.is-half .items { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-m); align-items: start; }
+  .learnings ol { list-style: none; margin: 0; padding: 0; }
+  .learnings li + li { margin-top: var(--space-l); }
+  .learnings h3 { margin: 0 0 var(--space-2xs); font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); word-spacing: normal; }
+  .case .cquote { margin: 0; display: grid; grid-template-columns: var(--photo) 1fr; gap: var(--space-l); align-items: start; --photo: var(--photo-width); }
+  .case .cquote .photo { background: none; border: 0; }
+  /* Breakpoints at the anchors (10.11.): stacked below 1020 where two columns would squeeze the text (decision: 310 px
+     at 744) or the screens (half showcase: 300 px each); side by side from 744 where the text keeps about 45 characters. */
+  @media (max-width: 1019px) {
+    .case .meta { grid-template-columns: repeat(2, 1fr); }
+    .decision { grid-template-columns: 1fr; row-gap: var(--space-m); }
+    .dhead { position: static; }
+    .showcase.is-half .items { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 743px) {
+    .case .meta { grid-template-columns: 1fr; }
+    .case .cquote { grid-template-columns: 1fr; --photo: min(280px, 60vw); }
+  }
+  /* Portrait pair (phone screens): two columns at the text measure, so a screen is not stretched over half the page. Stays
+     two columns on the phone. */
+  .showcase.is-half.is-portrait .items { grid-template-columns: 1fr 1fr; width: min(100%, calc(var(--space-measure) * 1ch)); }
+  /* More than two phone screens (--n set by the renderer): all in one row over the full width, a screen as wide as its
+     column. Three columns below the 1020 anchor, two on the phone. */
+  .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(var(--n), 1fr); width: 100%; }
+  @media (max-width: 1019px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 743px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(2, 1fr); } }
+
+    /* A footer, not a page: one step under the sections, xl above and below, the same as between the toolbar and the
+     button inside. */
+  .contact { text-align: center; min-height: 0; padding-top: var(--space-xxl); padding-bottom: var(--space-xxl); }
+  /* The chat button starts secondary and fills with coffee or tea. .cof is the drink with a copy of the label; JS
+     clips, masks or fades it. Filled it takes the primary's orange, without the glow's knockout spot: the spot sits
+     right under the pointer and would read as coffee still missing. */
+  .brew { position: relative; display: inline-flex; text-decoration: none; }
+  .brew .lbl { display: inline-flex; align-items: center; gap: 8px; }
+  .brew .cof { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--button-primary-background-color);
+    clip-path: inset(100% 0 0 0); pointer-events: none; }
+  /* Served (the button is full): the pot or bag is gone and the system's pointer is back, the hand on the button.
+     The plainest sign that the button can be clicked. */
+  /* Before a pick the system's pointer, the hand on the button. */
+  .brew, .brew * { cursor: pointer; }
+  .contact[data-drink], .contact[data-drink] * { cursor: none; }
+  .contact.served, .contact.served * { cursor: auto; }
+  .contact.served h2 { cursor: default; }
+  .brew.ready, .brew.ready * { cursor: pointer; }
+  .contact h2, .contact .intro { margin-left: auto; margin-right: auto; }
+  /* Headline, xs, subline, xs, "Make a choice.", xs, toolbar | xl | button. What belongs together takes xs (the question
+     is no longer set apart from the pitch, 04.11.), the button stands apart at xl. */
+  .contact .intro { margin-top: var(--space-xs); }
+  .contact .actions { margin-top: var(--space-xl); }
+  /* Coffee or tea, a small tool palette in the navbar's glass (see .glass), marked like the navbar: hover turns a
+     tool black and draws a thin ink rule from the middle, the chosen one is black with a short orange bar and the
+     other one goes grey. Before a pick both stay black, nothing is greyed out yet. */
+  .drink { display: inline-flex; gap: var(--space-2xs); margin-top: var(--space-xs); padding: 3px; }
+  .drink button { position: relative; height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 7px; border: 0;
+    background: transparent; color: var(--color-ink); font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); transition: color .2s; }
+  .drink[data-on] button { color: var(--color-muted); }
+  .drink button[aria-pressed="true"], :root:not([data-touch]) .drink[data-on] button:hover { color: var(--color-ink); }
+  .drink button::after { content: ""; position: absolute; left: 7px; right: 12px; bottom: 4px; height: 1px; background: var(--color-ink);
+    transform: scaleX(0); transition: transform .25s cubic-bezier(.3, 1, .4, 1); }
+  :root:not([data-touch]) .drink button:hover::after { transform: none; }
+  .drink button[aria-pressed="true"]::after { height: 2px; bottom: 3px; background: var(--color-primary); transform: none; }
+  .drink button:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+  /* Coffee | tea (11.11.): the navbar's hairline between the two, at every width. Centred on what is drawn, not on the
+     gap: the buttons pad 12 px after the label and 7 px before the glyph, and the tea glyph starts 1.5 px into its box. */
+  .drink button + button::before { content: ""; position: absolute; left: calc(-1 * (var(--space-2xs) + 12px - 7px) / 2 + 1px); top: 10px; bottom: 10px;
+    width: 1px; background: var(--color-rule); }
+  .contact .drink button, .contact .drink button * { cursor: pointer; }
+  .drink svg { width: 20px; height: 20px; }
+  /* Toolbar with nothing chosen: the glyphs act out what the pointer will do, in turn: the pot tips, the bag dips twice. Still once
+     a drink is picked. */
+  @keyframes tool-tip { 0%, 8%, 30%, 100% { transform: none; } 14%, 22% { transform: rotate(-18deg); } }
+  @keyframes tool-dip { 0%, 52%, 64%, 76%, 100% { transform: none; } 58%, 70% { transform: translateY(2.5px); } }
+  .contact .drink:not([data-on]) [data-drink="coffee"] svg { transform-origin: 50% 65%; animation: tool-tip 3.2s ease-in-out infinite; }
+  .contact .drink:not([data-on]) [data-drink="tea"] svg { animation: tool-dip 3.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .drink svg { animation: none !important; } }
+
+  /* The hero object: one canvas over the hero, under the annotations, over the glow. It scrolls with the hero like the
+     headline (11.11.): fixed and placed per frame, it lagged a frame behind a fast scroll and jumped at the overscroll. */
+  #obj3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+  /* Hero grid (11.11.): from the anchor 1020 headline and object side by side (the object finds its own column, see Obj),
+     under it stacked, the object above the headline, left-aligned (tablet like the phone since 11.11.; before: from 744). The slot only holds the object's room; its height
+     (--obj-h, 160 to 280) is set by the script from the screen height, so headline and lead stay in the first screen. */
+  .obj-slot { display: none; }
+  @media (max-width: 1019px) { .obj-slot { display: block; height: var(--obj-h, 200px); margin-top: var(--space-l); } }
+  /* Tablet (744 to 1019, 11.11.): the air between navbar and object 30 % shorter, the hero sits higher in the screen. */
+  @media (min-width: 744px) and (max-width: 1019px) {
+    .hero { padding-top: calc(var(--space-xxl) * .7); }
+    .hero .obj-slot { margin-top: calc(var(--space-l) * .7); }
+  }
+  /* A long press on the hero belongs to the press (glow under the finger), not to iOS's text selection or callout. */
+  html[data-touch] .hero { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  #fx { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 4; pointer-events: none; overflow: visible; }
+
+  /* Dark (10.11.): the colours come from tokens.css (modes.dark in design.md); here only what the dark ground asks of the
+     page itself. Photos screen instead of multiply: the image stays, its dark parts take the ground and the glow, mirrored
+     to the light page. Screenshots of light interfaces lie plain and a little dimmed, so they do not glare. The logos
+     turn white. The glass dims its sheen, which would read as a light film on dark. */
+  [data-theme="dark"] .photo, [data-theme="dark"] .about img, [data-theme="dark"] .cpage img { mix-blend-mode: screen; }
+  [data-theme="dark"] .case .vhero img, [data-theme="dark"] .block img, [data-theme="dark"] .case .vhero video, [data-theme="dark"] .block video { mix-blend-mode: normal; filter: brightness(.9); }
+  [data-theme="dark"] .logos img { filter: brightness(0) invert(1); }
+  [data-theme="dark"] .glass { --sheen: .16; --edge: .35; --tint: .62; --shadow: 3; }
+  [data-theme="dark"] .chat { box-shadow: 0 12px 32px rgb(0,0,0,.5), 0 0 0 1px var(--color-rule); }
+
+  /* Struck words in every entry style: an orange pen line drawn from the left, JS sets --s (0..1). */
+  .struck { position: relative; text-decoration: none; font-weight: 600; white-space: nowrap; }
+  .struck::after { content: ""; position: absolute; left: -.08em; right: -.08em; top: 54%; height: 2px; background: var(--color-primary);
+    transform-origin: 0 50%; transform: rotate(-1.5deg) scaleX(var(--s, 0)); }
+
+  /* Figma's comment pin: marks every orange phrase from the first frame on, its sharp corner on the point.
+     It is the trigger of the entry, so it takes the pointer. */
+  .pin { position: fixed; left: 0; top: 0; z-index: 3; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; background: var(--color-primary);
+    display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--color-on-primary); cursor: pointer; transform-origin: 0 100%;
+    box-shadow: 0 2px 6px rgb(0,0,0,.14); }
+
+  /* The entry, the same content in every version: who, what was struck, why. Fixed, placed by JS every frame. */
+  /* Above the annotation layer (#fx, 4, earlier in the DOM), so slots and redlines never cross the card. */
+  .entry { position: fixed; left: 0; top: 0; z-index: 4; font-size: 14px; pointer-events: none; opacity: 0; }
+  .entry .head { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--color-muted); }
+  .entry .head b { color: var(--color-ink); font-weight: 600; }
+  /* The role sits at the card's right edge, where Figma's comments put the time. */
+  .entry .head b + span { margin-left: auto; }
+  .entry .av { width: 22px; height: 22px; border-radius: 50%; background: var(--color-primary); display: grid; place-items: center; font-size: 10px; font-weight: 700; color: var(--color-on-primary); }
+  .entry ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+  .entry li { width: fit-content; }
+  .entry p { margin: 12px 0 0; line-height: 1.5; color: var(--color-ink); opacity: 0; }
+
+  /* The entry rides on a card at the cursor, like Figma's cursor chat. */
+  .chat { width: 260px; padding: 14px 16px 16px; background: var(--color-neutral); border-radius: 2px 12px 12px; transform-origin: 0 0;
+    box-shadow: 0 12px 32px rgb(0,0,0,.12), 0 1px 3px rgb(0,0,0,.08); }
+  /* Touch: opened by a tap on the pin, to its left; the sharp corner and the growth sit on the pin's side. */
+  .chat.left { border-radius: 12px 2px 12px 12px; transform-origin: 100% 0; }
+
+  .found { margin-top: 6px; text-align: center; font: 11px var(--mono); letter-spacing: .04em; color: var(--color-muted); }
+  .found b { color: var(--color-ink); font-weight: 600; }

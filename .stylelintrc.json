@@ -22,9 +22,10 @@
       true,
       {
         "ignoreProperties": [
-          "backdrop-filter",
-          "background-clip",
-          "mask-image"
+          "-webkit-backdrop-filter",
+          "-webkit-background-clip",
+          "-webkit-mask-image",
+          "-webkit-user-select"
         ]
       }
     ],

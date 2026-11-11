@@ -12,6 +12,13 @@ Portfolio von Sören Hädelt, gebaut mit Astro, gehostet auf GitHub Pages.
 
 ## Wo was liegt
 
+- `src/pages/` – eine Datei pro Seite: Startseite, About, Projects, Contact, `cases/[slug]`.
+- `src/layouts/Base.astro` – Hülle (Nav, Dark-Mode-Schalter, Glow) und der Schalter für Hell/Dunkel vor dem ersten Bild.
+- `src/styles/site.css` und `src/scripts/site.js` – CSS und JavaScript der Seite, 1:1 aus dem Prototyp.
+- `src/components/` – Case und Belege, gebaut aus der Collection.
+- `src/lib/url.ts` – alle internen Adressen laufen über `base`.
+- `src/data/projects.ts` – Projektliste.
+
 - `src/content/cases/` – ein Case pro YAML-Datei, Bilder in `media/` daneben.
 - `src/content.config.ts` – das Schema: welche Felder ein Case hat und welche Pflicht sind.
 - `public/media/` – Videos (werden nicht verarbeitet, nur ausgeliefert).

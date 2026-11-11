@@ -1,6 +1,7 @@
 ---
-// Eine Seite pro Case. Vorerst nur der Titel: Das Markup kommt mit dem Port der Startseite.
-// Die Route lädt die Collection schon jetzt, damit der Build auch fehlende Bilder findet.
+// Eine Seite pro Case, gebaut aus der Collection. Das Schema prüft jede Datei vor dem Build.
+import Base from "../../layouts/Base.astro";
+import Case from "../../components/Case.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -8,17 +9,8 @@ export async function getStaticPaths() {
   return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
-const { head } = Astro.props.entry.data;
+const { data } = Astro.props.entry;
 ---
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bis zum Umzug auf soerenhaedelt.com nicht indexieren. -->
-    <meta name="robots" content="noindex">
-    <title>{head.title} · {head.label}</title>
-  </head>
-  <body>
-    <h1>{head.title}</h1>
-  </body>
-</html>
+<Base page="case" title={`${data.head.title} · ${data.head.label}`}>
+  <Case data={data} />
+</Base>

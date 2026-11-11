@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import { url } from "../lib/url";
+import { projects } from "../data/projects";
+
+const cases = new Set((await getCollection("cases")).map((c) => c.id));
+---
+<Base page="projects" title="Projects · Sören Hädelt">
+  <section class="projects" id="projects" data-page="projects">
+    <h1 class="sr-only">Projects</h1>
+    <div class="head" aria-hidden="true"><span>Selected Project</span><span>Year</span></div>
+    <ol>
+      {projects.map(({ title, category, client, year, tags, slug }) => (
+        <li><a class="project" href={cases.has(slug) ? url(`cases/${slug}/`) : "#"}><h2>{title}</h2><p class="meta"><span>{category}</span><span>{client}</span><span class="year">{year}</span></p><ul class="tags">{tags.map((t) => <li>{t}</li>)}</ul></a></li>
+      ))}
+    </ol>
+  </section>
+</Base>
