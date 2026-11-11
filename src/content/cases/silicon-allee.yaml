@@ -1,0 +1,70 @@
+# Generiert aus dem Prototyp (scripts/import-cases.mjs). Bis zum Umstieg hier nichts von Hand ändern,
+# der nächste Import überschreibt die Datei.
+head:
+  kind: visual
+  label: Silicon Allee
+  title: SEO-safe Website Relaunch
+  media:
+    poster: ./media/silicon-allee-hero-2026-11.jpg
+    video: silicon-allee-hero-2026-11.mp4
+    alt: "Screen recording of siliconallee.com: the home page scrolls from the hero to the offer, then the news archive pages from the newest articles back to 2011"
+  caption: 11.2026 · The home page and the news archive back to 2011, as they run today.
+  meta:
+    - label: Role
+      value: Webflow Designer (Freelance)
+    - label: Design
+      value: Khaled Mahd, Creative Director at Silicon Allee
+    - label: Period
+      value: 01.2026 – 03.2026
+    - label: Scope
+      value: Webflow build, responsive breakpoints, news migration with redirects, CMS system
+blocks:
+  - type: chapter
+    decision: Fifteen years of news, every old link redirected.
+    why:
+      - The news archive ran on its own subdomain, news.siliconallee.com, with dated addresses. In the relaunch it moved into the Webflow CMS under siliconallee.com/news, with a new address for every article.
+      - I audited all 198 articles from 2011 to 2026, extracted the meta title of each and set one 301 redirect from every old address to its new one.
+    evidence:
+      - kind: stat
+        value: "198"
+        label:
+          - Old article URLs, 2011 to 2026.
+          - Each with a 301 redirect to its new address.
+  - type: showcase
+    width: half
+    portrait: true
+    items:
+      - kind: image
+        src: ./media/silicon-allee-mobil-start-2026-11.jpg
+        alt: "siliconallee.com on a phone: the headline We are your unfair advantage in white and lime on black, the Silicon Allee and Fraunhofer HHI logos in the header and the intro text below"
+        caption: 11.2026 · The home page. Desktop designs only, mobile built in Webflow.
+      - kind: image
+        src: ./media/silicon-allee-mobil-stimmen-2026-11.jpg
+        alt: "siliconallee.com founder testimonial on a phone: a quote from the co-founder of Neptune next to her portrait, with arrows to switch"
+        caption: 11.2026 · Founder testimonial.
+      - kind: image
+        src: ./media/silicon-allee-mobil-events-2026-11.jpg
+        alt: "siliconallee.com events slider on a phone: the card Deep Tech Night, Health Tech on November 19, 2026 with arrows to switch"
+        caption: 11.2026 · Events slider.
+      - kind: image
+        src: ./media/silicon-allee-mobil-themen-2026-11.jpg
+        alt: "siliconallee.com core topic on a phone: the card Photonic Sensors, From Chip to System on lime with the labels Photonic Integration, Precision Sensing and Chip Design"
+        caption: 11.2026 · A core topic.
+      - kind: image
+        src: ./media/silicon-allee-mobil-news-2026-11.jpg
+        alt: "siliconallee.com news list on a phone: article cards with image, title, author and date, among them Neptune Raises 1.5 Million Dollars to Scale Digital Music Education in the UAE"
+        caption: 11.2026 · The news list.
+  - type: chapter
+    decision: Publish without a developer.
+    why:
+      - The news section runs on the Webflow CMS, and the Silicon Allee team fills it itself. Since the relaunch, the team has published every article on its own, without a developer in between.
+    evidence:
+      - kind: image
+        src: ./media/silicon-allee-news-live-2026-11.jpg
+        alt: "siliconallee.com news overview in November 2026: the newest articles, dated October 20, July 2, June 9 and February 19, 2026"
+        caption: 11.2026 · The news overview today, newest articles first.
+  - type: quote
+    photo: ./media/khaled.jpg
+    position: 50% 12%
+    text: I've had the pleasure of working with Sören on multiple projects, including the relaunch of our website to Webflow. He handled the migration fully preserving our existing SEO visibility. His ability to anticipate risks and proactively solve complex problems made the transition smooth and stress-free. Integral work ethic and technical precision! I look forward to continuing our collaboration.
+    who: Khaled Mahd, Creative Director at Silicon Allee

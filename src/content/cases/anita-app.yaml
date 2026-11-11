@@ -1,0 +1,122 @@
+# Generiert aus dem Prototyp (scripts/import-cases.mjs). Bis zum Umstieg hier nichts von Hand ändern,
+# der nächste Import überschreibt die Datei.
+head:
+  kind: statement
+  label: Anita
+  title: Trust through Structural Evidence
+  from: Fragmented search results
+  to: Structured evidence
+  impact:
+    value: 0 → 700+
+    label:
+      - paying customers
+  meta:
+    - label: Role
+      value: Product Designer (Freelance)
+    - label: Period
+      value: 2024 – today
+    - label: Partner
+      value: Anita · Silicon Allee by Fraunhofer HHI
+    - label: Scope
+      value: Core search redesign, information architecture overhaul, AI chatbot integration, brand-aligned product redesign
+blocks:
+  - type: chapter
+    struck:
+      label: Assumption
+      text: "Two search bars: the facts and the argument."
+    decision: One search field, the way lawyers already search.
+    why:
+      - The dual search bar asked for a factual description and an argument at the same time. Better instructions, new placeholder texts and a different weighting of the two fields changed nothing.
+      - "The concept was wrong, not its execution: users do not formulate arguments upfront. We removed the second field and rebuilt the information architecture and the results around a single entry point."
+    evidence:
+      - kind: pair
+        items:
+          - src: ./media/anita-suche-2024-01.jpg
+            alt: "iur.crowd home screen, January 2024: two search fields, facts and arguments"
+            caption: 01.2024 · Two fields, no hint what goes where.
+          - src: ./media/anita-suche-2024-03.jpg
+            alt: "iur.crowd home screen, March 2024: one search field with filters above"
+            caption: 03.2024 · One field, filters when needed.
+      - kind: stat
+        value: 2.8 / 7
+        label:
+          - Satisfaction before the change.
+          - 205 error points across 6 participants.
+      - kind: quote
+        text: Am I supposed to search for two things at once?
+        who: Participant, usability test 2024
+  - type: chapter
+    struck:
+      label: Our own decision
+      text: A map of every court decision's argument.
+    decision: Dependable orientation over a structure we could only guess.
+    why:
+      - We extracted the reasoning of each court decision into argument segments and put them in a navigation bar. German decisions follow no shared structure, so the extraction was unstable from court to court.
+      - Users had to read two layers, the text and our guess at it, and could not trust the second one. Partial structure without full reliability harms more than it helps. That shaped the next turn of the product.
+    evidence:
+      - kind: image
+        src: ./media/anita-argumente-2024-10.jpg
+        alt: "Prototype, October 2024: a court decision page structured into its arguments"
+        caption: Prototype 10.2024 · The decision split into its arguments.
+  - type: chapter
+    decision: Simplicity as a product principle.
+    why:
+      - iur.crowd was repositioned and rebranded as Anita within the Silicon Allee accelerator, supported by Fraunhofer HHI. The Creative Director of Silicon Allee led the rebranding and defined the new strategic and visual foundation. Anita stands for radical simplicity within the complex ecosystem of legal research.
+      - "In close collaboration with the Creative Director, I redesigned the application from the ground up on that vision. The redesign was not merely aesthetic: it marked a strategic shift toward simplicity as a product principle."
+    evidence:
+      - kind: pair
+        items:
+          - src: ./media/anita-merkliste-2024-02.jpg
+            alt: "iur.crowd bookmark list, February 2024: folders and saved decisions as cards"
+            caption: iur.crowd 02.2024 · The bookmark list.
+          - src: ./media/anita-merkliste-2025-10.jpg
+            alt: "Anita bookmark list, October 2025: saved decisions as a plain list under the dark navigation"
+            caption: Anita 10.2025 · The list under the new brand.
+  - type: chapter
+    struck:
+      label: Earlier version
+      text: Summaries alone.
+    decision: An answer built from the decisions' own words.
+    why:
+      - Even with improved search, users struggled to see how individual court decisions related to their query. Without interpretation, results stayed fragmented, and checking each decision's relevance meant reading it in full.
+      - "The chatbot extracts the quotes from the decisions it found and builds its answer from them. Source markers inside the answer point back to those decisions. Hovering a marker shows the quote the statement rests on and marks the decision in the source list. Participants called it an “evidence layer”: trust came from being able to check, not from the summary. Earlier versions overwhelmed users with information; later iterations improved readability, pacing and the referencing."
+    evidence:
+      - kind: pair
+        items:
+          - src: ./media/anita-start-2025-10.jpg
+            alt: Anita home screen, October 2025, with the chat entry
+            caption: 10.2025 · The app with its chatbot patterns.
+          - src: ./media/anita-quellenzitat-2025-10.jpg
+            alt: "Anita results and chat, October 2025: the quote from the cited court decision in its hover state"
+            caption: 10.2025 · The quote from the cited decision in its hover state.
+      - kind: finding
+        text: All participants perceive the sources as evidence for the chatbot's answer.
+        who: Usability test, summer 2025
+  - type: showcase
+    width: half
+    items:
+      - kind: image
+        src: ./media/anita-ergebnis-2024-10.jpg
+        alt: "iur.crowd results page, October 2024: decisions as cards with tabs for details, arguments and norms"
+        caption: iur.crowd 10.2024 · Results as cards.
+      - kind: image
+        src: ./media/anita-ergebnis-2024-12.jpg
+        alt: "Anita results page, December 2024: sources and answer side by side"
+        caption: Anita 12.2024 · Sources and answer side by side.
+  - type: learnings
+    items:
+      - title: Fix the interaction before scaling the system
+        text: A flawed core interaction cannot be compensated by additional features. The dual search bar failed not because users lacked understanding, but because it contradicted their natural workflow. If users cannot start a task smoothly, every downstream improvement remains ineffective.
+      - title: Unreliable structure undermines trust
+        text: Extracting judicial reasoning promised orientation, but inconsistent document structures made the system fragile. When a feature appears systematic yet behaves unpredictably, it increases cognitive load instead of reducing it. In high-stakes domains, perceived precision must equal actual reliability.
+      - title: Simplicity requires strategic restraint
+        text: "The rebranding to Anita sharpened a principle that had already emerged: simplicity is not visual reduction, but disciplined decision-making. Every element must justify its existence. Every layer must lower friction. Clarity is a product decision, not a visual trend."
+      - title: AI must reduce cognitive load to create value
+        text: "The chatbot succeeded when it acted as an interpretive bridge. A summary alone was not enough. Trust grew when each statement was built from a quote and its marker led to the decision it came from: the answer became checkable. AI created impact through contextualization and evidence."
+      - title: Research must guide direction changes
+        text: User testing did not only validate improvements. It invalidated entire concepts. Abandoning structured argument extraction was not a setback, but a strategic correction. Design maturity includes knowing when to stop.
+  - type: quote
+    photo: ./media/til.jpg
+    position: 52% 35%
+    text: Sören hat unser SaaS-Produkt einmal komplett auf links gedreht. Die Identifikation der Schwachstellen, wie auch der Stärken, war schonungslos ehrlich, aber genau dieser Input war nötig, um das Produkt auf das nächste Level zu heben. Sören hatte dabei immer die technische und die Businessperspektive im Blick. Die Fortschritte der letzten zwei Jahre sprechen für sich.
+    who: Til Bußmann-Welsch, CXO & Co-Founder at Anita

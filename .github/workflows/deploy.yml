@@ -1,0 +1,36 @@
+# Baut die Seite bei jedem Push auf main und stellt sie auf GitHub Pages.
+# Der Build prüft dabei das Case-Schema: Fehlt ein Pflichtfeld, geht nichts live.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: withastro/action@v6
+        with:
+          build-cmd: npm run check   # Lint CSS, Build mit Schema-Prüfung, Lint HTML
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

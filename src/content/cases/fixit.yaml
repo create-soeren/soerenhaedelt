@@ -1,0 +1,77 @@
+# Generiert aus dem Prototyp (scripts/import-cases.mjs). Bis zum Umstieg hier nichts von Hand ändern,
+# der nächste Import überschreibt die Datei.
+head:
+  kind: statement
+  label: Fixit
+  title: Laying The Foundation
+  from: An app to install
+  to: A website on the phone
+  impact:
+    value: €10,000
+    label:
+      - Female Founder Prize of Berliner Sparkasse, 04.2024.
+      - Fixit pitched with the prototype.
+  meta:
+    - label: Role
+      value: UX Designer (Freelance)
+    - label: Client
+      value: Fixit, today amendio. Pre-seed startup for remote household repairs
+    - label: Period
+      value: 4 weeks, end of 2023
+    - label: Scope
+      value: Interview analysis, persona, user flow, information architecture, mid-fidelity prototype
+blocks:
+  - type: chapter
+    decision: One persona from the interviews.
+    why:
+      - "Fixit had already interviewed potential users when I joined. I sorted the interviews in an affinity map: motivations, emotional needs, expectations, fears and barriers."
+      - From that came Jesse, Fixit's first persona. Every product decision could be checked against her.
+    evidence:
+      - kind: image
+        src: ./media/fixit-persona-jesse-2023.jpg
+        alt: "Persona Jesse, a busy journalist in Berlin: motivations and goals, needs, expectations from the service, paint points, barriers and three quotes"
+        caption: 2023 · Jesse, Fixit's first persona.
+  - type: chapter
+    decision: A website on the phone, not an app.
+    why:
+      - "An app raises the barrier on both sides: for people with a broken fuse and for the repair companies Fixit needed on board. The first version ran as a mobile website, on the assumption that people look up a repair on their phone."
+      - "I prototyped the flow in mid fidelity, from the first question to the video call with a professional: an AI chat narrows down the problem, three packages set the length of the call, payment runs on its own."
+  - type: showcase
+    width: half
+    portrait: true
+    items:
+      - kind: video
+        src: fixit-prototyp-2023.mp4
+        poster: ./media/fixit-prototyp-2023.jpg
+        alt: "Screen recording of the Fixit prototype on a phone: the chat with a professional, the choice of a package and the booking of the call"
+        caption: Prototype 2023 · From the chat to the booked call.
+      - kind: image
+        src: ./media/fixit-prototyp-pakete-2023.jpg
+        alt: "Fixit prototype on a phone: Choose your package with Quick Fix for 20 euros, Comfort Fix for 40 euros and Guide for 60 euros"
+        caption: Prototype 2023 · Three packages set the length of the call.
+  - type: chapter
+    decision: Tools from a partner shop.
+    why:
+      - "Before the call, the professional lists the tools the fix needs. I linked that list to a partner shop: Fixit earns on the tools, and the user gets everything for the repair in one place."
+    evidence:
+      - kind: image
+        src: ./media/fixit-user-flow-2023.png
+        alt: "Excerpt of the Fixit user flow: after the diagnosis call, a branch to partner offers if the problem is too complicated, then a cost comparison, the list of tools and a second branch to partner offers if the user lacks tools"
+        caption: "2023 · The user flow: partner offers where the fix needs more."
+  - type: showcase
+    width: half
+    portrait: true
+    items:
+      - kind: image
+        src: ./media/fixit-prototyp-werkzeuge-2023.jpg
+        alt: "Fixit prototype on a phone: a chat with an electrician listing the tools for the fix, a 6er screwdriver, a voltage tester and a wire stripper"
+        caption: Prototype 2023 · The tool list before the call.
+      - kind: image
+        src: ./media/fixit-prototyp-warten-2023.jpg
+        alt: "Fixit prototype on a phone: a round assistant with a yellow helmet and the text I'm looking for the right fit for you"
+        caption: Prototype 2023 · Waiting for a free professional.
+  - type: quote
+    photo: ./media/zarangez-platzhalter.jpg
+    position: 50% 30%
+    text: It was great to see Sören’s commitment to understanding our target audience on a deeper level. He created detailed personas to truly understand the emotions and motivations of our customers. This translated into a design that not only met functional requirements but also resonated emotionally with our users.
+    who: Zarangez Muminova, Co-Founder at Fixit

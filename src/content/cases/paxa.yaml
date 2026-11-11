@@ -1,0 +1,84 @@
+# Generiert aus dem Prototyp (scripts/import-cases.mjs). Bis zum Umstieg hier nichts von Hand ändern,
+# der nächste Import überschreibt die Datei.
+head:
+  kind: visual
+  label: Paxa
+  title: Contemporary Legal Services
+  media:
+    poster: ./media/paxa-hero-2025-11.jpg
+    video: paxa-hero-2025-11-v2.mp4
+    alt: Screen recording of the paxa.law home page, from the hero down to the footer
+  caption: 11.2025 · The home page at launch, from top to bottom.
+  meta:
+    - label: Role
+      value: Webflow Designer (Freelance)
+    - label: Period
+      value: 07.2025 – 10.2025
+    - label: Input
+      value: First draft, texts and photos by the Paxa founders
+    - label: Scope
+      value: Web design, Webflow build, CMS for case studies and blog, German and English via Webflow Localization
+blocks:
+  - type: chapter
+    decision: From a Lovable draft to a visual language.
+    why:
+      - "The founders came with a Lovable draft: structure, texts, photos, a first green and Figtree as their typeface. What it lacked was a system behind sizes and spacing."
+      - I darkened the green, toned down the beige and gave the site one type scale and one spacing scale, applied to every page.
+      - The visual language kept growing after the launch. When a freelance brand designer extended the brand with orange in 02.2026 and 03.2026, I drew the icons for the home page.
+    evidence:
+      - kind: pair
+        items:
+          - src: ./media/paxa-lovable-entwurf-hero.jpg
+            alt: "The Lovable draft of the paxa home page: the headline Wir sind eure Rechtsabteilung in a grotesque typeface, a plain navigation"
+            caption: The Lovable draft by the founders.
+          - src: ./media/paxa-startseite-hero-2025-11.jpg
+            alt: "The paxa home page at launch: the headline Wir sind Ihre Rechtsabteilung in Figtree, dark green on beige"
+            caption: 11.2025 · The same page at launch.
+      - kind: image
+        src: ./media/paxa-icons-2026-03.jpg
+        alt: "Six line icons in orange on beige: a star, a sun, a thought bubble with bars, a flag, a speech bubble and four circles"
+        caption: 03.2026 · Icons I drew for the home page, alongside a brand extension by a freelance brand designer.
+  - type: showcase
+    width: half
+    portrait: true
+    items:
+      - kind: image
+        src: ./media/paxa-mobil-start-2026-11.jpg
+        alt: "paxa.law on a phone: the headline Wir sind Ihre Rechtsabteilung in dark green on beige"
+        caption: 11.2026 · The home page.
+      - kind: image
+        src: ./media/paxa-mobil-papers-2026-11.jpg
+        alt: "paxa.law on a phone: the Papers overview with a green card for a blog post"
+        caption: 11.2026 · The Papers overview.
+      - kind: image
+        src: ./media/paxa-mobil-case-teaser-2026-11.jpg
+        alt: "paxa.law on a phone: a case study teaser with an n8n graphic, the title Data protection as a basis for growth | n8n & Paxa, a short text and three tags"
+        caption: 11.2026 · A case study in the list.
+      - kind: image
+        src: ./media/paxa-mobil-case-seite-2026-11.jpg
+        alt: "paxa.law on a phone: the case study page Data protection as a basis for growth | n8n & Paxa with intro text, the tags Data Protection, Compliance and Commercial Contracts and the date April 29, 2026"
+        caption: 11.2026 · The same case study on its page, built on the CMS template.
+      - kind: image
+        src: ./media/paxa-mobil-team-2026-11.jpg
+        alt: "paxa.law on a phone: the page of Konstantin Heilmann with a black and white portrait and his profile"
+        caption: 11.2026 · A team page.
+  - type: chapter
+    decision: Two templates, 25 posts by the team.
+    why:
+      - "Paxa needed a site that grows with its practice. I prepared two CMS templates, one for case studies and one for blog posts, and the CMS structure behind them. The team only fills in text fields: layout, type and spacing come from the template."
+      - "German and English run through Webflow Localization, and the team maintains both languages itself. The result is a scalable site: so far the team has published 25 posts on its own."
+    evidence:
+      - kind: image
+        src: ./media/paxa-case-study-taktile-2026-11.jpg
+        alt: "The paxa.law case study Taktile: headline Partner der Automatisierung von Entscheidungen, tags, a company profile and the challenge"
+        caption: 11.2026 · The case study Taktile, built on the CMS template.
+      - kind: stat
+        value: "25"
+        label:
+          - "Posts published by the Paxa team on its own: 10 case studies, 15 blog posts."
+          - Live in 11.2026, each in German and English.
+  - type: quote
+    photo: ./media/konstantin-julian.jpg
+    position: 50% 30%
+    text: When we contacted Sören, we wanted to completely restructure our website quickly, but didn't have the resources to implement it ourselves. He was immediately available, executed our vision precisely, and contributed his own ideas. Throughout the process, we were closely involved. Even after the launch, we can always rely on his fast and dependable support.
+    who: Konstantin and Julian, Partners and Founders at Paxa

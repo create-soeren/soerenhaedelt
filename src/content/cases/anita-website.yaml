@@ -1,0 +1,66 @@
+# Generiert aus dem Prototyp (scripts/import-cases.mjs). Bis zum Umstieg hier nichts von Hand ändern,
+# der nächste Import überschreibt die Datei.
+head:
+  kind: visual
+  label: Anita
+  title: Face of a new brand
+  media:
+    poster: ./media/anita-website-hero-2026-11.jpg
+    video: anita-website-hero-2026-11.mp4
+    alt: Screen recording of the anita.legal home page, from the hero down to the footer
+  caption: 11.2026 · The home page today, from top to bottom.
+  meta:
+    - label: Role
+      value: Web Designer (Freelance)
+    - label: Concept
+      value: Home page, rough prototypes of three more pages, color mesh and images by Khaled Mahd, Creative Director at Silicon Allee
+    - label: Period
+      value: 2 months
+    - label: Scope
+      value: Responsive design of all pages, handoff to the Mosherino Agency, adjustments in Webflow since the launch
+blocks:
+  - type: chapter
+    decision: From a rough prototype to a responsive site.
+    why:
+      - Anita was rebranded within the Silicon Allee accelerator. Its Creative Director, Khaled Mahd, designed the new home page in Adobe, with the color mesh and the images, and roughed out how it works, why Anita and about us.
+      - I rebuilt these pages in Figma, made every page work down to the phone and designed what was still missing, such as the contact page.
+      - The Mosherino Agency built the site in Webflow from my Figma files. It went live in 02.2025 and replaced the old iur.crowd site.
+    evidence:
+      - kind: image
+        src: ./media/anita-website-kontakt-2025-05.jpg
+        alt: "The anita.legal contact page in May 2025: the headline Sie möchten uns etwas mitteilen? and a form with message, name, e-mail and phone fields"
+        caption: 05.2025 · The contact page, designed from scratch.
+  - type: showcase
+    width: half
+    portrait: true
+    items:
+      - kind: image
+        src: ./media/anita-website-mobil-start-2026-11.jpg
+        alt: "anita.legal home page on a phone: the arched hero image and the headline KI-gestützte Rechtsrecherche schneller und intelligenter"
+        caption: 11.2026 · The home page on a phone.
+      - kind: image
+        src: ./media/anita-website-mobil-stimmen-2026-11.jpg
+        alt: "anita.legal on a phone: the headline Anwält:innen die Anita vertrauen above an arched portrait of a lawyer and his quote, on a gradient from navy to orange"
+        caption: 11.2026 · A lawyer's testimonial.
+      - kind: image
+        src: ./media/anita-website-mobil-preise-public-2026-11.jpg
+        alt: "anita.legal pricing on a phone: the headline Features & Preise and the plan Anita Public as a list of features"
+        caption: 11.2026 · Pricing, the plan Anita Public.
+      - kind: image
+        src: ./media/anita-website-mobil-preise-private-2026-11.jpg
+        alt: "anita.legal pricing on a phone: the plan Anita Private as a list of features"
+        caption: 11.2026 · Pricing, the plan Anita Private.
+      - kind: image
+        src: ./media/anita-website-mobil-schritte-2026-11.jpg
+        alt: "anita.legal on a phone: So funktioniert’s in 3 einfachen Schritten with the steps register, enter a legal question and get insights, each with an icon"
+        caption: 11.2026 · How it works, in three steps.
+  - type: chapter
+    decision: From handoff to new pages.
+    why:
+      - "After the launch I kept adjusting the site in Webflow. When the founders wanted their prices on the site, I designed and built the table “Features & Preise”: two plans side by side, a toggle between yearly and monthly payment and one call to action per plan."
+      - In 05.2026 I added a landing page for Anita's API product.
+    evidence:
+      - kind: image
+        src: ./media/anita-website-preise-2026-11.jpg
+        alt: "The pricing table on anita.legal: the plans Anita Public and Anita Private side by side with their features, the price and a button each"
+        caption: 11.2026 · The pricing table, added in 2025 at the founders' request.
