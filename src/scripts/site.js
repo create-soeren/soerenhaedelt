@@ -1052,6 +1052,7 @@ function syncDrink() {
 }
 syncDrink();
 
+const NO_POUR = matchMedia("(max-width: 1019px), (hover: none)");
 const Cup = {
   build() {
     this.nodes?.forEach((n) => n.remove());
@@ -1117,8 +1118,10 @@ const Cup = {
     st.clipPath = `polygon(0% 100%, 0% ${y(0)}, ${pts.join(", ")}, 100% ${y(N - 1)}, 100% 100%)`;
   },
   update(dt, t) {
-    // No drink picked yet: the system's pointer, the button rests.
+    // No drink picked yet: the system's pointer, the button rests. No pour below the 1020 anchor or without hover (12.11.,
+    // see .contact in the CSS): a pot or bag still out from a wider window goes.
     if (!DRINK) return;
+    if (NO_POUR.matches) { this.nodes.forEach((n) => n.setAttribute("opacity", 0)); return; }
     const hit = P.inside ? document.elementFromPoint(P.x, P.y) : null;
     const onSwitch = !!(hit && hit.closest(".drink"));
     const on = !!(hit && hit.closest("#contact")) && !onSwitch && this.fill < 1, onBtn = !touch && !!(hit && hit.closest("#chat"));

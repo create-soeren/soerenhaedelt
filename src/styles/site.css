@@ -428,6 +428,15 @@
      is no longer set apart from the pitch, 04.11.), the button stands apart at xl. */
   .contact .intro { margin-top: var(--space-xs); }
   .contact .actions { margin-top: var(--space-xl); }
+  /* No pour where it cannot be played (12.11.): below the 1020 anchor (tablet, phone) and wherever the pointer does not
+     hover (an iPad held across is wider). No question, no toolbar, the button is served full in the primary's orange.
+     !important against the clip JS writes inline while a drink is poured, should the window narrow mid-pour. */
+  @media (max-width: 1019px), (hover: none) {
+    .contact .ask, .contact .drink { display: none; }
+    .brew .cof { clip-path: none !important; mask-image: none !important; }
+    .contact[data-drink], .contact[data-drink] * { cursor: auto; }
+    .brew, .brew * { cursor: pointer; }
+  }
   /* Coffee or tea, a small tool palette in the navbar's glass (see .glass), marked like the navbar: hover turns a
      tool black and draws a thin ink rule from the middle, the chosen one is black with a short orange bar and the
      other one goes grey. Before a pick both stay black, nothing is greyed out yet. */
