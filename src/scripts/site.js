@@ -246,9 +246,9 @@ function updateGlow(dt) {
   // In the contact the glow goes while the pot or the bag is the pointer: from the pick until the button is full.
   // Before a pick and once served it is there as everywhere.
   // Over a video the glow goes as well: the video is opaque, so the glow would only bleed around its edges.
-  const sec = contact.getBoundingClientRect(), brewing = !!DRINK && Cup.fill < 1;
+  const brewing = !!DRINK && Cup.fill < 1; // never on the contact page, which has no footer to pour in
   const overVideo = [...document.querySelectorAll("video")].some((v) => pointerIn(v.getBoundingClientRect()));
-  G.mute = lerp(G.mute, (pointerIn(sec) && brewing) || overVideo ? 1 : 0, reduced ? 1 : ease(dt, 0.8));
+  G.mute = lerp(G.mute, (brewing && pointerIn(contact.getBoundingClientRect())) || overVideo ? 1 : 0, reduced ? 1 : ease(dt, 0.8));
   G.presence = P.presence * (1 - G.mute);
   glowEl.style.transform = `translate(${G.x}px, ${G.y}px) scale(${G.scale.toFixed(3)})`;
   glowEl.style.opacity = G.presence;
@@ -980,8 +980,9 @@ function updateIcons(dt, t) {
 // Tea, the button as clear water: the bag is dunked, each dip sends a ripple, and the colour spreads from the bag
 //   with a soft edge.
 
+// Not on the contact page (12.11.): that page is the contact itself and has no footer; the pour then does nothing.
 const contact = document.getElementById("contact");
-const chat = document.getElementById("chat"), cof = chat.querySelector(".cof"), drinkEl = contact.querySelector(".drink");
+const chat = contact?.querySelector("#chat"), cof = chat?.querySelector(".cof"), drinkEl = contact?.querySelector(".drink");
 const LIQUID = RAMP[2], NEAR_BTN = 120;
 // Turns a point of the pointer drawing into page coordinates.
 const turn = (x, y, a, ox, oy) => { const c = Math.cos(a), s = Math.sin(a); return [ox + x * c - y * s, oy + x * s + y * c]; };
@@ -1038,7 +1039,7 @@ const TOOL_ICONS = {
   coffee: ["M6.5 4 H15.5 L13.5 11.5 H8.5 Z", "M8.5 12.5 H13.5 L15.5 21 H6.5 Z", "M6.8 5 L3 4 L7.6 8.6", "M15.2 5.5 H20 L18.6 11 H13.9", "M9.5 4 V2.5 H12.5 V4"],
   tea: ["M4.5 12 L7 9.5 H13 L15.5 12 V20 Q15.5 21 14.5 21 H5.5 Q4.5 21 4.5 20 Z", "M10 9.5 C10 5 13 3 16.5 4.5", "M16.5 2.5 H21 V7.5 H16.5 Z"],
 };
-drinkEl.querySelectorAll("button").forEach((b) => {
+drinkEl?.querySelectorAll("button").forEach((b) => {
   const svg = svgEl("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 1.6, "stroke-linejoin": "round", "stroke-linecap": "round" }, b);
   for (const d of TOOL_ICONS[b.dataset.drink]) svgEl("path", { d }, svg);
   b.append(b.title);
@@ -1046,6 +1047,7 @@ drinkEl.querySelectorAll("button").forEach((b) => {
 });
 // The chosen drink on the toolbar and the section (the pointer's CSS hangs on it); none until a pick.
 function syncDrink() {
+  if (!contact) return;
   drinkEl.querySelectorAll("button").forEach((o) => o.setAttribute("aria-pressed", o.dataset.drink === DRINK));
   if (DRINK) contact.dataset.drink = drinkEl.dataset.on = DRINK;
   else { delete contact.dataset.drink; delete drinkEl.dataset.on; }
@@ -1055,6 +1057,7 @@ syncDrink();
 const NO_POUR = matchMedia("(max-width: 1019px), (hover: none)");
 const Cup = {
   build() {
+    if (!contact) return;
     this.nodes?.forEach((n) => n.remove());
     this.g = svgEl("g", { opacity: 0 }, fx);
     const extra = (el) => (this.nodes.push(el), el);

@@ -225,7 +225,6 @@
   html:not([data-p="projects"]) [data-page="projects"], html:not([data-p="case"]) [data-page="case"],
   html:not([data-p="contact"]) [data-page="contact"] { display: none; }
   /* The contact page is the contact: no closing section under it. */
-  html[data-p="contact"] #contact { display: none; }
   /* The editor's pins and entries belong to the home's orange phrases. */
   html:not([data-p="home"]) .pin, html:not([data-p="home"]) .entry { display: none; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

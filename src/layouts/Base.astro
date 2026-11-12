@@ -50,16 +50,18 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
 
     <slot />
 
-    <section class="contact" id="contact">
-      <h2>Let's get <span class="ink">together.</span></h2>
-      <p class="intro">We can talk about your product, design or whatever is on your mind.</p>
-      <p class="intro ask">Make a choice.</p>
-      <div><div class="drink glass" role="group" aria-label="Coffee or tea">
-        <button type="button" data-drink="coffee" aria-pressed="true" aria-label="Coffee" title="Coffee"></button>
-        <button type="button" data-drink="tea" aria-pressed="false" aria-label="Tea" title="Tea"></button>
-      </div></div>
-      <div class="actions"><a class="btn brew" id="chat" href="https://cal.com/create-soeren/coffee-or-tea" target="_blank" rel="noopener"><span class="lbl">Let's have a chat</span><span class="cof" aria-hidden="true"><span class="lbl">Let's have a chat</span></span></a></div>
-    </section>
+    {page !== "contact" && (
+      <section class="contact" id="contact">
+        <h2>Let's get <span class="ink">together.</span></h2>
+        <p class="intro">We can talk about your product, design or whatever is on your mind.</p>
+        <p class="intro ask">Make a choice.</p>
+        <div><div class="drink glass" role="group" aria-label="Coffee or tea">
+          <button type="button" data-drink="coffee" aria-pressed="true" aria-label="Coffee" title="Coffee"></button>
+          <button type="button" data-drink="tea" aria-pressed="false" aria-label="Tea" title="Tea"></button>
+        </div></div>
+        <div class="actions"><a class="btn brew" id="chat" href="https://cal.com/create-soeren/coffee-or-tea" target="_blank" rel="noopener"><span class="lbl">Let's have a chat</span><span class="cof" aria-hidden="true"><span class="lbl">Let's have a chat</span></span></a></div>
+      </section>
+    )}
 
     <svg id="fx"></svg>
     <script>
