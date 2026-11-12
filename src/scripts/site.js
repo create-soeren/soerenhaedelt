@@ -1156,6 +1156,9 @@ function start() {
 }
 // A theme change (dark mode, 10.11.): the colours JS holds as values are read again from the variables, and what was
 // drawn with them is drawn again. The icons start unplayed, like after a restart.
+// The token kit calls retheme() after a colour change in its panel. A module's functions are not global, so it is handed
+// to the window on purpose (the prototype's classic script had it there by itself).
+window.retheme = () => retheme();
 function retheme() {
   RAMP.splice(0, RAMP.length, ...RAMP_VARS.map(cssVar));
   CREAM_POT.handle = CREAM_POT.line = RAMP[0];

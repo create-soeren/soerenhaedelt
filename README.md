@@ -22,6 +22,19 @@ Portfolio von Sören Hädelt, gebaut mit Astro, gehostet auf GitHub Pages.
 - `public/media/` – Videos (werden nicht verarbeitet, nur ausgeliefert).
 - `src/styles/tokens.css` – Design-Tokens, erzeugt vom Prototype-Kit aus `design.md`. Nicht von Hand ändern.
 
+## Token-Kit
+
+Werte (Farben, Schrift, Abstände) stehen in `design.md` und werden mit dem Prototype-Kit eingestellt. Lokal liegt dafür eine
+`kit.json` im Repo-Root (gitignored):
+
+```json
+{ "kit": "../prototype-kit", "design": "<pfad>/design.md", "out": "src/styles/tokens.css" }
+```
+
+Mit der Datei zeigt `npm run dev` jede Seite im Kit, `?present` zeigt sie ohne. "Speichern" schreibt `design.md` und
+`tokens.css`, die Seite übernimmt die CSS ohne Neuladen. Ohne `kit.json` (auf GitHub Actions) läuft alles ohne Kit, der Build
+nimmt die eingecheckte `tokens.css`.
+
 ## Stand
 
 Seit 11.11.2026 ist dieses Repo die Quelle für Seiten und Cases. Der Prototyp (second-brain, `website-redesign-2026.html`, Stand `486dc63`) ist eingefroren und nur noch Referenz.

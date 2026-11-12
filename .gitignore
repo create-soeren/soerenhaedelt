@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Token-Kit, nur lokal (Pfade zum privaten Kit und zu design.md)
+kit.json
+kit-variants.json
