@@ -6,14 +6,15 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "npm run fonts && astro dev",
+    "build": "npm run fonts && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint:css": "stylelint \"src/**/*.{css,astro}\" --allow-empty-input",
     "lint:html": "html-validate -c .htmlvalidate.json \"dist/**/*.html\"",
-    "check": "npm run lint:css && astro build && npm run lint:html",
-    "prepare": "simple-git-hooks"
+    "check": "npm run lint:css && npm run build && npm run lint:html",
+    "prepare": "simple-git-hooks",
+    "fonts": "node scripts/fonts.mjs"
   },
   "dependencies": {
     "astro": "^7.4.10"

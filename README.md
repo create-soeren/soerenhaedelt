@@ -29,12 +29,23 @@ Werte (Farben, Schrift, Abstände) stehen in `design.md` und werden mit dem Prot
 `kit.json` im Repo-Root (gitignored):
 
 ```json
-{ "kit": "../prototype-kit", "design": "<pfad>/design.md", "out": "src/styles/tokens.css" }
+{ "kit": "../prototype-kit", "design": "<pfad>/design.md", "out": "src/styles/tokens.css", "fonts": "src/fonts" }
 ```
 
 Mit der Datei zeigt `npm run dev` jede Seite im Kit, `?present` zeigt sie ohne. "Speichern" schreibt `design.md` und
 `tokens.css`, die Seite übernimmt die CSS ohne Neuladen. Ohne `kit.json` (auf GitHub Actions) läuft alles ohne Kit, der Build
 nimmt die eingecheckte `tokens.css`.
+
+## Schriften
+
+Selbst gehostet in `src/fonts/`, kein Request an Google oder Fontshare. Der Ordner gehört dem Kit: Es lädt die Dateien beim
+Speichern und schreibt die `@font-face`-Regeln in `tokens.css`.
+
+- Poppins (SIL Open Font License) liegt im Repo, mit `Poppins-OFL.txt`.
+- Clash Display (ITF Free Font License) darf selbst gehostet, aber nicht über ein öffentliches Repo weitergegeben werden.
+  Die Dateien sind gitignored, `scripts/fonts.mjs` lädt sie vor `dev` und `build` aus der Quelle in `fetch.json`. Lokal
+  liegen sie schon, auf GitHub Actions lädt das Skript alle fünf.
+- Clash Display 700 (alle Überschriften) wird im Layout vorgeladen.
 
 ## Stand
 

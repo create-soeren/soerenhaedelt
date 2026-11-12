@@ -2,6 +2,9 @@
 import "../styles/tokens.css";
 import "../styles/site.css";
 import { url } from "../lib/url";
+// Die Schrift jeder Überschrift, vorgeladen, damit sie nicht erst nach dem CSS angefragt wird. Dieselbe Datei wie in
+// tokens.css, Vite gibt beiden dieselbe Adresse.
+import headFont from "../fonts/clash-display-700.woff2?url";
 
 interface Props { page: "home" | "about" | "projects" | "case" | "contact"; title: string }
 const { page, title } = Astro.props;
@@ -14,6 +17,7 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <!-- Bis zum Umzug auf soerenhaedelt.com nicht indexieren. -->
     <meta name="robots" content="noindex">
     <title>{title}</title>
+    <link rel="preload" href={headFont} as="font" type="font/woff2" crossorigin>
     <script is:inline>
       // Light or dark before the first paint (10.11.): the visitor's own choice from the switch, else the system's. Set on
       // <html> always, so the page's dark rules only ever ask data-theme.
