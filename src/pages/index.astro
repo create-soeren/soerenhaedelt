@@ -1,6 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
-import { asset, url } from "../lib/url";
+import { Image } from "astro:assets";
+import Pic from "../components/Pic.astro";
+import { url } from "../lib/url";
+import til from "../assets/people/til.jpg";
+import khaled from "../assets/people/khaled.jpg";
+import anita from "../assets/logos/anita.png";
+import paxa from "../assets/logos/paxa.png";
+import hdt from "../assets/logos/hdt.png";
+import amendio from "../assets/logos/amendio.png";
+import neptune from "../assets/logos/neptune.png";
+import siliconAllee from "../assets/logos/silicon-allee.svg";
+import fraunhofer from "../assets/logos/fraunhofer.svg";
+// Logos: Anzeigehöhe aus site.css (--h, Standard 30 px), geladen in doppelter Höhe für scharfe Kanten.
+const logos = [[anita, "Anita"], [siliconAllee, "Silicon Allee", 44], [paxa, "Paxa"], [hdt, "HDT Systems", 36], [amendio, "amendio", 24], [fraunhofer, "Fraunhofer", 34], [neptune, "neptune", 28]];
 ---
 <Base page="home" title="Sören Hädelt">
   <section class="hero" data-page="home">
@@ -25,14 +38,14 @@ import { asset, url } from "../lib/url";
   <section id="quote" data-page="home">
     <div class="quotes">
       <figure class="quote is-on">
-        <img class="photo" src={asset("assets/people/til.jpg")} alt="Til Bußmann-Welsch" style="object-position: 52% 35%">
+        <Pic class="photo" src={til} widths={[340, 680]} sizes="(max-width: 743px) min(280px, 60vw), 340px" alt="Til Bußmann-Welsch" style="object-position: 52% 35%" decoding="async" />
         <div>
           <blockquote>"Sören hat unser SaaS-Produkt einmal komplett auf links gedreht. Die Identifikation der Schwachstellen, wie auch der Stärken, war schonungslos ehrlich, aber genau dieser Input war nötig, um das Produkt auf das nächste Level zu heben. Sören hatte dabei immer die technische und die Businessperspektive im Blick. Die Fortschritte der letzten zwei Jahre sprechen für sich."</blockquote>
           <footer class="who">Til Bußmann-Welsch, Co-Founder Anita</footer>
         </div>
       </figure>
       <figure class="quote">
-        <img class="photo" src={asset("assets/people/khaled.jpg")} alt="Khaled Mahd" style="object-position: 50% 12%">
+        <Pic class="photo" src={khaled} widths={[340, 680]} sizes="(max-width: 743px) min(280px, 60vw), 340px" alt="Khaled Mahd" style="object-position: 50% 12%" loading="lazy" decoding="async" />
         <div>
           <blockquote>"I've had the pleasure of working with Sören on multiple projects, including the relaunch of our website to Webflow. He handled the migration fully preserving our existing SEO visibility. His ability to anticipate risks and proactively solve complex problems made the transition smooth and stress-free. Integral work ethic and technical precision! I look forward to continuing our collaboration."</blockquote>
           <footer class="who">Khaled Mahd, Creative Director at Silicon Allee</footer>
@@ -46,13 +59,7 @@ import { asset, url } from "../lib/url";
     <div class="logos" role="group" aria-label="Clients">
       <div class="logos-track">
         <div class="logos-set">
-          <img src={asset("assets/logos/anita.png")} alt="Anita">
-          <img src={asset("assets/logos/silicon-allee.svg")} alt="Silicon Allee" style="--h: 44px">
-          <img src={asset("assets/logos/paxa.png")} alt="Paxa">
-          <img src={asset("assets/logos/hdt.png")} alt="HDT Systems" style="--h: 36px">
-          <img src={asset("assets/logos/amendio.png")} alt="amendio" style="--h: 24px">
-          <img src={asset("assets/logos/fraunhofer.svg")} alt="Fraunhofer" style="--h: 34px">
-          <img src={asset("assets/logos/neptune.png")} alt="neptune" style="--h: 28px">
+          {logos.map(([src, alt, h]) => <Image src={src} alt={alt} height={(h ?? 30) * 2} format={src.format === "svg" ? undefined : "webp"} quality={90} style={h ? `--h: ${h}px` : undefined} />)}
         </div>
       </div>
     </div>

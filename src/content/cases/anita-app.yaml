@@ -114,7 +114,7 @@ blocks:
       - title: Research must guide direction changes
         text: User testing did not only validate improvements. It invalidated entire concepts. Abandoning structured argument extraction was not a setback, but a strategic correction. Design maturity includes knowing when to stop.
   - type: quote
-    photo: ./media/til.jpg
+    photo: ../../assets/people/til.jpg
     position: 52% 35%
     text: Sören hat unser SaaS-Produkt einmal komplett auf links gedreht. Die Identifikation der Schwachstellen, wie auch der Stärken, war schonungslos ehrlich, aber genau dieser Input war nötig, um das Produkt auf das nächste Level zu heben. Sören hatte dabei immer die technische und die Businessperspektive im Blick. Die Fortschritte der letzten zwei Jahre sprechen für sich.
     who: Til Bußmann-Welsch, CXO & Co-Founder at Anita

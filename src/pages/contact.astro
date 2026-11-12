@@ -1,10 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
-import { asset } from "../lib/url";
+import Pic from "../components/Pic.astro";
+import portrait from "../assets/bildsprache-platzhalter.jpg";
 ---
 <Base page="contact" title="Contact · Sören Hädelt">
   <section class="cpage" id="cpage" data-page="contact">
-    <img src={asset("assets/bildsprache-platzhalter.jpg")} alt="Portrait, placeholder">
+    <Pic src={portrait} widths={[340, 680]} sizes="340px" alt="Portrait, placeholder" />
     <div class="cbody">
       <h1>Let's get <span class="ink">together.</span></h1>
       <p class="intro">We can talk about your product, design or whatever is on your mind.</p>

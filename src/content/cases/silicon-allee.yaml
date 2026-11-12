@@ -62,7 +62,7 @@ blocks:
         alt: "siliconallee.com news overview in November 2026: the newest articles, dated October 20, July 2, June 9 and February 19, 2026"
         caption: 11.2026 · The news overview today, newest articles first.
   - type: quote
-    photo: ./media/khaled.jpg
+    photo: ../../assets/people/khaled.jpg
     position: 50% 12%
     text: I've had the pleasure of working with Sören on multiple projects, including the relaunch of our website to Webflow. He handled the migration fully preserving our existing SEO visibility. His ability to anticipate risks and proactively solve complex problems made the transition smooth and stress-free. Integral work ethic and technical precision! I look forward to continuing our collaboration.
     who: Khaled Mahd, Creative Director at Silicon Allee

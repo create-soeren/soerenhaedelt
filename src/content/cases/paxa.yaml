@@ -76,7 +76,7 @@ blocks:
           - "Posts published by the Paxa team on its own: 10 case studies, 15 blog posts."
           - Live in 11.2026, each in German and English.
   - type: quote
-    photo: ./media/konstantin-julian.jpg
+    photo: ../../assets/people/konstantin-julian.jpg
     position: 50% 30%
     text: When we contacted Sören, we wanted to completely restructure our website quickly, but didn't have the resources to implement it ourselves. He was immediately available, executed our vision precisely, and contributed his own ideas. Throughout the process, we were closely involved. Even after the launch, we can always rely on his fast and dependable support.
     who: Konstantin and Julian, Partners and Founders at Paxa

@@ -1,0 +1,9 @@
+---
+// Ein Bild aus der Collection oder aus src/assets: WebP in mehreren Breiten, die Maße kommen aus dem Bild selbst
+// (width und height im Markup, der Platz ist vor dem Laden reserviert). sizes sagt dem Browser, wie breit das Bild
+// auf der Seite steht, danach wählt er die Datei.
+import { Image } from "astro:assets";
+const { src, widths: steps = [480, 800, 1200, 1600], ...rest } = Astro.props;
+const widths = [...steps.filter((w) => w < src.width), src.width];
+---
+<Image src={src} widths={widths} format="webp" quality={82} {...rest} />

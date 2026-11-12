@@ -1,12 +1,19 @@
 ---
 // Ein Case aus der Collection. Markup und Klassen wie im Prototyp (renderCase und BLOCKS), vom Server gebaut.
 import Evidence from "./Evidence.astro";
+import Pic from "./Pic.astro";
 import { asset } from "../lib/url";
+import { poster } from "../lib/poster";
 
 const { head, blocks } = Astro.props.data;
 const of = blocks.filter((b) => b.type === "chapter").length;
 const visual = head.kind === "visual";
 let no = 0;
+const lead = visual && head.media.video ? await poster(head.media.poster) : null;
+// Breite des Bildes auf der Seite je Block (Spalten aus site.css): Kapitel rechte Spalte, Showcase je nach Anordnung.
+const sizesOf = (b) => b.type === "chapter" ? "(min-width: 1020px) 52vw, 100vw"
+  : b.items.length > 2 ? "(min-width: 1020px) 20vw, (min-width: 744px) 33vw, 50vw"
+  : b.portrait ? "(min-width: 1020px) 300px, 50vw" : "(min-width: 1020px) 50vw, 100vw";
 const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "0");
 ---
 <section class="case" id="case" data-page="case">
@@ -17,8 +24,8 @@ const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "
         <h1 class="stmt vtitle">{head.title}</h1>
         <figure>
           {head.media.video
-            ? <video src={asset(`media/${head.media.video}`)} poster={head.media.poster.src} aria-label={head.media.alt} controls muted loop playsinline preload="metadata"></video>
-            : <img src={head.media.poster.src} alt={head.media.alt}>}
+            ? <video src={asset(`media/${head.media.video}`)} poster={lead.src} width={lead.width} height={lead.height} aria-label={head.media.alt} controls muted loop playsinline preload="metadata"></video>
+            : <Pic src={head.media.poster} alt={head.media.alt} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" />}
           {head.caption && <figcaption>{head.caption}</figcaption>}
         </figure>
       </Fragment>
@@ -39,18 +46,18 @@ const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "
           {b.struck && <p class="was"><span class="sr-only">{b.struck.label}, struck: </span><span class="pen">{b.struck.text}</span></p>}
           <h2>{b.decision}</h2></div>
           <div class="dbody"><div class="why">{b.why.map((p) => <p>{p}</p>)}</div>
-          {b.evidence && <div class="evidence">{b.evidence.map((e) => <Evidence e={e} />)}</div>}</div></article>
+          {b.evidence && <div class="evidence">{b.evidence.map((e) => <Evidence e={e} sizes={sizesOf(b)} />)}</div>}</div></article>
       )}
       {b.type === "showcase" && (
         <div class:list={["block showcase", `is-${b.width}`, { "is-portrait": b.portrait, "is-row": b.items.length > 2 }]} style={`--n: ${b.items.length}`}>
-          <div class="items">{b.items.map((e) => <Evidence e={e} />)}</div></div>
+          <div class="items">{b.items.map((e) => <Evidence e={e} sizes={sizesOf(b)} />)}</div></div>
       )}
       {b.type === "learnings" && (
         <article class="block decision learnings"><div class="dhead"><h2>Key learnings</h2></div>
           <ol>{b.items.map(({ title, text }) => <li><h3>{title}</h3><p>{text}</p></li>)}</ol></article>
       )}
       {b.type === "quote" && (
-        <figure class="block cquote"><img class="photo" src={b.photo.src} alt={b.who.split(",")[0]} style={`object-position: ${b.position}`}>
+        <figure class="block cquote"><Pic class="photo" src={b.photo} widths={[340, 680]} sizes="(max-width: 743px) min(280px, 60vw), 340px" alt={b.who.split(",")[0]} style={`object-position: ${b.position}`} loading="lazy" decoding="async" />
           <div><blockquote>“{b.text}”</blockquote><footer class="who">{b.who}</footer></div></figure>
       )}
     </Fragment>

@@ -182,7 +182,7 @@
   .quote.is-on { opacity: 1; visibility: visible; }
   /* Multiply lets the glow behind the page show through the photo, as light falling on it; elsewhere the near-white
      ground leaves the photo as it is. */
-  .photo { width: var(--photo); aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1); mix-blend-mode: multiply; opacity: var(--opacity-quote-photo); }
+  .photo { width: var(--photo); height: auto; aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1); mix-blend-mode: multiply; opacity: var(--opacity-quote-photo); }
   blockquote { margin: 0; max-width: calc(var(--space-measure) * 1ch); font-family: var(--font-quote); font-style: italic; font-weight: var(--w-quote); font-size: var(--type-quote-size); line-height: var(--type-quote-lh); }
   .who { font-size: 13px; line-height: var(--who-lh); margin-top: var(--space-s); color: var(--color-muted); }
   /* The box is the hit area (44 × 30); its padding reaches out past the corner, so the arrow itself sits flush with the
@@ -278,7 +278,7 @@
   .about .prose { margin-top: var(--space-s); }
   .about .prose p { margin: 0; text-wrap: pretty; }
   .about .prose p + p { margin-top: var(--space-s); }
-  .about img { grid-area: 2 / 2; display: block; width: var(--photo); aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
+  .about img { grid-area: 2 / 2; display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
   /* Phone (10.11.): text and photo stack; the LinkedIn mark stands at the photo's top right, outside it. The text blocks
      dissolve into the grid (display: contents), so headline and prose take a row each. From the 744 anchor text and photo
      stand side by side, the gap narrower there (about.gap) and growing to xl's size by 1020. */
@@ -296,7 +296,7 @@
   .cpage { min-height: 100vh; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: var(--photo) minmax(0, calc(var(--space-measure) * 1ch));
     justify-content: center; align-items: center; column-gap: var(--space-xl); --photo: var(--photo-width); }
   .cpage::before { display: none; }
-  .cpage img { display: block; width: var(--photo); aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
+  .cpage img { display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
   .cpage .cbody { text-align: center; }
   .cpage h1, .cpage .intro { margin-left: auto; margin-right: auto; }
   .cpage .intro { margin-top: var(--space-xs); color: var(--color-muted); }
