@@ -857,7 +857,13 @@ function tapAt(x, y) {
   const near = (r, m) => r.width > 0 && x >= r.left - m && x <= r.right + m && y >= r.top - m && y <= r.bottom + m;
   const tapped = phrases.find((ph) => near(ph.pin.getBoundingClientRect(), PIN_TAP));
   if (!tapped && phrases.some((ph) => ph.open && near(ph.card.getBoundingClientRect(), 0))) return;
-  for (const ph of phrases) ph.open = ph === tapped ? !ph.open : false;
+  for (const ph of phrases) {
+    const was = ph.open;
+    ph.open = ph === tapped ? !ph.open : false;
+    // Closed by a tap, the entry fades at once (12.11.): no hold (that is for a cursor slipping off the pin) and straight
+    // into the fade, which is the last 30 % of the clock. Before, it stood still for about 0.75 s and felt broken.
+    if (was && !ph.open) { ph.hold = 0; ph.c = Math.min(ph.c, 0.3 * E_DUR); }
+  }
 }
 addEventListener("pointerup", (e) => {
   if (e.pointerType !== "touch" || P.press || Press.eat) return;
@@ -1296,15 +1302,6 @@ function frame(t) {
   Cup.update(dt, t);
 
   requestAnimationFrame(frame);
-}
-
-// --- Type ---------------------------------------------------------------------------------------
-// Families, weights and sizes are tokens: set in design.md, loaded through tokens.css, tuned in the kit panel.
-// Writes one URL parameter, reading the URL at the moment of writing.
-function setParam(param, value) {
-  const url = new URL(location.href);
-  if (value) url.searchParams.set(param, value); else url.searchParams.delete(param);
-  history.replaceState(null, "", url);
 }
 
 // --- Case strikes ---------------------------------------------------------------------------------

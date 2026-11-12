@@ -19,6 +19,20 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <title>{title}</title>
     <link rel="preload" href={headFont} as="font" type="font/woff2" crossorigin>
     <script is:inline>
+      // Scroll position (12.11.): Arc and Chrome on iOS put a reload, even a pull-to-refresh at the top, back to an older
+      // position of the page (footer, win cards); Safari did not. The page keeps its own: where it stood on leaving, per
+      // address, back on reload and on back/forward. A new visit starts at the top.
+      (() => {
+        const key = `y:${location.pathname}`;
+        try {
+          const nav = performance.getEntriesByType("navigation")[0]?.type, y = +sessionStorage.getItem(key);
+          history.scrollRestoration = "manual";
+          addEventListener("pagehide", () => sessionStorage.setItem(key, String(Math.max(0, Math.round(scrollY)))));
+          if ((nav === "reload" || nav === "back_forward") && y > 0) addEventListener("DOMContentLoaded", () => scrollTo(0, y));
+        } catch { /* no storage (private mode): the browser keeps its own restore */ }
+      })();
+    </script>
+    <script is:inline>
       // Light or dark before the first paint (10.11.): the visitor's own choice from the switch, else the system's. Set on
       // <html> always, so the page's dark rules only ever ask data-theme.
       (() => {
