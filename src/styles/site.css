@@ -191,7 +191,9 @@
   .next svg { width: 28px; height: 14px; display: block; }
   @media (max-width: 743px) {
     .quotes { --photo: min(280px, 60vw); }
-    .quote { grid-template-columns: 1fr; gap: var(--space-l); }
+    /* align-content (12.11.): the quotes share one cell as tall as the longest; without it the spare height of a short
+       quote went between photo and text. Now it goes below the name, the arrow stays where the thumb left it. */
+    .quote { grid-template-columns: 1fr; gap: var(--space-l); align-content: start; }
     .next { bottom: calc(var(--who-lh) / 2 - 15px); }
   }
 
