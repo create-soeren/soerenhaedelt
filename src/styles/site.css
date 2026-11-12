@@ -178,8 +178,14 @@
   /* Testimonials: stacked in one grid cell, one visible at a time, the arrow switches. Photo and quote grow with the
      window (as at 1440 px: 340 px and 20 px); below the 744 anchor the photo sits above the quote. */
   .quotes { position: relative; display: grid; --photo: var(--photo-width); --who-lh: 20px; }
-  .quote { grid-area: 1 / 1; display: grid; grid-template-columns: var(--photo) 1fr; gap: var(--space-l); align-items: start; margin: 0; opacity: 0; visibility: hidden; transition: opacity .5s, visibility .5s; }
-  .quote.is-on { opacity: 1; visibility: visible; }
+  .quote { grid-area: 1 / 1; display: grid; grid-template-columns: var(--photo) 1fr; gap: var(--space-l); align-items: start; margin: 0; visibility: hidden; transition: visibility 0s .25s; }
+  .quote.is-on { visibility: visible; transition: none; }
+  /* The switch (12.11.): photo and text fade on their own, the quote itself stays opaque. A quote fading as a whole is
+     its own group while it fades, so the photo's multiply met that empty group instead of the page: the photo went pale
+     for half a second and both photos lay over each other. Now the old one goes (.25 s), then the new one comes (.25 s). */
+  .quote > div, .quote > .photo { opacity: 0; transition: opacity .25s; }
+  .quote.is-on > div { opacity: 1; transition: opacity .25s .25s; }
+  .quote.is-on > .photo { opacity: var(--opacity-quote-photo); transition: opacity .25s .25s; }
   /* Multiply lets the glow behind the page show through the photo, as light falling on it; elsewhere the near-white
      ground leaves the photo as it is. */
   .photo { width: var(--photo); height: auto; aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1); mix-blend-mode: multiply; opacity: var(--opacity-quote-photo); }
