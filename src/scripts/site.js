@@ -538,15 +538,26 @@ const box = (l, t, r, b) => ({ left: l, top: t, right: r, bottom: b, width: r - 
 
 // The push's redlines, quieter than the pills: line and end ticks, with `small` a grey figure beside it.
 const QUIET = "var(--color-quiet)";
+// Figures in Poppins (12.11.). Poppins has proportional digits and no tnum (the 1 is half as wide as the rest),
+// so every digit gets its own fixed cell, centred in it: the number no longer jumps while it counts.
+// The cell is the widest digit, the 6 (0.629 em in Light, 0.635 em in Regular).
+const FIG_SIZE = 10, FIG_CELL = 0.635 * FIG_SIZE;
+// `cx` is the centre of the whole number (horizontal labels) or, with `start`, its left edge (vertical labels).
+function figures(g, cx, y, value, start = false) {
+  const s = String(value), x0 = start ? cx : cx - (s.length * FIG_CELL) / 2;
+  const t = svgEl("text", { y: y.toFixed(1), "text-anchor": "middle", "font-size": FIG_SIZE, fill: QUIET, style: "font-family: var(--font-caption)" }, g);
+  [...s].forEach((d, i) => { svgEl("tspan", { x: (x0 + (i + 0.5) * FIG_CELL).toFixed(2) }, t).textContent = d; });
+}
 function quietH(g, y, x1, x2, small) {
   if (Math.abs(x2 - x1) < 1) return;
   line(g, x1, y, x2, y); line(g, x1, y - 3, x1, y + 3); line(g, x2, y - 3, x2, y + 3);
-  if (small) svgEl("text", { x: ((x1 + x2) / 2).toFixed(1), y: (y - 5).toFixed(1), "text-anchor": "middle", "font-size": 9, "font-family": MONO, fill: QUIET }, g).textContent = Math.round(Math.abs(x2 - x1));
+  if (small) figures(g, (x1 + x2) / 2, y - 5, Math.round(Math.abs(x2 - x1)));
 }
 function quietV(g, x, y1, y2, small) {
   if (Math.abs(y2 - y1) < 1) return;
   line(g, x, y1, x, y2); line(g, x - 3, y1, x + 3, y1); line(g, x - 3, y2, x + 3, y2);
-  if (small) svgEl("text", { x: (x + 6).toFixed(1), y: ((y1 + y2) / 2 + 3).toFixed(1), "font-size": 9, "font-family": MONO, fill: QUIET }, g).textContent = Math.round(Math.abs(y2 - y1));
+  // + 3.5: half the cap height (0.7 em), so the figure sits centred on the line.
+  if (small) figures(g, x + 6, (y1 + y2) / 2 + 3.5, Math.round(Math.abs(y2 - y1)), true);
 }
 
 const Push = {
