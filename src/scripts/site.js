@@ -593,9 +593,12 @@ const Push = {
       if (off > 1.5) {
         const L = layer(clamp(off / 6));
         svgEl("rect", { x: home.left, y: home.top, width: home.width, height: home.height, fill: "none", stroke: "currentColor", "stroke-width": 1, "stroke-dasharray": "4 3" }, L);
-        const c = r.top + r.height / 2;
-        if (Math.abs(it.x) > 1.5) quietH(L, c, home.left, r.left, true);
-        if (Math.abs(it.y) > 1.5) quietV(L, r.left + Math.min(r.width / 2, 80), home.top, r.top, true);
+        // The redline measures the edge the line moved away from, inside the slot where the space opens (12.11.): pushed
+        // right the left edges, pushed left the right edges; down the top edges, up the bottom edges. Before, it always
+        // measured left and top, so a push left or up drew it outside the slot, under the text.
+        const c = r.top + r.height / 2, vx = r.left + Math.min(r.width / 2, 80);
+        if (Math.abs(it.x) > 1.5) it.x > 0 ? quietH(L, c, home.left, r.left, true) : quietH(L, c, r.right, home.right, true);
+        if (Math.abs(it.y) > 1.5) it.y > 0 ? quietV(L, vx, home.top, r.top, true) : quietV(L, vx, r.bottom, home.bottom, true);
       }
       if (it.flash > 0) guideV(layer(it.flash), home.left, [[home.top, home.bottom]]);
     }
