@@ -489,13 +489,15 @@
 
   /* Figma's comment pin: marks every orange phrase from the first frame on, its sharp corner on the point.
      It is the trigger of the entry, so it takes the pointer. */
-  .pin { position: fixed; left: 0; top: 0; z-index: 3; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; background: var(--color-primary);
+  /* The layer for pins and entries at the document's origin; it takes no space, the pins hang out of it (see placePin). */
+  .pins { position: absolute; left: 0; top: 0; }
+  .pin { position: absolute; left: 0; top: 0; z-index: 3; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; background: var(--color-primary);
     display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--color-on-primary); cursor: pointer; transform-origin: 0 100%;
     box-shadow: 0 2px 6px rgb(0,0,0,.14); }
 
-  /* The entry, the same content in every version: who, what was struck, why. Fixed, placed by JS every frame. */
+  /* The entry, the same content in every version: who, what was struck, why. In the pin layer, placed by JS every frame. */
   /* Above the annotation layer (#fx, 4, earlier in the DOM), so slots and redlines never cross the card. */
-  .entry { position: fixed; left: 0; top: 0; z-index: 4; font-size: 14px; pointer-events: none; opacity: 0; }
+  .entry { position: absolute; left: 0; top: 0; z-index: 4; font-size: 14px; pointer-events: none; opacity: 0; }
   .entry .head { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--color-muted); }
   .entry .head b { color: var(--color-ink); font-weight: 600; }
   /* The role sits at the card's right edge, where Figma's comments put the time. */

@@ -788,19 +788,24 @@ function entryPlay(ph, t, from) {
   ph.items.forEach((el, k) => el.style.setProperty("--s", easeOut(seg(t, from + k * 0.08, from + 0.2 + k * 0.08)).toFixed(3)));
   ph.note.style.opacity = easeOut(seg(t, from + 0.2, from + 0.5)).toFixed(3);
 }
-// x/y is the point the pin refers to; it grows a little while its entry is open. It never leaves the screen: under about
-// 350 px a phrase that fills its line pushes the pin past the edge, there it overlaps the phrase's end instead.
+// Pins and entries live in a layer at the document's origin, not fixed to the screen (12.11.): zoomed in on an iPhone
+// the fixed pins sat apart from their phrases, because the browser counts fixed boxes and element boxes from different
+// viewports. Placed as the distance between two element boxes, a pin stays on its phrase at any zoom and scroll.
+const pinLayer = PAGE === "home" ? h("div", "pins", null, document.body) : null;
+const fromLayer = (x, y) => { const o = pinLayer.getBoundingClientRect(); return [x - o.left, y - o.top]; };
+// x/y is the point the pin refers to (screen coordinates); it grows a little while its entry is open. It never leaves the
+// screen: under about 350 px a phrase that fills its line pushes the pin past the edge, there it overlaps the phrase's end.
 function placePin(pin, x, y, t) {
-  x = Math.min(x, document.documentElement.clientWidth - 28);
-  pin.style.transform = `translate(${x.toFixed(1)}px, ${(y - 24).toFixed(1)}px) scale(${(1 + 0.2 * snap(seg(t, 0, 0.3))).toFixed(3)})`;
+  const [lx, ly] = fromLayer(Math.min(x, document.documentElement.clientWidth - 28), y - 24);
+  pin.style.transform = `translate(${lx.toFixed(1)}px, ${ly.toFixed(1)}px) scale(${(1 + 0.2 * snap(seg(t, 0, 0.3))).toFixed(3)})`;
 }
 
 // Cursor-Chat. Figma's comment pin marks every orange phrase from the first frame, and the entry rides on the cursor,
 // like Figma's cursor chat and like the cup at the contact: the content appears where the eye already is.
 const Chat = {
   build(ph) {
-    ph.pin = h("div", "pin", "S", document.body);
-    ph.card = h("div", "entry chat", null, document.body);
+    ph.pin = h("div", "pin", "S", pinLayer);
+    ph.card = h("div", "entry chat", null, pinLayer);
     entryBody(ph, ph.card);
   },
   update(ph, t, rects) {
@@ -827,7 +832,8 @@ const Chat = {
       ph.card.classList.toggle("left", !right);
       ph.at = { x: right ? r.left : Math.max(16, r.right - w), y: r.bottom + 8 + hgt > innerHeight - 16 ? r.top - 8 - hgt : r.bottom + 8 };
     } else if (ph.onPin || !ph.at) ph.at = { x: P.sx + 18 + 260 > innerWidth - 16 ? P.sx - 18 - 260 : P.sx + 18, y: P.sy + 20 };
-    ph.card.style.transform = `translate(${ph.at.x.toFixed(1)}px, ${ph.at.y.toFixed(1)}px) scale(${lerp(0.9, 1, o).toFixed(3)})`;
+    const [cx, cy] = fromLayer(ph.at.x, ph.at.y);
+    ph.card.style.transform = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) scale(${lerp(0.9, 1, o).toFixed(3)})`;
     entryPlay(ph, t, 0.25);
   },
 };
@@ -841,18 +847,29 @@ phrases.forEach((ph) => STYLE.build(ph));
 // A finger on a hybrid (touch laptop, iPad with trackpad) taps as on a phone; the mouse there keeps hovering (11.11.).
 const PIN_TAP = 20;
 let lastPointer = touch ? "touch" : "mouse";
-addEventListener("pointerdown", (e) => { lastPointer = e.pointerType; });
+// A finger's tap counts on pointerup, not on click (12.11.): iOS WebKit (Safari, Arc) sends no click for a tap on a plain
+// div or on text, so a tap on the pin or beside it never arrived and the entries did not open on the iPhone. A scroll
+// ends in pointercancel, not pointerup, so scrolling opens nothing. The lift after a long press on the hero opens nothing
+// either (P.press still on, or Press.eat set by the touchend, whichever the browser sends first).
+addEventListener("pointerdown", (e) => { lastPointer = e.pointerType; if (e.pointerType === "touch") Press.eat = false; });
 if (touch) phrases.forEach((ph) => ph.card.classList.add("left"));
-{
-  addEventListener("click", (e) => {
-    if (Press.eat) { Press.eat = false; return; } // the lift after a long press on the hero
-    if (!touch && lastPointer !== "touch") { for (const ph of phrases) ph.open = false; return; }
-    const near = (r, m) => r.width > 0 && e.clientX >= r.left - m && e.clientX <= r.right + m && e.clientY >= r.top - m && e.clientY <= r.bottom + m;
-    const tapped = phrases.find((ph) => near(ph.pin.getBoundingClientRect(), PIN_TAP));
-    if (!tapped && phrases.some((ph) => ph.open && near(ph.card.getBoundingClientRect(), 0))) return;
-    for (const ph of phrases) ph.open = ph === tapped ? !ph.open : false;
-  });
+function tapAt(x, y) {
+  const near = (r, m) => r.width > 0 && x >= r.left - m && x <= r.right + m && y >= r.top - m && y <= r.bottom + m;
+  const tapped = phrases.find((ph) => near(ph.pin.getBoundingClientRect(), PIN_TAP));
+  if (!tapped && phrases.some((ph) => ph.open && near(ph.card.getBoundingClientRect(), 0))) return;
+  for (const ph of phrases) ph.open = ph === tapped ? !ph.open : false;
 }
+addEventListener("pointerup", (e) => {
+  if (e.pointerType !== "touch" || P.press || Press.eat) return;
+  tapAt(e.clientX, e.clientY);
+});
+// Mouse and trackpad keep the click: where the device hovers it closes what a finger opened; on a touch-first device
+// (iPad with a trackpad) a click on the pin opens its entry like a tap.
+addEventListener("click", (e) => {
+  if (lastPointer === "touch") return;
+  if (!touch) { for (const ph of phrases) ph.open = false; return; }
+  tapAt(e.clientX, e.clientY);
+});
 
 // --- Calm at the pin --------------------------------------------------------------------------------
 // The entry opens on the pin, so the hero has to hold still while it is read. The glow, and the push with it, shrink
@@ -885,7 +902,10 @@ function updateCalm(dt) {
 //     once; it stays played, the brackets go, and a counter under the row keeps score.
 // On touch the icons fall back to the scroll clock of ink.html. Set off once, every icon keeps its end state.
 
-const ICON_DUR = 1400, ICON_GAP = 700, ROW_TOTAL = ICON_DUR + 2 * ICON_GAP;
+// ICON_GAP (touch only): the next icon starts at 1100 of the previous one's 1400 ms (12.11., was 700). By then the eased run
+// has 90 % of its movement behind it, so the row reads as one icon after another; at 700 the first icon took its colour
+// while the second already moved, and the two read as one.
+const ICON_DUR = 1400, ICON_GAP = 1100, ROW_TOTAL = ICON_DUR + 2 * ICON_GAP;
 const rows = [...document.querySelectorAll(".wins")];
 
 function buildIndicator(card, svg) {
