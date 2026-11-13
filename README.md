@@ -36,6 +36,24 @@ Mit der Datei zeigt `npm run dev` jede Seite im Kit, `?present` zeigt sie ohne. 
 `tokens.css`, die Seite übernimmt die CSS ohne Neuladen. Ohne `kit.json` (auf GitHub Actions) läuft alles ohne Kit, der Build
 nimmt die eingecheckte `tokens.css`.
 
+## Spielwiese und Stände
+
+Ein Versuch, der die Website nicht anfassen soll, läuft als Branch in einem eigenen Ordner mit eigenem Dev-Server und Kit.
+Gestartet wird im Hauptordner auf `main`:
+
+| Befehl | Was er tut |
+| --- | --- |
+| `npm run spiel -- <name>` | Branch `spiel/<name>` ab `main`, Ordner `../soerenhaedelt-spiel/<name>`, Server auf dem nächsten freien Port ab 4322, mit Kit. Gibt es die Spielwiese schon, wird sie wieder geöffnet. |
+| `npm run spiel -- stand <name>` | Tag `stand/<name>` auf `main` (falls neu) als Ordner geöffnet, **ohne Kit**: genau die eingecheckte `tokens.css`. Der Vergleichsstand. |
+| `npm run spiel -- list` | Alle Spielwiesen und Stände mit Adresse. |
+| `npm run spiel -- weg <ordner>` | Server stoppen, Ordner entfernen. Branch und Tag bleiben. |
+
+- Gespeichert wird per Commit auf dem Branch. Was überzeugt, kommt per Merge nach `main`, was nicht, wird verworfen (`git branch -D`).
+- Das Kit schreibt auf der Spielwiese in eine Kopie von `design.md` (`../soerenhaedelt-spiel/<name>.design.md`), nie in die echte.
+  Gewinnen dort Werte, werden sie von Hand in die echte `design.md` übernommen.
+- Nicht eingecheckte Änderungen im Hauptordner gehen nicht in die Spielwiese über, sie startet vom letzten Commit auf `main`.
+- Kleine Versuche brauchen keine Spielwiese: Kit-Varianten halten Token-Stände, Ausblenden im Kit ist eine Vorschau.
+
 ## Schriften
 
 Selbst gehostet in `src/fonts/`, kein Request an Google oder Fontshare. Der Ordner gehört dem Kit: Es lädt die Dateien beim

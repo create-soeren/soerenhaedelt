@@ -14,7 +14,8 @@
     "lint:html": "html-validate -c .htmlvalidate.json \"dist/**/*.html\"",
     "check": "npm run lint:css && npm run build && npm run lint:html",
     "prepare": "simple-git-hooks",
-    "fonts": "node scripts/fonts.mjs"
+    "fonts": "node scripts/fonts.mjs",
+    "spiel": "node scripts/spiel.mjs"
   },
   "dependencies": {
     "astro": "^7.4.10"
