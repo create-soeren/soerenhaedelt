@@ -16,11 +16,12 @@ const video = text.refine((file) => existsSync(join(process.cwd(), "public/media
 const cases = defineCollection({
   loader: glob({ pattern: "*.yaml", base: "./src/content/cases" }),
   schema: ({ image }) => {
-    const figure = { src: image(), alt: text, caption: text.optional() };
+    // rounded: Gerätebild mit schwarzen Ecken im JPG (kein Alpha), der Radius in der CSS deckt sie ab.
+    const figure = { src: image(), alt: text, caption: text.optional(), rounded: z.boolean().optional() };
     const evidence = z.discriminatedUnion("kind", [
       z.object({ kind: z.literal("image"), ...figure }),
       z.object({ kind: z.literal("pair"), items: z.array(z.object(figure)).length(2) }),
-      z.object({ kind: z.literal("video"), src: video, poster: image(), alt: text, caption: text.optional() }),
+      z.object({ kind: z.literal("video"), src: video, poster: image(), alt: text, caption: text.optional(), loop: z.boolean().optional() }),
       z.object({ kind: z.literal("stat"), value: text, label: lines }),
       z.object({ kind: z.literal("quote"), text, who: text }),
       z.object({ kind: z.literal("finding"), text, who: text }),
@@ -34,7 +35,7 @@ const cases = defineCollection({
         why: lines,
         evidence: z.array(evidence).optional(),
       }),
-      z.object({ type: z.literal("showcase"), width: z.enum(["half"]), portrait: z.boolean().optional(), items: z.array(evidence).min(1) }),
+      z.object({ type: z.literal("showcase"), width: z.enum(["half", "full"]), portrait: z.boolean().optional(), items: z.array(evidence).min(1) }),
       z.object({ type: z.literal("learnings"), items: z.array(z.object({ title: text, text })).min(1) }),
       // Das Foto bekommt seinen Alt-Text aus dem Namen in "who".
       z.object({ type: z.literal("quote"), photo: image(), position: text, text, who: text }),

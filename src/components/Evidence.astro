@@ -8,7 +8,7 @@ const { e, sizes = "100vw" } = Astro.props;
 const clip = e.kind === "video" ? await poster(e.poster) : null;
 ---
 {e.kind === "image" && (
-  <figure><Pic src={e.src} alt={e.alt} sizes={sizes} loading="lazy" decoding="async" />{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
+  <figure><Pic class={e.rounded ? "device" : undefined} src={e.src} alt={e.alt} sizes={sizes} loading="lazy" decoding="async" />{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
 )}
 {e.kind === "pair" && (
   <div class="pair">{e.items.map((i) => (
@@ -16,7 +16,7 @@ const clip = e.kind === "video" ? await poster(e.poster) : null;
   ))}</div>
 )}
 {e.kind === "video" && (
-  <figure><video src={asset(`media/${e.src}`)} poster={clip.src} width={clip.width} height={clip.height} aria-label={e.alt} controls muted loop playsinline preload="metadata"></video>{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
+  <figure><video src={asset(`media/${e.src}`)} poster={clip.src} width={clip.width} height={clip.height} aria-label={e.alt} controls muted loop={e.loop !== false} playsinline preload="metadata"></video>{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
 )}
 {e.kind === "stat" && (
   <p class="stat"><b>{e.value}</b><span>{e.label.map((l, i) => <Fragment>{i > 0 && <br>}{l}</Fragment>)}</span></p>

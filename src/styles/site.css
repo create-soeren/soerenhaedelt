@@ -357,6 +357,10 @@
   .block:last-child { padding-bottom: 0; }
   .block figure { margin: 0; }
   .block img, .block video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }
+  /* Device shots (Fixit): cropped to the phone body (side buttons cut off), but the JPG has no alpha, so its corners stay
+     black outside the phone. The radius is 9.5 % of the width (the phone's own corner is 9 %), the vertical part is
+     scaled by 636/1370 so the corner stays circular. */
+  .block img.device { border-radius: 9.5% / 4.41%; }
   .block figcaption { margin-top: var(--space-2xs); font-size: 13px; line-height: 1.45; color: var(--color-muted); }
   .decision { display: grid; grid-template-columns: 5fr 6fr; column-gap: var(--space-xl); align-items: start; }
   .dhead { position: sticky; top: 112px; }

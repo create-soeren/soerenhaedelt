@@ -35,18 +35,14 @@ blocks:
       - "An app raises the barrier on both sides: for people with a broken fuse and for the repair companies Fixit needed on board. The first version ran as a mobile website, on the assumption that people look up a repair on their phone."
       - "I prototyped the flow in mid fidelity, from the first question to the video call with a professional: an AI chat narrows down the problem, three packages set the length of the call, payment runs on its own."
   - type: showcase
-    width: half
-    portrait: true
+    width: full
     items:
       - kind: video
-        src: fixit-prototyp-2023.mp4
-        poster: ./media/fixit-prototyp-2023.jpg
-        alt: "Screen recording of the Fixit prototype on a phone: the chat with a professional, the choice of a package and the booking of the call"
-        caption: Prototype 2023 · From the chat to the booked call.
-      - kind: image
-        src: ./media/fixit-prototyp-pakete-2023.jpg
-        alt: "Fixit prototype on a phone: Choose your package with Quick Fix for 20 euros, Comfort Fix for 40 euros and Guide for 60 euros"
-        caption: Prototype 2023 · Three packages set the length of the call.
+        src: fixit-hero-2023.mp4
+        poster: ./media/fixit-hero-2023.jpg
+        loop: false
+        alt: "Fixit prototype on a phone in front of a light gradient: the screens scroll past, from the choice of a package through payment and the chat to the cost comparison"
+        caption: Prototype 2023 · Package, payment and chat on the phone.
   - type: chapter
     decision: Tools from a partner shop.
     why:
@@ -61,13 +57,30 @@ blocks:
     portrait: true
     items:
       - kind: image
+        src: ./media/fixit-prototyp-pakete-2023.jpg
+        rounded: true
+        alt: "Fixit prototype on a phone: Choose your package with Quick Fix for 20 euros, Comfort Fix for 40 euros and Guide for 60 euros"
+        caption: 2023 · Choose a package.
+      - kind: image
+        src: ./media/fixit-prototyp-termin-2023.jpg
+        rounded: true
+        alt: "Fixit prototype on a phone: Schedule your call with the date 20.12 and the times 17:30, 18:00 and 09:30 to 14:00"
+        caption: 2023 · Schedule the call.
+      - kind: image
+        src: ./media/fixit-prototyp-zahlung-2023.jpg
+        rounded: true
+        alt: "Fixit prototype on a phone: four payment methods, PayPal, card, Apple Pay and Google Pay, above a greyed-out Continue button"
+        caption: 2023 · Choose how to pay.
+      - kind: image
         src: ./media/fixit-prototyp-werkzeuge-2023.jpg
+        rounded: true
         alt: "Fixit prototype on a phone: a chat with an electrician listing the tools for the fix, a 6er screwdriver, a voltage tester and a wire stripper"
-        caption: Prototype 2023 · The tool list before the call.
+        caption: 2023 · The tool list before the call.
       - kind: image
         src: ./media/fixit-prototyp-warten-2023.jpg
+        rounded: true
         alt: "Fixit prototype on a phone: a round assistant with a yellow helmet and the text I'm looking for the right fit for you"
-        caption: Prototype 2023 · Waiting for a free professional.
+        caption: 2023 · Waiting for a free professional.
   - type: quote
     photo: ../../assets/people/zarangez.jpg
     position: 50% 50%

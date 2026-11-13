@@ -17,6 +17,11 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <!-- Bis zum Umzug auf soerenhaedelt.com nicht indexieren. -->
     <meta name="robots" content="noindex">
     <title>{title}</title>
+    <!-- Favicon (13.11.): the note pin with S, as on the hero. SVG for current browsers, ICO for the rest, and the
+         touch icon on the page colour, since iOS fills transparency with black. -->
+    <link rel="icon" href={url("favicon.ico")} sizes="32x32">
+    <link rel="icon" href={url("favicon.svg")} type="image/svg+xml">
+    <link rel="apple-touch-icon" href={url("apple-touch-icon.png")}>
     <link rel="preload" href={headFont} as="font" type="font/woff2" crossorigin>
     <script is:inline>
       // Scroll position (12.11.): Arc and Chrome on iOS put a reload, even a pull-to-refresh at the top, back to an older
