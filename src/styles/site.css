@@ -490,7 +490,11 @@
      page itself. Photos screen instead of multiply: the image stays, its dark parts take the ground and the glow, mirrored
      to the light page. Screenshots of light interfaces lie plain and a little dimmed, so they do not glare. The logos
      turn white. The glass dims its sheen, which would read as a light film on dark. */
-  [data-theme="dark"] .photo, [data-theme="dark"] .about img, [data-theme="dark"] .cpage img { mix-blend-mode: screen; }
+  [data-theme="dark"] .about img, [data-theme="dark"] .cpage img { mix-blend-mode: screen; }
+  /* Quote photos stay unblended in dark (13.11.): with screen the glow tinted the grey photo, and devices that fade it on
+     the GPU drew it unblended while fading and blended at rest, so it jumped in colour after every switch. The unblended
+     look is the one we keep. */
+  [data-theme="dark"] .photo { mix-blend-mode: normal; }
   [data-theme="dark"] .case .vhero img, [data-theme="dark"] .block img, [data-theme="dark"] .case .vhero video, [data-theme="dark"] .block video { mix-blend-mode: normal; filter: brightness(.9); }
   [data-theme="dark"] .logos img { filter: brightness(0) invert(1); }
   [data-theme="dark"] .glass { --sheen: .16; --edge: .35; --tint: .62; --shadow: 3; }
