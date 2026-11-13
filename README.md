@@ -46,7 +46,7 @@ Gestartet wird im Hauptordner auf `main`:
 | `npm run spiel -- <name>` | Branch `spiel/<name>` ab `main`, Ordner `../soerenhaedelt-spiel/<name>`, Server auf dem nächsten freien Port ab 4322, mit Kit. Gibt es die Spielwiese schon, wird sie wieder geöffnet. |
 | `npm run spiel -- stand <name>` | Tag `stand/<name>` auf `main` (falls neu) als Ordner geöffnet, **ohne Kit**: genau die eingecheckte `tokens.css`. Der Vergleichsstand. |
 | `npm run spiel -- list` | Alle Spielwiesen und Stände mit Adresse. |
-| `npm run spiel -- weg <ordner>` | Server stoppen, Ordner entfernen. Branch und Tag bleiben. |
+| `npm run spiel -- weg <ordner>` | Server stoppen, Ordner entfernen. Branch und Tag bleiben. Bricht ab, wenn Nicht-Committetes oder neue Werte in der `design.md`-Kopie drin sind, `--force` entfernt trotzdem. |
 
 - Gespeichert wird per Commit auf dem Branch. Was überzeugt, kommt per Merge nach `main`, was nicht, wird verworfen (`git branch -D`).
 - Das Kit schreibt auf der Spielwiese in eine Kopie von `design.md` (`../soerenhaedelt-spiel/<name>.design.md`), nie in die echte.

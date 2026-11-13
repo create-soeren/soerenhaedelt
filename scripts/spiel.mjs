@@ -5,7 +5,8 @@
 //   npm run spiel -- <name>          Spielwiese anlegen oder wieder öffnen (Branch spiel/<name>, Port ab 4322)
 //   npm run spiel -- stand <name>    Vergleichsstand: Tag stand/<name> auf main (falls neu), als Ordner geöffnet, ohne Kit
 //   npm run spiel -- list            alle Spielwiesen und Stände, mit Adresse
-//   npm run spiel -- weg <ordner>    Server stoppen, Ordner entfernen (Branch und Tag bleiben), <ordner> wie in list
+//   npm run spiel -- weg <ordner>    Server stoppen, Ordner entfernen (Branch und Tag bleiben), <ordner> wie in list.
+//                                    Bricht ab, wenn Nicht-Committetes oder neue Werte in der design.md-Kopie drin sind (--force)
 //
 // Das Kit schreibt auf der Spielwiese in eine Kopie von design.md (../soerenhaedelt-spiel/<name>.design.md), nicht in die echte.
 // Ein Stand läuft ohne Kit: Er zeigt genau die eingecheckte tokens.css, die design.md von damals gibt es hier nicht.
@@ -62,9 +63,14 @@ if (cmd === "list") {
 } else if (cmd === "weg") {
   const dir = join(home, arg ?? "");
   if (!arg || !existsSync(dir)) fail(`Kein Ordner "${arg}", siehe: npm run spiel -- list`);
+  // Nicht entfernen, was sonst verloren ginge: Nicht-Committetes im Ordner, neue Werte in der design.md-Kopie.
+  const copy = join(home, `${arg}.design.md`), own = join(root, "kit.json"), lost = [];
+  if (spawnSync("git", ["status", "--porcelain"], { cwd: dir, encoding: "utf8" }).stdout.trim()) lost.push("nicht committete Änderungen im Ordner");
+  if (existsSync(copy) && existsSync(own) && readFileSync(copy, "utf8") !== readFileSync(resolve(root, JSON.parse(readFileSync(own, "utf8")).design), "utf8")) lost.push(`Werte in ${arg}.design.md, die in der echten design.md fehlen`);
+  if (lost.length && !process.argv.includes("--force")) fail(`${arg} nicht entfernt, es gingen verloren: ${lost.join("; ")}.\nErst committen bzw. Werte in die echte design.md übernehmen. Trotzdem entfernen: npm run spiel -- weg ${arg} --force`);
   spawnSync("npx", ["astro", "dev", "stop"], { cwd: dir, stdio: "inherit" });
   run("git", ["worktree", "remove", "--force", dir], root);
-  rmSync(join(home, `${arg}.design.md`), { force: true });
+  rmSync(copy, { force: true });
   console.log(arg.startsWith("stand-") ? `${arg} entfernt. Der Tag stand/${arg.slice(6)} bleibt (löschen: git tag -d stand/${arg.slice(6)}).`
     : `${arg} entfernt. Der Branch spiel/${arg} bleibt, mit allem, was darauf committet ist (löschen: git branch -D spiel/${arg}).`);
 } else if (cmd === "stand") {
