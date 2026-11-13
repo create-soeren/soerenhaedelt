@@ -75,7 +75,7 @@
   /* From the 744 anchor on only (10.11.): on the phone the ticks stand in the gutter, over the text. */
   @media (max-width: 743px) { .ticks { display: none; } }
 
-  section { min-height: 100vh; padding: var(--space-xxl) var(--side); position: relative; }
+  section { min-height: 100svh; padding: var(--space-xxl) var(--side); position: relative; }
   section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-rule-strong); }
 
   /* Own size step since 11.11.: display × 1.15, the case headlines stay on display.
@@ -98,7 +98,7 @@
   /* Prototype 2 pins the hero for a short stretch, so the margin notes have room to play. The first frame is
      the same as without the pin. */
   [data-v="2"] .hero { height: 170vh; min-height: 0; padding: 0; }
-  [data-v="2"] .stage { position: sticky; top: 0; height: 100vh; padding: var(--space-xxl) var(--side); }
+  [data-v="2"] .stage { position: sticky; top: 0; height: 100svh; padding: var(--space-xxl) var(--side); }
   .note { position: absolute; left: 0; top: 0; font-size: 20px; font-weight: 600; white-space: nowrap; text-decoration: none; opacity: 0; }
   .note::after { content: ""; position: absolute; left: -.08em; right: -.08em; top: 54%; height: 2px; background: var(--color-primary);
     transform-origin: 0 50%; transform: rotate(-1.5deg) scaleX(var(--s, 0)); }
@@ -300,7 +300,7 @@
   /* Contact page: photo and text as one group in the middle like About, xl between, the text centred in its column.
      Headline, xs, subline, m, button | l, tick line, l | label, 2xs, address. The tick line is as wide as the column and has the
      project list's colour (rule); subline and label are muted (tried in the kit, 09.11.). */
-  .cpage { min-height: 100vh; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: var(--photo) minmax(0, calc(var(--space-measure) * 1ch));
+  .cpage { min-height: 100svh; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: var(--photo) minmax(0, calc(var(--space-measure) * 1ch));
     justify-content: center; align-items: center; column-gap: var(--space-xl); --photo: var(--photo-width); }
   .cpage::before { display: none; }
   .cpage img { display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
@@ -348,7 +348,7 @@
      title override below. */
   .case h1.vtitle { max-width: calc(var(--space-measure-headline) * 1ch); margin-top: var(--space-s); }
   .case .vhero figure { margin: var(--space-xl) 0 0; }
-  .case .vhero img, .case .vhero video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: #fff; }
+  .case .vhero img, .case .vhero video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }
   /* Images multiply onto the page like the photos, so the glow shows through them and does not vanish behind the
      white ground. Videos stay opaque; the glow fades out over them instead (see updateGlow). */
   .case .vhero img, .block img { mix-blend-mode: multiply; }
@@ -356,7 +356,7 @@
   .block { padding: var(--space-xl) 0; border-top: 1px solid var(--color-rule); }
   .block:last-child { padding-bottom: 0; }
   .block figure { margin: 0; }
-  .block img, .block video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: #fff; }
+  .block img, .block video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }
   .block figcaption { margin-top: var(--space-2xs); font-size: 13px; line-height: 1.45; color: var(--color-muted); }
   .decision { display: grid; grid-template-columns: 5fr 6fr; column-gap: var(--space-xl); align-items: start; }
   .dhead { position: sticky; top: 112px; }
