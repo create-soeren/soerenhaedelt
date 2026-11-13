@@ -41,6 +41,9 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
         document.documentElement.dataset.theme = t === "light" || t === "dark" ? t : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       })();
     </script>
+    <!-- Umami (13.11.): cookieless page views. data-domains keeps it silent everywhere but soerenhaedelt.com, so
+         github.io and local runs count nothing and counting starts with the domain move. -->
+    <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="9cb55be6-230e-4be4-9d4c-70fdb5c63bac" data-domains="soerenhaedelt.com"></script>
   </head>
   <body>
     <div class="glow" id="glow"></div>
