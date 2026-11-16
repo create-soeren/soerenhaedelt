@@ -7,8 +7,7 @@ head:
   impact:
     value: €10,000
     label:
-      - Female Founder Prize of Berliner Sparkasse, 04.2024.
-      - Fixit pitched with the prototype.
+      - founder prize, pitched with this prototype
   meta:
     - label: Role
       value: UX Designer (Freelance)
@@ -33,7 +32,7 @@ blocks:
     decision: A website on the phone, not an app.
     why:
       - "An app raises the barrier on both sides: for people with a broken fuse and for the repair companies Fixit needed on board. The first version ran as a mobile website, on the assumption that people look up a repair on their phone."
-      - "I prototyped the flow in mid fidelity, from the first question to the video call with a professional: an AI chat narrows down the problem, three packages set the length of the call, payment runs on its own."
+      - "I prototyped the flow in mid fidelity, from the first question to the video call with a professional: an AI chat narrows down the problem, three packages set the length of the call, payment runs on its own. In April 2024 Fixit pitched with this prototype in a competition and won the Female Founder Prize of Berliner Sparkasse, endowed with €10,000."
   - type: showcase
     width: full
     items:
