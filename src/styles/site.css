@@ -286,7 +286,7 @@
   .about .prose { margin-top: var(--space-s); }
   .about .prose p { margin: 0; text-wrap: pretty; }
   .about .prose p + p { margin-top: var(--space-s); }
-  .about img { grid-area: 2 / 2; display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
+  .about img { grid-area: 2 / 2; display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; opacity: var(--opacity-portrait-light); }
   /* Phone (10.11.): text and photo stack; the LinkedIn mark stands at the photo's top right, outside it. The text blocks
      dissolve into the grid (display: contents), so headline and prose take a row each. From the 744 anchor text and photo
      stand side by side, the gap narrower there (about.gap) and growing to xl's size by 1020. */
@@ -304,7 +304,7 @@
   .cpage { min-height: 100svh; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: var(--photo) minmax(0, calc(var(--space-measure) * 1ch));
     justify-content: center; align-items: center; column-gap: var(--space-xl); --photo: var(--photo-width); }
   .cpage::before { display: none; }
-  .cpage img { display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; }
+  .cpage img { display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; opacity: var(--opacity-portrait-light); }
   .cpage .cbody { text-align: center; }
   .cpage h1, .cpage .intro { margin-left: auto; margin-right: auto; }
   .cpage .intro { margin-top: var(--space-xs); color: var(--color-muted); }
@@ -508,7 +508,7 @@
      page itself. Photos screen instead of multiply: the image stays, its dark parts take the ground and the glow, mirrored
      to the light page. Screenshots of light interfaces lie plain and a little dimmed, so they do not glare. The logos
      turn white. The glass dims its sheen, which would read as a light film on dark. */
-  [data-theme="dark"] .about img, [data-theme="dark"] .cpage img { mix-blend-mode: screen; }
+  [data-theme="dark"] .about img, [data-theme="dark"] .cpage img { mix-blend-mode: screen; opacity: var(--opacity-portrait-dark); }
   /* Quote photos stay unblended in dark (13.11.): with screen the glow tinted the grey photo, and devices that fade it on
      the GPU drew it unblended while fading and blended at rest, so it jumped in colour after every switch. The unblended
      look is the one we keep. */
