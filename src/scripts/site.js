@@ -755,7 +755,9 @@ const ENTRIES = {
 // Each phrase runs on its own clock: forward while its pin is hovered (plus a short hold, so a slip of the cursor
 // does not close it), backward after. The open entry stays while the cursor is on it, so it can be read.
 // t = 0..1 feeds the entry style.
-const E_DUR = 900, E_HOLD = 300;
+// Closing (16.11.): 300 ms hold and a 1.4x reverse clock stood the card still for about 0.8 s before it began to fade (the
+// fade is the last 30 % of the clock), which felt like lag. Now 150 ms hold and a 4x reverse: gone after about 0.4 s.
+const E_DUR = 900, E_HOLD = 150, E_CLOSE = 4;
 // Only the phrases this page has (the orange ones are on the home page).
 const phrases = Object.keys(ENTRIES).filter((name) => document.querySelector(`[data-ink="${name}"]`)).map((name) => {
   const spans = [...document.querySelectorAll(`[data-ink="${name}"]`)];
@@ -772,7 +774,7 @@ function updatePhrases(dt) {
     ph.onPin = over;
     ph.over = over || (!touch && ph.c > 0 && pointerIn(ph.card.getBoundingClientRect(), 6));
     ph.hold = ph.over ? E_HOLD : Math.max(0, ph.hold - dt);
-    ph.c = reduced ? (ph.hold > 0 ? E_DUR : 0) : clamp(ph.c + (ph.hold > 0 ? dt : -dt * 1.4), 0, E_DUR);
+    ph.c = reduced ? (ph.hold > 0 ? E_DUR : 0) : clamp(ph.c + (ph.hold > 0 ? dt : -dt * E_CLOSE), 0, E_DUR);
     STYLE.update(ph, ph.c / E_DUR, rects);
   }
 }
@@ -799,9 +801,10 @@ const pinLayer = PAGE === "home" ? h("div", "pins", null, document.body) : null;
 const fromLayer = (x, y) => { const o = pinLayer.getBoundingClientRect(); return [x - o.left, y - o.top]; };
 // x/y is the point the pin refers to (screen coordinates); it grows a little while its entry is open. It never leaves the
 // screen: under about 350 px a phrase that fills its line pushes the pin past the edge, there it overlaps the phrase's end.
+const PIN_GROW = 0.2;
 function placePin(pin, x, y, t) {
   const [lx, ly] = fromLayer(Math.min(x, document.documentElement.clientWidth - 28), y - 24);
-  pin.style.transform = `translate(${lx.toFixed(1)}px, ${ly.toFixed(1)}px) scale(${(1 + 0.2 * snap(seg(t, 0, 0.3))).toFixed(3)})`;
+  pin.style.transform = `translate(${lx.toFixed(1)}px, ${ly.toFixed(1)}px) scale(${(1 + PIN_GROW * snap(seg(t, 0, 0.3))).toFixed(3)})`;
 }
 
 // Cursor-Chat. Figma's comment pin marks every orange phrase from the first frame, and the entry rides on the cursor,
@@ -822,20 +825,29 @@ const Chat = {
     ph.card.style.opacity = o.toFixed(3);
     if (!t) return;
     // Follows the cursor while it is on the pin and stays where it was once the cursor moves on, onto the card or away.
-    // Flips to the left of the cursor near the right edge.
+    // The side is set by the hover area's right edge (full-grown pin plus pointerIn's 4 px), not by the cursor (16.11.): asked of the
+    // cursor, the card jumped 296 px to the other side while the cursor crossed the pin near the right edge. If the card
+    // would hit the edge anywhere in the area, it opens to the left for all of it, sharp corner on the cursor's side,
+    // and stops at 16 px from the left edge where neither side fits (narrow windows with a mouse).
     // On touch there is no cursor: the entry opens to the left of its pin (the pin always sits at the phrase's right end),
     // right edges aligned, below the pin, above it near the bottom of the screen; it moves with the pin while scrolling.
     // A finger's tap on a hybrid places it the same way, until it has faded out again.
     // Where there is room right of the pin (wide screens, iPad landscape), the entry opens to the right instead, left
     // edges aligned: it then lies beside the phrase's end and does not cover it (11.11.). The phone keeps the left side.
     ph.byTap = ph.open || (ph.byTap && t > 0);
-    if (!touch && !ph.byTap) ph.card.classList.remove("left");
     if (touch || ph.byTap) {
       const r = ph.pin.getBoundingClientRect(), w = ph.card.offsetWidth, hgt = ph.card.offsetHeight;
       const right = r.left + w <= innerWidth - 16;
       ph.card.classList.toggle("left", !right);
       ph.at = { x: right ? r.left : Math.max(16, r.right - w), y: r.bottom + 8 + hgt > innerHeight - 16 ? r.top - 8 - hgt : r.bottom + 8 };
-    } else if (ph.onPin || !ph.at) ph.at = { x: P.sx + 18 + 260 > innerWidth - 16 ? P.sx - 18 - 260 : P.sx + 18, y: P.sy + 20 };
+    } else if (ph.onPin || !ph.at) {
+      // The pin grows while the entry opens (from its left edge, see placePin); measured as it renders, its edge moved
+      // across the line mid-animation and flipped the card. Its full-grown edge holds still.
+      const r = ph.pin.getBoundingClientRect(), w = ph.card.offsetWidth;
+      const left = r.left + ph.pin.offsetWidth * (1 + PIN_GROW) + 4 + 18 + w > innerWidth - 16;
+      ph.card.classList.toggle("left", left);
+      ph.at = { x: left ? Math.max(16, P.sx - 18 - w) : P.sx + 18, y: P.sy + 20 };
+    }
     const [cx, cy] = fromLayer(ph.at.x, ph.at.y);
     ph.card.style.transform = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) scale(${lerp(0.9, 1, o).toFixed(3)})`;
     entryPlay(ph, t, 0.25);
