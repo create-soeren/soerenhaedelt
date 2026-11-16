@@ -149,18 +149,17 @@
 :root {
   --color-primary: #F94C00;
   --color-neutral: #F4F3F0;
-  --color-ink: #000000;
+  --color-ink: #292823;
+  --color-ink-strong: #000000;
   --color-muted: #5E5D5A;
   --color-rule: #D4D3CF;
   --color-quiet: #8A8985;
-  --color-rule-strong: #1A1A1A;
   --color-on-primary: #000000;
   --color-ramp-0: #1A0700;
   --color-ramp-1: #7B2706;
   --color-ramp-2: #D54911;
   --color-tea-paper: #EFE7D6;
   --color-bracket: #9C9B97;
-  --color-tick-on: #505050;
   --rounded-none: 0px;
   --rounded-sm: 2px;
   --rounded-md: 4px;
@@ -215,9 +214,9 @@
   --button-padding-x: 24px;
   --button-rounded: var(--rounded-none);
   --button-primary-background-color: var(--color-primary);
-  --button-primary-text-color: var(--color-ink);
+  --button-primary-text-color: var(--color-on-primary);
   --button-secondary-background-color: var(--color-neutral);
-  --button-secondary-text-color: var(--color-ink);
+  --button-secondary-text-color: var(--color-ink-strong);
   --button-secondary-border-color: var(--color-primary);
   --win-padding-y: 24px;
   --win-padding-x: 16px;
@@ -384,17 +383,16 @@
     --color-primary: #F94C00;
     --color-neutral: #211700;
     --color-ink: #F4F3F0;
+    --color-ink-strong: #F4F3F0;
     --color-muted: #A3A19C;
     --color-rule: #3C341F;
     --color-quiet: #75736E;
-    --color-rule-strong: #8A8884;
     --color-on-primary: #000000;
     --color-ramp-0: #F4F3F0;
     --color-ramp-1: #F6B090;
     --color-ramp-2: #F8763C;
     --color-tea-paper: #EFE7D6;
     --color-bracket: #75736E;
-    --color-tick-on: #A3A19C;
   }
 }
 :root[data-theme="dark"] {
@@ -402,15 +400,14 @@
   --color-primary: #F94C00;
   --color-neutral: #211700;
   --color-ink: #F4F3F0;
+  --color-ink-strong: #F4F3F0;
   --color-muted: #A3A19C;
   --color-rule: #3C341F;
   --color-quiet: #75736E;
-  --color-rule-strong: #8A8884;
   --color-on-primary: #000000;
   --color-ramp-0: #F4F3F0;
   --color-ramp-1: #F6B090;
   --color-ramp-2: #F8763C;
   --color-tea-paper: #EFE7D6;
   --color-bracket: #75736E;
-  --color-tick-on: #A3A19C;
 }

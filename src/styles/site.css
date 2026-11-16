@@ -13,6 +13,8 @@
   body { margin: 0; background: var(--color-neutral); color: var(--color-ink); font-family: var(--font-body); font-weight: var(--w-body); -webkit-font-smoothing: antialiased; }
   /* --ws-head: the headline word space on top of the font's own, in em (the dev bar sets it in %, set 03.11. at 5 %). */
   h1, h2, h3 { font-family: var(--font-head); word-spacing: var(--ws-head, .05em); }
+  /* Two inks (16.11.): everything set in the headline face takes the loudest step, text stays on ink. */
+  h1, h2, .case .ctitle, .case > header .stat, .stat b { color: var(--color-ink-strong); }
 
   /* Glass after Sören's Figma settings: 80 % light, frost 4, depth 20. Refraction and dispersion have no CSS
      equivalent; the lit edge, the sheen and the inner depth carry the effect. The light falls straight from above, as
@@ -71,12 +73,12 @@
      stays at 1 px. */
   .ticks { position: fixed; right: calc(var(--space-gutter) / 2); top: 50%; transform: translate(50%, -50%); z-index: 5; display: grid; gap: 8px; }
   .ticks i { display: block; width: 14px; height: 1px; background: var(--color-rule); transition: background .3s; }
-  .ticks i.on { height: 2px; background: var(--color-tick-on); }
+  .ticks i.on { height: 2px; background: var(--color-muted); }
   /* From the 744 anchor on only (10.11.): on the phone the ticks stand in the gutter, over the text. */
   @media (max-width: 743px) { .ticks { display: none; } }
 
   section { min-height: 100svh; padding: var(--space-xxl) var(--side); position: relative; }
-  section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-rule-strong); }
+  section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-ink); }
 
   /* Own size step since 11.11.: display × 1.15, the case headlines stay on display.
      Safety net under the smallest anchor (11.11.): the lines do not break, so below about 375 px the headline shrinks to the
@@ -118,7 +120,7 @@
     --p: 1;
     background-image:
       radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%),
-      linear-gradient(90deg, var(--color-primary) 0 50%, var(--color-ink) 50% 100%);
+      linear-gradient(90deg, var(--color-primary) 0 50%, var(--color-ink-strong) 50% 100%);
     background-size: 100% 100%, 200% 100%;
     background-position: 0 0, calc((1 - var(--p, 0)) * 100%) 0;
     background-repeat: no-repeat;
@@ -146,7 +148,7 @@
   .win { position: relative; padding: var(--win-padding-y) var(--win-padding-x); }
   .win .icon { width: var(--win-size); height: var(--win-size); margin: 0 auto; }
   .win .icon svg { width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--color-ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
-  .win p { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; }
+  .win p { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; color: var(--color-ink-strong); }
   .win.won .icon { animation: land .5s cubic-bezier(.3, 1.7, .5, 1); }
   @keyframes land { 50% { transform: scale(1.22); } }
 
@@ -237,7 +239,6 @@
   .projects::before { display: none; }
   .projects > ol { list-style: none; margin: 0; padding: 0; }
   .projects > ol > li + li { border-top: 1px solid var(--color-rule); }
-  .projects .head { display: flex; justify-content: space-between; margin: 0 0 var(--space-m); font-size: var(--type-body-size); line-height: var(--type-body-lh); }
   .project { display: block; padding: var(--space-m) 0; color: inherit; text-decoration: none; }
   .projects > ol > li:first-child .project { padding-top: 0; }
   .projects > ol > li:last-child .project { padding-bottom: 0; }
@@ -403,7 +404,7 @@
   .showcase.is-half .items { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-m); align-items: start; }
   .learnings ol { list-style: none; margin: 0; padding: 0; }
   .learnings li + li { margin-top: var(--space-l); }
-  .learnings h3 { margin: 0 0 var(--space-2xs); font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); word-spacing: normal; }
+  .learnings h3 { margin: 0 0 var(--space-2xs); font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); word-spacing: normal; color: var(--color-ink-strong); }
   .case .cquote { margin: 0; display: grid; grid-template-columns: var(--photo) 1fr; gap: var(--space-l); align-items: start; --photo: var(--photo-width); }
   .case .cquote .photo { background: none; border: 0; }
   /* Breakpoints at the anchors (10.11.): stacked below 1020 where two columns would squeeze the text (decision: 310 px
