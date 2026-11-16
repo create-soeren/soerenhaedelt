@@ -327,7 +327,7 @@
   .case { min-height: 0; padding: var(--space-xxl) var(--side); }
   /* Pages start the same (10.11.): case, about and projects keep at least the l spacing clear under the fixed nav
      (24 px from the top plus its height); xxl stays where it is larger, from the 1020 anchor on. */
-  .case, .about, .projects { padding-top: max(var(--space-xxl), calc(24px + var(--navbar-height) + var(--space-l))); }
+  .case, .about, .projects { --page-top: max(var(--space-xxl), calc(24px + var(--navbar-height) + var(--space-l))); padding-top: var(--page-top); }
   .case::before { display: none; }
   .case > header { margin-bottom: var(--space-xl); }
   .case h1 { font-family: var(--font-headline); font-size: var(--type-headline-size); line-height: var(--type-headline-lh); font-weight: var(--w-headline); letter-spacing: var(--type-headline-ls); margin: var(--space-xs) 0 0; max-width: calc(var(--space-measure-headline) * 1ch); }
@@ -341,17 +341,22 @@
   /* Heads, rebuilt from the Figma draft (16.11.): the label row spreads over the width in both kinds of head, the spacing
      steps are 2xs (label row to title, Kit swap 16.11.) and m. The rhythm is the draft's, the values are the tokens'. */
   .case > header > .no { justify-content: space-between; }
-  .case .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-m) var(--space-l); margin: var(--space-xl) 0 0; padding-top: var(--space-s); border-top: 1px solid var(--color-rule); }
+  .case .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-m) var(--space-l); margin: var(--space-l) 0 0; padding-top: var(--space-s); border-top: 1px solid var(--color-rule); }
   .case .meta > div { margin: 0; }
   .case .meta dt { font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); line-height: var(--type-label-sm-lh); color: var(--color-muted); }
   .case .meta dd { margin: var(--space-2xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
-  .case > header:not(.vhero) .meta { margin-top: var(--space-m); }
+  /* The statement head fills the first screen (Sören, 16.11.): it ends l above the fold, so the first chapter starts below
+     it. Statement to figure and figure to meta keep one rhythm: both are m at least (the figure's padding), the free height
+     splits evenly between them (two auto margins). Taller than the screen, the head just runs on with the m steps. */
+  .case > header:not(.vhero) { display: flex; flex-direction: column; min-height: calc(100svh - var(--page-top) - var(--space-l)); }
+  .case > header:not(.vhero) .stat { margin-top: auto; padding-block: var(--space-m); }
+  .case > header:not(.vhero) .meta { margin-top: auto; }
   /* Visual head (hero J, 05.11.): for cases that carry through the delivered work, not through decisions (Silicon Allee,
      Paxa). Title, then the screen over the full width, then the meta; on the page colours like every other head. The
      video replaces the poster on the same spot. The h1 takes .stmt for the display tokens and stays out of the mobile
      title override below. */
   .case h1.vtitle { max-width: calc(var(--space-measure-headline) * 1ch); margin-top: var(--space-s); }
-  .case .vhero figure { margin: var(--space-xl) 0 0; }
+  .case .vhero figure { margin: var(--space-l) 0 0; }
   .case .vhero img, .case .vhero video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }
   /* Images multiply onto the page like the photos, so the glow shows through them and does not vanish behind the
      white ground. Videos stay opaque; the glow fades out over them instead (see updateGlow). */
