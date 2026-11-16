@@ -33,6 +33,12 @@ const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "
       <Fragment>
         <p class="ctitle">{head.title}</p>
         <h1 class="stmt"><span class="was"><span class="sr-only">Before, struck: </span><span class="pen">{head.from}</span></span><span>{head.to}</span></h1>
+        {head.media && (
+          <figure class="hmedia">
+            <Pic src={head.media.src} alt={head.media.alt} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" />
+            {head.media.caption && <figcaption>{head.media.caption}</figcaption>}
+          </figure>
+        )}
       </Fragment>
     )}
     {head.impact && <Evidence e={{ kind: "stat", value: head.impact.value, label: head.impact.label }} />}

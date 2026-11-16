@@ -357,12 +357,12 @@
      video replaces the poster on the same spot. The h1 takes .stmt for the display tokens and stays out of the mobile
      title override below. */
   .case h1.vtitle { max-width: calc(var(--space-measure-headline) * 1ch); margin-top: var(--space-s); }
-  .case .vhero figure { margin: var(--space-l) 0 0; }
-  .case .vhero img, .case .vhero video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }
+  .case .vhero figure, .case .hmedia { margin: var(--space-l) 0 0; }
+  .case .vhero img, .case .vhero video, .case .hmedia img { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }
   /* Images multiply onto the page like the photos, so the glow shows through them and does not vanish behind the
      white ground. Videos stay opaque; the glow fades out over them instead (see updateGlow). */
-  .case .vhero img, .block img { mix-blend-mode: multiply; }
-  .case .vhero figcaption { margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
+  .case .vhero img, .case .hmedia img, .block img { mix-blend-mode: multiply; }
+  .case .vhero figcaption, .case .hmedia figcaption { margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
   .block { padding: var(--space-xl) 0; border-top: 1px solid var(--color-rule); }
   .block:last-child { padding-bottom: 0; }
   .block figure { margin: 0; }
@@ -513,7 +513,7 @@
      the GPU drew it unblended while fading and blended at rest, so it jumped in colour after every switch. The unblended
      look is the one we keep. */
   [data-theme="dark"] .photo { mix-blend-mode: normal; }
-  [data-theme="dark"] .case .vhero img, [data-theme="dark"] .block img, [data-theme="dark"] .case .vhero video, [data-theme="dark"] .block video { mix-blend-mode: normal; filter: brightness(.9); }
+  [data-theme="dark"] .case .vhero img, [data-theme="dark"] .case .hmedia img, [data-theme="dark"] .block img, [data-theme="dark"] .case .vhero video, [data-theme="dark"] .block video { mix-blend-mode: normal; filter: brightness(.9); }
   [data-theme="dark"] .logos img { filter: brightness(0) invert(1); }
   [data-theme="dark"] .glass { --sheen: .16; --edge: .35; --tint: .62; --shadow: 3; }
   [data-theme="dark"] .chat { box-shadow: 0 12px 32px rgb(0,0,0,.5), 0 0 0 1px var(--color-rule); }

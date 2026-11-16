@@ -4,6 +4,10 @@ head:
   title: Trust through Structural Evidence
   from: Fragmented search results
   to: Structured evidence
+  media:
+    src: ./media/anita-quellenzitat-2025-10.jpg
+    alt: "Anita results and chat, October 2025: the quote from the cited court decision in its hover state"
+    caption: 10.2025 · The quote from the cited decision in its hover state.
   impact:
     value: 0 → 700+
     label:
