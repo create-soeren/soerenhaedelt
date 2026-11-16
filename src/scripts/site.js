@@ -489,7 +489,9 @@ function buildFx() {
   S.ann = svgEl("g", { id: "ann" }, defs);
   // --fig: the push figures' colour per copy. Grey outside, background-coloured in the core: the push readout knocks
   // out whole, redline and figure together, in both themes (16.11.). Before, the figure stayed grey on the glow.
-  svgEl("use", { href: "#ann", mask: "url(#mOut)", style: "color: var(--color-primary); --fig: var(--color-quiet)" }, fx);
+  // Dark mode takes `muted` instead of `quiet` (16.11.): quiet read 3.7:1 on the ground and 2.2:1 in the glow's fringe,
+  // muted reads 6.9:1 and 4.1:1. light-dark() follows the color-scheme the theme tokens set.
+  svgEl("use", { href: "#ann", mask: "url(#mOut)", style: "color: var(--color-primary); --fig: light-dark(var(--color-quiet), var(--color-muted))" }, fx);
   svgEl("use", { href: "#ann", mask: "url(#mIn)", style: "color: var(--color-neutral); --fig: var(--color-neutral)" }, fx);
 }
 
