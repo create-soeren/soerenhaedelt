@@ -487,8 +487,10 @@ function buildFx() {
     svgEl("rect", { width: "100%", height: "100%", fill: `url(#${g})` }, m);
   }
   S.ann = svgEl("g", { id: "ann" }, defs);
-  svgEl("use", { href: "#ann", mask: "url(#mOut)", style: "color: var(--color-primary)" }, fx);
-  svgEl("use", { href: "#ann", mask: "url(#mIn)", style: "color: var(--color-neutral)" }, fx);
+  // --fig: the push figures' colour per copy. Grey outside, background-coloured in the core: the push readout knocks
+  // out whole, redline and figure together, in both themes (16.11.). Before, the figure stayed grey on the glow.
+  svgEl("use", { href: "#ann", mask: "url(#mOut)", style: "color: var(--color-primary); --fig: var(--color-quiet)" }, fx);
+  svgEl("use", { href: "#ann", mask: "url(#mIn)", style: "color: var(--color-neutral); --fig: var(--color-neutral)" }, fx);
 }
 
 const pillW = (text) => text.length * 6.1 + 10;
@@ -545,7 +547,7 @@ const FIG_SIZE = 10, FIG_CELL = 0.635 * FIG_SIZE;
 // `cx` is the centre of the whole number (horizontal labels) or, with `start`, its left edge (vertical labels).
 function figures(g, cx, y, value, start = false) {
   const s = String(value), x0 = start ? cx : cx - (s.length * FIG_CELL) / 2;
-  const t = svgEl("text", { y: y.toFixed(1), "text-anchor": "middle", "font-size": FIG_SIZE, fill: QUIET, style: "font-family: var(--font-caption)" }, g);
+  const t = svgEl("text", { y: y.toFixed(1), "text-anchor": "middle", "font-size": FIG_SIZE, style: `fill: var(--fig, ${QUIET}); font-family: var(--font-caption)` }, g);
   [...s].forEach((d, i) => { svgEl("tspan", { x: (x0 + (i + 0.5) * FIG_CELL).toFixed(2) }, t).textContent = d; });
 }
 function quietH(g, y, x1, x2, small) {
