@@ -72,7 +72,7 @@
   /* Centred between the end of the section dividers (the gutter) and the window edge. Half size, the hairline
      stays at 1 px. */
   .ticks { position: fixed; right: calc(var(--space-gutter) / 2); top: 50%; transform: translate(50%, -50%); z-index: 5; display: grid; gap: 8px; }
-  .ticks i { display: block; width: 14px; height: 1px; background: var(--color-tick); transition: background .3s; }
+  .ticks i { display: block; width: 14px; height: 1px; background: var(--color-tick); }
   .ticks i.on { height: 2px; background: var(--color-tick-on); }
   /* From the 744 anchor on only (10.11.): on the phone the ticks stand in the gutter, over the text. */
   @media (max-width: 743px) { .ticks { display: none; } }
