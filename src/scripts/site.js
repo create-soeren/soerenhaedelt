@@ -981,23 +981,21 @@ function updateIcons(dt, t) {
 // Coffee: a cream pot with an ink outline. It tips further the nearer it gets, the button is the tipping point; the spout sits
 //   on the pointer, so the stream lands right under it. The lid opens only with the real tip and snaps shut when it
 //   leaves. In the button the floor is wet almost at once, then a calm level rises; rings run out from the stream.
-// Tea, the button as clear water: the bag is dunked, each dip sends a ripple, and the colour spreads from the bag
-//   with a soft edge.
+// Tea, the button as clear water: the pointer holds the tag and the button pulls the bag in (see MAG); in it the bag is
+//   dunked, each dip sends a ripple, and the colour spreads from where it went in with a soft edge.
 
 // Not on the contact page (12.11.): that page is the contact itself and has no footer; the pour then does nothing.
 const contact = document.getElementById("contact");
 const chat = contact?.querySelector("#chat"), cof = chat?.querySelector(".cof"), drinkEl = contact?.querySelector(".drink");
 const LIQUID = RAMP[2], NEAR_BTN = 120;
-// Spielwiese: the tea bag's sign towards the button, ?tb=3|4|5 (see Base.astro). 0: none, as before.
-const TB = +(contact?.dataset.tb || 0);
-// 4 and 5, the magnet (17.11.): the pointer holds the paper tag, the bag hangs on its string and the button pulls it in.
-// range: how far the pull reaches (px from the bag to the button); pull: how much of the way the bag gives in, far and near
-// (near: within NEAR px, 17.11.: close to the button the pull eases off, so the bag is not snatched in); stretch: how far the
-// string may give beyond its 24 px; short: within this many px of the tag to the button the string draws in (17.11.), so the
-// bag hangs close under the tag and the pointer is near the button by the time the bag is in; K, D: the spring the bag follows
-// with, so it lags, swings and settles.
-const MAG = { 4: { range: 140, pull: 0.45, near: 0.45, stretch: 6, short: 0, K: 110, D: 11 }, 5: { range: 340, pull: 0.9, near: 0.35, stretch: 20, short: 90, K: 160, D: 9 } }[TB] || null;
-const MAG_NEAR = 120;
+// The tea bag on a magnet (17.11.): the pointer holds the paper tag, the bag hangs on its string and the button pulls it in,
+// the bag's counterpart to the pot that tips and opens its lid. range: how far the pull reaches (px from the bag to the button);
+// pull: how much of the way the bag gives in, far and near (near: within MAG_NEAR px the pull eases off, so the bag is not
+// snatched in); stretch: how far the string may give beyond its rest; short: within this many px of the tag to the button the
+// string draws in, so the bag hangs close under the tag and the pointer is near the button by the time the bag is in. The
+// page's pointer cannot be moved, so this is what brings it to the button when the tea is done. K, D: the spring the bag
+// follows with, so it lags, swings and settles.
+const MAG = { range: 340, pull: 0.9, near: 0.35, stretch: 20, short: 90, K: 160, D: 9 }, MAG_NEAR = 120;
 // Turns a point of the pointer drawing into page coordinates.
 const turn = (x, y, a, ox, oy) => { const c = Math.cos(a), s = Math.sin(a); return [ox + x * c - y * s, oy + x * s + y * c]; };
 
@@ -1095,8 +1093,6 @@ const Cup = {
     } else if (DRINK === "tea") {
       this.bag = drawTeaBag(svgEl("g", {}, this.g));
       this.rings = [0, 1].map(() => extra(svgEl("circle", { fill: "none", stroke: RAMP[3], "stroke-width": 1.5, opacity: 0 }, fx)));
-      // 3: where the bag would land, a ripple on the button's edge under it, before it gets there.
-      this.land = TB === 3 ? [0, 1].map(() => extra(svgEl("ellipse", { fill: "none", stroke: RAMP[3], "stroke-width": 1.5, opacity: 0 }, fx))) : null;
     }
     // On touch there is no hover: the button is served full.
     Object.assign(this, { op: 0, near: 0, act: 0, lid: 0, ready: 0, fill: touch ? 1 : 0, ox: 0, oy: 0, R: 0, bx: undefined, bagX: 0, bagY: 0, bagIn: false });
@@ -1155,7 +1151,7 @@ const Cup = {
     const hit = P.inside ? document.elementFromPoint(P.x, P.y) : null;
     // Over a tool that is not chosen the system's hand is back and the pot or bag steps aside; over the chosen one it stays.
     const onSwitch = !!(hit && hit.closest('.drink button[aria-pressed="false"]'));
-    const on = !!(hit && hit.closest("#contact")) && !onSwitch && this.fill < 1, onBtn = !touch && (MAG && DRINK === "tea" ? this.bagIn : !!(hit && hit.closest("#chat")));
+    const on = !!(hit && hit.closest("#contact")) && !onSwitch && this.fill < 1, onBtn = !touch && (DRINK === "tea" ? this.bagIn : !!(hit && hit.closest("#chat")));
     const r = chat.getBoundingClientRect();
     this.op = lerp(this.op, on ? 1 : 0, ease(dt, onSwitch ? 0.5 : 0.7));
     const d = Math.hypot(P.x - clamp(P.x, r.left, r.right), P.y - clamp(P.y, r.top, r.bottom));
@@ -1207,53 +1203,38 @@ const Cup = {
         dr.setAttribute("opacity", ((1 - k) * pour).toFixed(3));
       });
     } else {
-      // Dunked: the bag lifts by its string and drops back, a ripple goes out on each dip. A few pixels only, the
-      // pointer stays on the button.
-      const beat = (t / 650) % 1, k = smoothstep(this.near);
+      // Dunked (the bag in the button, not the pointer): the bag lifts by its string and drops back, a ripple goes out on each
+      // dip. A few pixels only.
+      const beat = (t / 650) % 1;
       lift = reduced ? 0 : -5 * this.act * Math.sin(Math.PI * beat);
-      // The sign towards the button (Spielwiese, ?tb), the tea bag's counterpart to the pot that tips and opens its lid.
-      // 3: a ripple runs on the button's edge under the bag.
-      // 4, 5: the magnet, soft and strong (see MAG).
-      if (MAG) {
-        // The tag sits on the pointer; the drawing's origin, the bag's resting centre, hangs 28.5 px below (tag centre to bag
-        // centre). The string starts at the tag's lower edge.
-        y = P.y + 28.5;
-        // Centre distances from the tag's lower edge: 24 at rest (a 14 px string), 14 drawn in (4 px).
-        const px = P.x, py = P.y + 4.5;
-        const dTag = Math.hypot(px - clamp(px, r.left, r.right), py - clamp(py, r.top, r.bottom));
-        const close = MAG.short ? 1 - smoothstep(clamp(dTag / MAG.short)) : 0;
-        const Lrest = lerp(24, 14, close), rx = px, ry = py + Lrest;
-        const vx = clamp(rx, r.left, r.right) - rx, vy = clamp(ry, r.top, r.bottom) - ry, d = Math.hypot(vx, vy);
-        const pull = lerp(MAG.near, MAG.pull, smoothstep(clamp(d / MAG_NEAR))) * smoothstep(clamp(1 - d / MAG.range));
-        let tx = rx + vx * pull, ty = ry + vy * pull;
-        const lx = tx - px, ly = ty - py, L = Math.hypot(lx, ly), Lmax = Lrest + MAG.stretch * (1 - close);
-        if (L > Lmax) { tx = px + lx / L * Lmax; ty = py + ly / L * Lmax; }
-        // A spring, not a lerp: the bag lags behind a fast pointer, swings past and settles. Snapped while it is not shown.
-        if (this.bx === undefined || this.op < 0.05 || reduced) { this.bx = tx; this.by = ty; this.vx = this.vy = 0; }
-        else {
-          const h = dt / 1000;
-          this.vx += (MAG.K * (tx - this.bx) - MAG.D * this.vx) * h; this.vy += (MAG.K * (ty - this.by) - MAG.D * this.vy) * h;
-          this.bx += this.vx * h; this.by += this.vy * h;
-        }
-        const bx = this.bx, by = this.by + lift, ang = Math.atan2(bx - px, by - py);
-        // The bag turns on its string so its top points at the tag.
-        this.bag.body.setAttribute("transform", `translate(${(bx - x).toFixed(1)} ${(by - y).toFixed(1)}) rotate(${(-ang * 57.3).toFixed(1)})`);
-        this.bag.string.setAttribute("d", `M 0 -24 L ${(bx - x - 10 * Math.sin(ang)).toFixed(1)} ${(by - y - 10 * Math.cos(ang)).toFixed(1)}`);
-        // Dunked is the bag in the button, not the pointer: the tea starts where the bag goes in.
-        this.bagX = bx; this.bagY = by + 2;
-        this.bagIn = bx >= r.left && bx <= r.right && by >= r.top && by <= r.bottom;
-        lift = 0;
-      } else {
-        this.bag.body.removeAttribute("transform");
-        this.bag.string.setAttribute("d", "M 0 -10 V -24");
-        this.bagX = P.x; this.bagY = P.y + 2;
+      // The tag sits on the pointer; the drawing's origin, the bag's resting centre, hangs 28.5 px below (tag centre to bag
+      // centre). The string starts at the tag's lower edge. Centre distances from that edge: 24 at rest (a 14 px string), 14
+      // drawn in (4 px).
+      y = P.y + 28.5;
+      const px = P.x, py = P.y + 4.5;
+      const dTag = Math.hypot(px - clamp(px, r.left, r.right), py - clamp(py, r.top, r.bottom));
+      const close = 1 - smoothstep(clamp(dTag / MAG.short));
+      const Lrest = lerp(24, 14, close), rx = px, ry = py + Lrest;
+      const vx = clamp(rx, r.left, r.right) - rx, vy = clamp(ry, r.top, r.bottom) - ry, d = Math.hypot(vx, vy);
+      const pull = lerp(MAG.near, MAG.pull, smoothstep(clamp(d / MAG_NEAR))) * smoothstep(clamp(1 - d / MAG.range));
+      let tx = rx + vx * pull, ty = ry + vy * pull;
+      const lx = tx - px, ly = ty - py, L = Math.hypot(lx, ly), Lmax = Lrest + MAG.stretch * (1 - close);
+      if (L > Lmax) { tx = px + lx / L * Lmax; ty = py + ly / L * Lmax; }
+      // A spring, not a lerp: the bag lags behind a fast pointer, swings past and settles. Snapped while it is not shown.
+      if (this.bx === undefined || this.op < 0.05 || reduced) { this.bx = tx; this.by = ty; this.vx = this.vy = 0; }
+      else {
+        const h = dt / 1000;
+        this.vx += (MAG.K * (tx - this.bx) - MAG.D * this.vx) * h; this.vy += (MAG.K * (ty - this.by) - MAG.D * this.vy) * h;
+        this.bx += this.vx * h; this.by += this.vy * h;
       }
-      if (this.land) this.land.forEach((e, i) => {
-        const ph = (reduced ? 0.5 : (t / 1100 + i / 2) % 1), lx = clamp(P.x, r.left + 12, r.right - 12);
-        e.setAttribute("cx", lx.toFixed(1)); e.setAttribute("cy", (r.top + 6).toFixed(1));
-        e.setAttribute("rx", (3 + 15 * ph).toFixed(1)); e.setAttribute("ry", (1 + 4.5 * ph).toFixed(1));
-        e.setAttribute("opacity", (k * (1 - this.act) * (1 - ph) * 0.9).toFixed(3));
-      });
+      const bx = this.bx, by = this.by + lift, ang = Math.atan2(bx - px, by - py);
+      // The bag turns on its string so its top points at the tag.
+      this.bag.body.setAttribute("transform", `translate(${(bx - x).toFixed(1)} ${(by - y).toFixed(1)}) rotate(${(-ang * 57.3).toFixed(1)})`);
+      this.bag.string.setAttribute("d", `M 0 -24 L ${(bx - x - 10 * Math.sin(ang)).toFixed(1)} ${(by - y - 10 * Math.cos(ang)).toFixed(1)}`);
+      // The tea starts where the bag goes in.
+      this.bagX = bx; this.bagY = by + 2;
+      this.bagIn = bx >= r.left && bx <= r.right && by >= r.top && by <= r.bottom;
+      lift = 0;
       this.rings.forEach((rg, i) => {
         const k = (beat + i / 2) % 1;
         rg.setAttribute("cx", this.bagX.toFixed(1)); rg.setAttribute("cy", (this.bagY + 8).toFixed(1));
@@ -1267,11 +1248,11 @@ const Cup = {
   },
 };
 
-// Spielwiese, toolbar variant a3 (16.11.): over a tool that is not chosen the system's hand stays, and at it hangs a small
-// ghost of what the click turns into the pointer, the pot or the bag. It is the same drawing, smaller and half there; it
-// fades out when the hand leaves, and the click lets the real one take over in the same frame.
+// The ghost (16.11.): over a tool that is not chosen the system's hand stays, and at it hangs a small ghost of what the
+// click turns into the pointer, the pot or the bag. It is the same drawing, smaller and half there; it fades out when the
+// hand leaves, and the click lets the real one take over in the same frame.
 const Ghost = {
-  on: contact?.dataset.tv === "a3",
+  on: !!drinkEl,
   build() {
     if (!this.on) return;
     this.g?.remove();
