@@ -148,7 +148,8 @@
   .win { position: relative; padding: var(--win-padding-y) var(--win-padding-x); }
   .win .icon { width: var(--win-size); height: var(--win-size); margin: 0 auto; }
   .win .icon svg { width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--color-ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
-  .win p { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; color: var(--color-ink-strong); }
+  .win p { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; color: var(--color-ink-strong);
+    text-wrap: balance; }
   .win.won .icon { animation: land .5s cubic-bezier(.3, 1.7, .5, 1); }
   @keyframes land { 50% { transform: scale(1.22); } }
 
@@ -191,7 +192,7 @@
   /* Multiply lets the glow behind the page show through the photo, as light falling on it; elsewhere the near-white
      ground leaves the photo as it is. */
   .photo { width: var(--photo); height: auto; aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1); mix-blend-mode: multiply; opacity: var(--opacity-quote-photo); }
-  blockquote { margin: 0; max-width: calc(var(--space-measure) * 1ch); font-family: var(--font-quote); font-style: italic; font-weight: var(--w-quote); font-size: var(--type-quote-size); line-height: var(--type-quote-lh); }
+  blockquote { margin: 0; max-width: calc(var(--space-measure) * 1ch); font-family: var(--font-quote); font-style: italic; font-weight: var(--w-quote); font-size: var(--type-quote-size); line-height: var(--type-quote-lh); text-wrap: pretty; }
   .who { font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--who-lh); margin-top: var(--space-s); color: var(--color-muted); }
   /* The box is the hit area (44 × 30); its padding reaches out past the corner, so the arrow itself sits flush with the
      content edge and, beside the photo, with the photo's bottom. Stacked, it centres on the name's line. */
@@ -345,7 +346,7 @@
   .case .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-m) var(--space-l); margin: var(--space-l) 0 0; padding-top: var(--space-s); border-top: 1px solid var(--color-rule); }
   .case .meta > div { margin: 0; }
   .case .meta dt { font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); line-height: var(--type-label-sm-lh); color: var(--color-muted); }
-  .case .meta dd { margin: var(--space-2xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
+  .case .meta dd { margin: var(--space-2xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); text-wrap: pretty; }
   /* The statement head fills the first screen (Sören, 16.11.): it ends l above the fold, so the first chapter starts below
      it. Statement to figure and figure to meta keep one rhythm: both are m at least (the figure's padding), the free height
      splits evenly between them (two auto margins). Taller than the screen, the head just runs on with the m steps. */
