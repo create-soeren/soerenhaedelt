@@ -99,17 +99,6 @@ blocks:
       - kind: finding
         text: All participants perceive the sources as evidence for the chatbot's answer.
         who: Usability test, summer 2025
-  - type: showcase
-    width: half
-    items:
-      - kind: image
-        src: ./media/anita-ergebnis-2024-10.jpg
-        alt: "iur.crowd results page, October 2024: decisions as cards with tabs for details, arguments and norms"
-        caption: iur.crowd 10.2024 · Results as cards.
-      - kind: image
-        src: ./media/anita-ergebnis-2024-12.jpg
-        alt: "Anita results page, December 2024: sources and answer side by side"
-        caption: Anita 12.2024 · Sources and answer side by side.
   - type: learnings
     items:
       - title: Fix the interaction before scaling the system
