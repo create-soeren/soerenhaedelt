@@ -428,9 +428,9 @@
   @media (max-width: 1019px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 743px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(2, 1fr); } }
 
-    /* A footer, not a page: one step under the sections, xl above and below, the same as between the toolbar and the
-     button inside. */
-  .contact { text-align: center; min-height: 0; padding-top: var(--space-xxl); padding-bottom: var(--space-xxl); }
+    /* A footer, not a page: one step under the sections, xxl above, l below (17.11., Kit-Tausch: the page ends closer
+     under the button). */
+  .contact { text-align: center; min-height: 0; padding-top: var(--space-xxl); padding-bottom: var(--space-l); }
   /* The chat button starts secondary and fills with coffee or tea. .cof is the drink with a copy of the label; JS
      clips, masks or fades it. Filled it takes the primary's orange, without the glow's knockout spot: the spot sits
      right under the pointer and would read as coffee still missing. */
