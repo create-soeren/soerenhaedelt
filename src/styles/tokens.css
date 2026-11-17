@@ -239,7 +239,7 @@
   --space-xs: 12px;
   --space-s: 16px;
   --space-m: 24px;
-  --space-l: 40px;
+  --space-l: 48px;
   --space-xl: 64px;
   --space-xxl: 88px;
   --space-gutter: 24px;
@@ -263,7 +263,7 @@
     --space-xs: clamp(12px, calc(7.5932px + 1.1299vw), 16px);
     --space-s: clamp(16px, calc(11.5932px + 1.1299vw), 20px);
     --space-m: clamp(24px, calc(19.5932px + 1.1299vw), 28px);
-    --space-l: clamp(40px, calc(31.1864px + 2.2599vw), 48px);
+    --space-l: clamp(48px, calc(39.1864px + 2.2599vw), 56px);
     --space-xl: clamp(64px, calc(46.3729px + 4.5198vw), 80px);
     --space-xxl: clamp(88px, calc(61.5593px + 6.7797vw), 112px);
     --space-gutter: clamp(24px, calc(-2.4407px + 6.7797vw), 48px);
@@ -288,7 +288,7 @@
     --space-xs: 16px;
     --space-s: 20px;
     --space-m: clamp(28px, calc(17.2174px + 1.4493vw), 32px);
-    --space-l: clamp(48px, calc(26.4348px + 2.8986vw), 56px);
+    --space-l: clamp(56px, calc(34.4348px + 2.8986vw), 64px);
     --space-xl: clamp(80px, calc(36.8696px + 5.7971vw), 96px);
     --space-xxl: clamp(112px, calc(68.8696px + 5.7971vw), 128px);
     --space-gutter: clamp(48px, calc(4.8696px + 5.7971vw), 64px);
@@ -313,7 +313,7 @@
     --space-xs: 16px;
     --space-s: clamp(20px, calc(10.2857px + 0.9524vw), 24px);
     --space-m: clamp(32px, calc(12.5714px + 1.9048vw), 40px);
-    --space-l: clamp(56px, calc(17.1429px + 3.8095vw), 72px);
+    --space-l: clamp(64px, calc(25.1429px + 3.8095vw), 80px);
     --space-xl: clamp(96px, calc(37.7143px + 5.7143vw), 120px);
     --space-xxl: clamp(128px, calc(50.2857px + 7.619vw), 160px);
     --space-gutter: clamp(64px, calc(5.7143px + 5.7143vw), 88px);
@@ -338,7 +338,7 @@
     --space-xs: clamp(16px, calc(4px + 0.8333vw), 20px);
     --space-s: clamp(24px, calc(12px + 0.8333vw), 28px);
     --space-m: clamp(40px, calc(16px + 1.6667vw), 48px);
-    --space-l: clamp(72px, calc(24px + 3.3333vw), 88px);
+    --space-l: clamp(80px, calc(32px + 3.3333vw), 96px);
     --space-xl: clamp(120px, calc(48px + 5vw), 144px);
     --space-xxl: clamp(160px, calc(64px + 6.6667vw), 192px);
     --space-gutter: clamp(88px, calc(-8px + 6.6667vw), 120px);
@@ -363,7 +363,7 @@
     --space-xs: 20px;
     --space-s: 28px;
     --space-m: 48px;
-    --space-l: 88px;
+    --space-l: 96px;
     --space-xl: 144px;
     --space-xxl: 192px;
     --space-gutter: 120px;
