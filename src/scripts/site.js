@@ -1379,10 +1379,12 @@ if (PAGE === "home") {
   });
 }
 
-// On a case page every part of the case (head, chapter, showcase, quote) counts as a section of its own.
-const sections = [...document.querySelectorAll("section")].filter((s) => getComputedStyle(s).display !== "none")
+// The ticks stand on case pages only (17.11.), the layout writes them nowhere else. Every part of the case (head,
+// chapter, showcase, quote) counts as a section of its own, the footer as one more.
+const ticksEl = document.querySelector(".ticks");
+const sections = !ticksEl ? [] : [...document.querySelectorAll("section")].filter((s) => getComputedStyle(s).display !== "none")
   .flatMap((s) => (s.id === "case" ? [...s.children] : [s]));
-document.querySelector(".ticks").innerHTML = "<i></i>".repeat(sections.length);
+if (ticksEl) ticksEl.innerHTML = "<i></i>".repeat(sections.length);
 const tickEls = [...document.querySelectorAll(".ticks i")];
 let prev = performance.now();
 
@@ -1392,9 +1394,11 @@ function frame(t) {
   P.sx = lerp(P.sx, P.x, k); P.sy = lerp(P.sy, P.y, k);
   P.presence = lerp(P.presence, P.inside ? 1 : 0, ease(dt, 0.88));
   // The section whose top has passed the middle of the screen; at the end of the page the last one, which is too short to get there.
-  const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
-  const active = atEnd ? sections.length - 1 : Math.max(0, sections.findLastIndex((s) => s.getBoundingClientRect().top <= innerHeight / 2));
-  tickEls.forEach((el, i) => el.classList.toggle("on", i === active));
+  if (tickEls.length) {
+    const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+    const active = atEnd ? sections.length - 1 : Math.max(0, sections.findLastIndex((s) => s.getBoundingClientRect().top <= innerHeight / 2));
+    tickEls.forEach((el, i) => el.classList.toggle("on", i === active));
+  }
 
   if (PAGE === "home") updateCalm(dt);
   updateGlow(dt);

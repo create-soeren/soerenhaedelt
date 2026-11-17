@@ -72,13 +72,13 @@
   /* Centred between the end of the section dividers (the gutter) and the window edge. Half size, the hairline
      stays at 1 px. */
   .ticks { position: fixed; right: calc(var(--space-gutter) / 2); top: 50%; transform: translate(50%, -50%); z-index: 5; display: grid; gap: 8px; }
-  .ticks i { display: block; width: 14px; height: 1px; background: var(--color-rule); transition: background .3s; }
-  .ticks i.on { height: 2px; background: var(--color-muted); }
+  .ticks i { display: block; width: 14px; height: 1px; background: var(--color-tick); transition: background .3s; }
+  .ticks i.on { height: 2px; background: var(--color-tick-on); }
   /* From the 744 anchor on only (10.11.): on the phone the ticks stand in the gutter, over the text. */
   @media (max-width: 743px) { .ticks { display: none; } }
 
   section { min-height: 100svh; padding: var(--space-xxl) var(--side); position: relative; }
-  section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-ink); }
+  section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-divider); }
 
   /* Own size step since 11.11.: display × 1.15, the case headlines stay on display.
      Safety net under the smallest anchor (11.11.): the lines do not break, so below about 375 px the headline shrinks to the
@@ -238,7 +238,7 @@
   .projects { min-height: 0; padding: var(--space-xxl) var(--side); }
   .projects::before { display: none; }
   .projects > ol { list-style: none; margin: 0; padding: 0; }
-  .projects > ol > li + li { border-top: 1px solid var(--color-rule); }
+  .projects > ol > li + li { border-top: 1px solid var(--color-divider-table); }
   .project { display: block; padding: var(--space-m) 0; color: inherit; text-decoration: none; }
   .projects > ol > li:first-child .project { padding-top: 0; }
   .projects > ol > li:last-child .project { padding-bottom: 0; }
@@ -325,7 +325,7 @@
      the next chapter's head pushes it out. Blocks: chapter, showcase (full or half), learnings, quote. Evidence:
      image, pair, video, stat, quote. The stroke is static (element before motion). Below the 1020 anchor the
      decision runs in the text flow and the notes follow inline. */
-  .case { min-height: 0; padding: var(--space-xxl) var(--side); }
+  .case { min-height: 0; padding: var(--space-xxl) var(--side) var(--space-xl); }
   /* Pages start the same (10.11.): case, about and projects keep at least the l spacing clear under the fixed nav
      (24 px from the top plus its height); xxl stays where it is larger, from the 1020 anchor on. */
   .case, .about, .projects { --page-top: max(var(--space-xxl), calc(24px + var(--navbar-height) + var(--space-l))); padding-top: var(--page-top); }
@@ -363,7 +363,7 @@
      white ground. Videos stay opaque; the glow fades out over them instead (see updateGlow). */
   .case .vhero img, .case .hmedia img, .block img { mix-blend-mode: multiply; }
   .case .vhero figcaption, .case .hmedia figcaption { margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
-  .block { padding: var(--space-xl) 0; border-top: 1px solid var(--color-rule); }
+  .block { padding: var(--space-xl) 0; border-top: 1px solid var(--color-divider); }
   .block:last-child { padding-bottom: 0; }
   .block figure { margin: 0; }
   .block img, .block video { display: block; width: 100%; height: auto; border: 1px solid var(--color-rule); background: var(--color-neutral); }

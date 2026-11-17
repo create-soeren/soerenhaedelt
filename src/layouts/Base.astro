@@ -54,7 +54,7 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <div class="glow" id="glow"></div>
     <nav class="nav glass">{links.map(([key, href, label]) => <a href={url(href)} aria-current={page === key ? "page" : undefined}>{label}</a>)}</nav>
     <div class="themebar glass"><button class="theme" type="button" aria-label="Dark mode" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 4.5a7.5 7.5 0 0 0 0 15z" fill="currentColor"/></svg></button></div>
-    <div class="ticks"></div>
+    {page === "case" && <div class="ticks"></div>}
 
     <slot />
 

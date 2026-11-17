@@ -153,6 +153,10 @@
   --color-ink-strong: #000000;
   --color-muted: #5E5D5A;
   --color-rule: #D4D3CF;
+  --color-divider: var(--color-muted);
+  --color-divider-table: var(--color-rule);
+  --color-tick: var(--color-rule);
+  --color-tick-on: var(--color-muted);
   --color-quiet: #8A8985;
   --color-on-primary: #000000;
   --color-ramp-0: #1A0700;
@@ -388,6 +392,10 @@
     --color-ink-strong: #F4F3F0;
     --color-muted: #A3A19C;
     --color-rule: #3C341F;
+    --color-divider: var(--color-ink);
+    --color-divider-table: var(--color-quiet);
+    --color-tick: var(--color-quiet);
+    --color-tick-on: var(--color-ink);
     --color-quiet: #75736E;
     --color-on-primary: #000000;
     --color-ramp-0: #F4F3F0;
@@ -405,6 +413,10 @@
   --color-ink-strong: #F4F3F0;
   --color-muted: #A3A19C;
   --color-rule: #3C341F;
+  --color-divider: var(--color-ink);
+  --color-divider-table: var(--color-quiet);
+  --color-tick: var(--color-quiet);
+  --color-tick-on: var(--color-ink);
   --color-quiet: #75736E;
   --color-on-primary: #000000;
   --color-ramp-0: #F4F3F0;
