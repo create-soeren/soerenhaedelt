@@ -993,13 +993,21 @@ function updateIcons(dt, t) {
 // Coffee: a cream pot with an ink outline. It tips further the nearer it gets, the button is the tipping point; the spout sits
 //   on the pointer, so the stream lands right under it. The lid opens only with the real tip and snaps shut when it
 //   leaves. In the button the floor is wet almost at once, then a calm level rises; rings run out from the stream.
-// Tea, the button as clear water: the bag is dunked, each dip sends a ripple, and the colour spreads from the bag
-//   with a soft edge.
+// Tea, the button as clear water: the pointer holds the tag and the button pulls the bag in (see MAG); in it the bag is
+//   dunked, each dip sends a ripple, and the colour spreads from where it went in with a soft edge.
 
 // Not on the contact page (12.11.): that page is the contact itself and has no footer; the pour then does nothing.
 const contact = document.getElementById("contact");
 const chat = contact?.querySelector("#chat"), cof = chat?.querySelector(".cof"), drinkEl = contact?.querySelector(".drink");
 const LIQUID = RAMP[2], NEAR_BTN = 120;
+// The tea bag on a magnet (17.11.): the pointer holds the paper tag, the bag hangs on its string and the button pulls it in,
+// the bag's counterpart to the pot that tips and opens its lid. range: how far the pull reaches (px from the bag to the button);
+// pull: how much of the way the bag gives in, far and near (near: within MAG_NEAR px the pull eases off, so the bag is not
+// snatched in); stretch: how far the string may give beyond its rest; short: within this many px of the tag to the button the
+// string draws in, so the bag hangs close under the tag and the pointer is near the button by the time the bag is in. The
+// page's pointer cannot be moved, so this is what brings it to the button when the tea is done. K, D: the spring the bag
+// follows with, so it lags, swings and settles.
+const MAG = { range: 340, pull: 0.9, near: 0.35, stretch: 20, short: 90, K: 160, D: 9 }, MAG_NEAR = 120;
 // Turns a point of the pointer drawing into page coordinates.
 const turn = (x, y, a, ox, oy) => { const c = Math.cos(a), s = Math.sin(a); return [ox + x * c - y * s, oy + x * s + y * c]; };
 
@@ -1034,10 +1042,12 @@ function drawPot(parent, { body, side, handle, line, lw = 0 }) {
 // The tea bag on the centre of its bag, string and orange tag above. Paper with an ink outline and a few leaves.
 function drawTeaBag(parent) {
   const g = svgEl("g", { stroke: RAMP[0], "stroke-width": 1.3, "stroke-linejoin": "round", "stroke-linecap": "round" }, parent);
-  svgEl("path", { d: "M 0 -10 V -24", fill: "none", "stroke-width": 1 }, g);
+  g.string = svgEl("path", { d: "M 0 -10 V -24", fill: "none", "stroke-width": 1 }, g);
   svgEl("rect", { x: -5.5, y: -33, width: 11, height: 9, rx: 1.5, fill: RAMP[3] }, g);
-  svgEl("path", { d: "M -7.5 -6 L -3 -10 H 3 L 7.5 -6 V 8 Q 7.5 10.5 5 10.5 H -5 Q -7.5 10.5 -7.5 8 Z", fill: "var(--color-tea-paper)" }, g);
-  for (const [x, y] of [[-3, -1], [2.5, 1], [-1, 4.5], [3, 6], [-3.5, 7]]) svgEl("circle", { cx: x, cy: y, r: 0.9, fill: RAMP[1], stroke: "none" }, g);
+  // The bag itself in a group of its own (16.11.), so it can hang lower on its string.
+  g.body = svgEl("g", {}, g);
+  svgEl("path", { d: "M -7.5 -6 L -3 -10 H 3 L 7.5 -6 V 8 Q 7.5 10.5 5 10.5 H -5 Q -7.5 10.5 -7.5 8 Z", fill: "var(--color-tea-paper)" }, g.body);
+  for (const [x, y] of [[-3, -1], [2.5, 1], [-1, 4.5], [3, 6], [-3.5, 7]]) svgEl("circle", { cx: x, cy: y, r: 0.9, fill: RAMP[1], stroke: "none" }, g.body);
   return g;
 }
 
@@ -1046,6 +1056,8 @@ const CREAM_POT = { body: "var(--color-neutral)", side: "var(--color-neutral)", 
 
 // The coffee's surface over N columns, h in px, and the time a full pour takes.
 const FLOW = { N: 48, POUR_MS: 1400 };
+// The soft edge of the tea's colour, in px.
+const TEA_EDGE = 30;
 
 // The toolbar shows each drink as a plain line glyph in the ink colour, readable on the orange of the chosen tile.
 // The detailed pot and bag stay the pointer's.
@@ -1059,7 +1071,14 @@ drinkEl?.querySelectorAll("button").forEach((b) => {
   const svg = svgEl("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 1.6, "stroke-linejoin": "round", "stroke-linecap": "round" }, b);
   for (const d of TOOL_ICONS[b.dataset.drink]) svgEl("path", { d }, svg);
   b.append(b.title);
-  b.addEventListener("click", () => { DRINK = b.dataset.drink; syncDrink(); Cup.build(); });
+  // The pick at once (16.11.): the pointer is on the tool just clicked, so the pot or bag is there in the same frame and the
+  // system's pointer is gone (see the cursor rules), no need to leave the toolbar first. The drink already chosen stays as it
+  // is: a click on it must not empty what is poured.
+  b.addEventListener("click", (e) => {
+    if (DRINK === b.dataset.drink) return;
+    DRINK = b.dataset.drink; syncDrink(); Cup.build();
+    if (e.detail) Cup.op = 1;
+  });
 });
 // The chosen drink on the toolbar and the section (the pointer's CSS hangs on it); none until a pick.
 function syncDrink() {
@@ -1088,7 +1107,7 @@ const Cup = {
       this.rings = [0, 1].map(() => extra(svgEl("circle", { fill: "none", stroke: RAMP[3], "stroke-width": 1.5, opacity: 0 }, fx)));
     }
     // On touch there is no hover: the button is served full.
-    Object.assign(this, { op: 0, near: 0, act: 0, lid: 0, ready: 0, fill: touch ? 1 : 0, ox: 0, oy: 0 });
+    Object.assign(this, { op: 0, near: 0, act: 0, lid: 0, ready: 0, fill: touch ? 1 : 0, ox: 0, oy: 0, R: 0, bx: undefined, bagX: 0, bagY: 0, bagIn: false });
     this.h = new Float32Array(FLOW.N);
     Object.assign(this, { vol: 0, wetL: Infinity, wetR: -Infinity, xl: 0, amp: 0 });
     this.serve();
@@ -1127,9 +1146,9 @@ const Cup = {
     if (f <= 0) { st.clipPath = "inset(100% 0 0 0)"; return; }
     const r = chat.getBoundingClientRect();
     if (DRINK === "tea") {
-      const R = f * (Math.hypot(r.width, r.height) + 30);
+      const R = this.R;
       st.clipPath = "none";
-      st.maskImage = st.webkitMaskImage = `radial-gradient(circle at ${this.ox.toFixed(1)}px ${this.oy.toFixed(1)}px, #000 ${Math.max(0, R - 30).toFixed(1)}px, transparent ${R.toFixed(1)}px)`;
+      st.maskImage = st.webkitMaskImage = `radial-gradient(circle at ${this.ox.toFixed(1)}px ${this.oy.toFixed(1)}px, #000 ${Math.max(0, R - TEA_EDGE).toFixed(1)}px, transparent ${R.toFixed(1)}px)`;
       return;
     }
     const N = FLOW.N, y = (i) => `${(100 - this.h[i] / r.height * 100).toFixed(2)}%`, pts = [];
@@ -1142,8 +1161,9 @@ const Cup = {
     if (!DRINK) return;
     if (NO_POUR.matches) { this.nodes.forEach((n) => n.setAttribute("opacity", 0)); return; }
     const hit = P.inside ? document.elementFromPoint(P.x, P.y) : null;
-    const onSwitch = !!(hit && hit.closest(".drink"));
-    const on = !!(hit && hit.closest("#contact")) && !onSwitch && this.fill < 1, onBtn = !touch && !!(hit && hit.closest("#chat"));
+    // Over a tool that is not chosen the system's hand is back and the pot or bag steps aside; over the chosen one it stays.
+    const onSwitch = !!(hit && hit.closest('.drink button[aria-pressed="false"]'));
+    const on = !!(hit && hit.closest("#contact")) && !onSwitch && this.fill < 1, onBtn = !touch && (DRINK === "tea" ? this.bagIn : !!(hit && hit.closest("#chat")));
     const r = chat.getBoundingClientRect();
     this.op = lerp(this.op, on ? 1 : 0, ease(dt, onSwitch ? 0.5 : 0.7));
     const d = Math.hypot(P.x - clamp(P.x, r.left, r.right), P.y - clamp(P.y, r.top, r.bottom));
@@ -1152,12 +1172,19 @@ const Cup = {
     this.act = lerp(this.act, onBtn && this.fill < 1 ? 1 : 0, ease(dt, 0.85));
     // What is poured stays. Tea draws on a clock; coffee counts what the pool holds (see the coffee branch below).
     if (reduced && onBtn) this.fill = 1;
-    else if (!touch && DRINK === "tea") this.fill = clamp(this.fill + (onBtn ? dt / 1625 : 0));
+    else if (!touch && DRINK === "tea") {
+      // Tea (16.11.): the colour spreads from where the bag first went in and stays anchored there, so leaving the button
+      // at its edge does not pull the circle along and empty the far side. Full means what is seen: the circle, soft edge
+      // included, has passed the corner farthest from that point. Before, full waited for the whole diagonal, so a bag
+      // in the middle showed a full button about a second before the pointer gave way.
+      if (onBtn && this.R === 0) { this.ox = this.bagX - r.left; this.oy = this.bagY - r.top; }
+      if (onBtn) this.R += dt * (Math.hypot(r.width, r.height) + TEA_EDGE) / 1625;
+      const far = Math.hypot(Math.max(this.ox, r.width - this.ox), Math.max(this.oy, r.height - this.oy));
+      this.fill = clamp(this.R / (far + TEA_EDGE));
+    }
     // Full: the pointer fades and shrinks away, the system's pointer takes over.
     this.serve();
     this.ready = reduced ? +(this.fill >= 1) : lerp(this.ready, this.fill >= 1 ? 1 : 0, ease(dt, 0.6));
-    // The tea spreads from the middle of the bag, which hangs just below the pointer.
-    if (onBtn && this.fill < 1) { this.ox = P.x - r.left; this.oy = P.y + 2 - r.top; }
 
     let x = P.x, y = P.y, a = 0, lift = 0;
     if (DRINK === "coffee") {
@@ -1188,13 +1215,41 @@ const Cup = {
         dr.setAttribute("opacity", ((1 - k) * pour).toFixed(3));
       });
     } else {
-      // Dunked: the bag lifts by its string and drops back, a ripple goes out on each dip. A few pixels only, the
-      // pointer stays on the button.
+      // Dunked (the bag in the button, not the pointer): the bag lifts by its string and drops back, a ripple goes out on each
+      // dip. A few pixels only.
       const beat = (t / 650) % 1;
       lift = reduced ? 0 : -5 * this.act * Math.sin(Math.PI * beat);
+      // The tag sits on the pointer; the drawing's origin, the bag's resting centre, hangs 28.5 px below (tag centre to bag
+      // centre). The string starts at the tag's lower edge. Centre distances from that edge: 24 at rest (a 14 px string), 14
+      // drawn in (4 px).
+      y = P.y + 28.5;
+      const px = P.x, py = P.y + 4.5;
+      const dTag = Math.hypot(px - clamp(px, r.left, r.right), py - clamp(py, r.top, r.bottom));
+      const close = 1 - smoothstep(clamp(dTag / MAG.short));
+      const Lrest = lerp(24, 14, close), rx = px, ry = py + Lrest;
+      const vx = clamp(rx, r.left, r.right) - rx, vy = clamp(ry, r.top, r.bottom) - ry, d = Math.hypot(vx, vy);
+      const pull = lerp(MAG.near, MAG.pull, smoothstep(clamp(d / MAG_NEAR))) * smoothstep(clamp(1 - d / MAG.range));
+      let tx = rx + vx * pull, ty = ry + vy * pull;
+      const lx = tx - px, ly = ty - py, L = Math.hypot(lx, ly), Lmax = Lrest + MAG.stretch * (1 - close);
+      if (L > Lmax) { tx = px + lx / L * Lmax; ty = py + ly / L * Lmax; }
+      // A spring, not a lerp: the bag lags behind a fast pointer, swings past and settles. Snapped while it is not shown.
+      if (this.bx === undefined || this.op < 0.05 || reduced) { this.bx = tx; this.by = ty; this.vx = this.vy = 0; }
+      else {
+        const h = dt / 1000;
+        this.vx += (MAG.K * (tx - this.bx) - MAG.D * this.vx) * h; this.vy += (MAG.K * (ty - this.by) - MAG.D * this.vy) * h;
+        this.bx += this.vx * h; this.by += this.vy * h;
+      }
+      const bx = this.bx, by = this.by + lift, ang = Math.atan2(bx - px, by - py);
+      // The bag turns on its string so its top points at the tag.
+      this.bag.body.setAttribute("transform", `translate(${(bx - x).toFixed(1)} ${(by - y).toFixed(1)}) rotate(${(-ang * 57.3).toFixed(1)})`);
+      this.bag.string.setAttribute("d", `M 0 -24 L ${(bx - x - 10 * Math.sin(ang)).toFixed(1)} ${(by - y - 10 * Math.cos(ang)).toFixed(1)}`);
+      // The tea starts where the bag goes in.
+      this.bagX = bx; this.bagY = by + 2;
+      this.bagIn = bx >= r.left && bx <= r.right && by >= r.top && by <= r.bottom;
+      lift = 0;
       this.rings.forEach((rg, i) => {
         const k = (beat + i / 2) % 1;
-        rg.setAttribute("cx", x.toFixed(1)); rg.setAttribute("cy", (y + 10).toFixed(1));
+        rg.setAttribute("cx", this.bagX.toFixed(1)); rg.setAttribute("cy", (this.bagY + 8).toFixed(1));
         rg.setAttribute("r", (3 + 16 * k).toFixed(1));
         rg.setAttribute("opacity", ((1 - k) * this.act * 0.8).toFixed(3));
       });
@@ -1202,6 +1257,32 @@ const Cup = {
     this.g.setAttribute("transform", `translate(${x.toFixed(1)} ${(y + lift).toFixed(1)}) rotate(${(a * 57.3).toFixed(1)}) scale(${(1 - 0.4 * this.ready).toFixed(3)})`);
     this.g.setAttribute("opacity", (this.op * (1 - this.ready)).toFixed(3));
     this.paint();
+  },
+};
+
+// The ghost (16.11.): over a tool that is not chosen the system's hand stays, and at it hangs a small ghost of what the
+// click turns into the pointer, the pot or the bag. It is the same drawing, smaller and half there; it fades out when the
+// hand leaves, and the click lets the real one take over in the same frame.
+const Ghost = {
+  on: !!drinkEl,
+  build() {
+    if (!this.on) return;
+    this.g?.remove();
+    this.g = svgEl("g", { opacity: 0 }, fx);
+    this.kinds = { coffee: svgEl("g", {}, this.g), tea: svgEl("g", {}, this.g) };
+    drawPot(this.kinds.coffee, CREAM_POT);
+    drawTeaBag(this.kinds.tea);
+    this.op = 0; this.kind = "coffee";
+  },
+  update(dt) {
+    if (!this.on || !this.g) return;
+    const hit = P.inside && !NO_POUR.matches ? document.elementFromPoint(P.x, P.y) : null;
+    const btn = hit?.closest('.drink button[aria-pressed="false"]');
+    if (btn) this.kind = btn.dataset.drink;
+    this.op = lerp(this.op, btn ? 1 : 0, ease(dt, 0.6));
+    for (const k in this.kinds) this.kinds[k].setAttribute("display", k === this.kind ? "inline" : "none");
+    this.g.setAttribute("transform", `translate(${(P.x + 26).toFixed(1)} ${(P.y + 24).toFixed(1)}) scale(${(0.5 + 0.1 * this.op).toFixed(3)})`);
+    this.g.setAttribute("opacity", (0.85 * this.op).toFixed(3));
   },
 };
 
@@ -1215,6 +1296,7 @@ function start() {
   phrases.forEach((ph) => { ph.c = 0; ph.hold = 0; });
   DRINK = null; syncDrink();
   Cup.build();
+  Ghost.build();
 }
 // A theme change (dark mode, 10.11.): the colours JS holds as values are read again from the variables, and what was
 // drawn with them is drawn again. The icons start unplayed, like after a restart.
@@ -1228,6 +1310,7 @@ function retheme() {
   setKoFilters();
   buildIcons();
   Cup.build();
+  Ghost.build();
   if (PAGE === "home") Obj.recolor();
 }
 // One switch, light or dark; the choice is kept (localStorage "theme"). Without a choice the page follows the system, also
@@ -1322,6 +1405,7 @@ function frame(t) {
   updateKnock();
   if (PAGE === "home") updateIcons(dt, t);
   Cup.update(dt, t);
+  Ghost.update(dt);
 
   requestAnimationFrame(frame);
 }
