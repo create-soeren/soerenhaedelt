@@ -311,7 +311,7 @@
   .cpage .intro { margin-top: var(--space-xs); color: var(--color-muted); }
   .cpage .actions { margin-top: var(--space-m); }
   .cpage .btn { display: inline-block; text-decoration: none; }
-  .cpage .mail-block { margin-top: var(--space-l); padding-top: var(--space-l); border-top: 1px solid var(--color-rule); }
+  .cpage .mail-block { margin-top: var(--space-l); padding-top: var(--space-l); border-top: 1px solid var(--color-divider-table); }
   .cpage .mlabel { margin: 0; color: var(--color-muted); font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); }
   .cpage .mail { display: inline-block; margin-top: var(--space-2xs); color: var(--color-ink); text-decoration: none; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
   :root:not([data-touch]) .cpage .mail:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
@@ -343,7 +343,7 @@
   /* Heads, rebuilt from the Figma draft (16.11.): the label row spreads over the width in both kinds of head, the spacing
      steps are 2xs (label row to title, Kit swap 16.11.) and m. The rhythm is the draft's, the values are the tokens'. */
   .case > header > .no { justify-content: space-between; }
-  .case .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-m) var(--space-l); margin: var(--space-l) 0 0; padding-top: var(--space-s); border-top: 1px solid var(--color-rule); }
+  .case .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-m) var(--space-l); margin: var(--space-l) 0 0; padding-top: var(--space-s); border-top: 1px solid var(--color-divider-table); }
   .case .meta > div { margin: 0; }
   .case .meta dt { font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); line-height: var(--type-label-sm-lh); color: var(--color-muted); }
   .case .meta dd { margin: var(--space-2xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); text-wrap: pretty; }
