@@ -533,6 +533,8 @@
   .pin { position: absolute; left: 0; top: 0; z-index: 3; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; background: var(--color-primary);
     cursor: pointer; transform-origin: 0 100%; box-shadow: 0 2px 6px rgb(0,0,0,.14); }
   .pin svg { display: block; width: 100%; height: 100%; fill: var(--color-on-primary); }
+  /* Focus of the twin button after the headline (site.js, Twin), shown on the pin; follows the drop's shape. */
+  .pin.focus { outline: 2px solid var(--color-ink); outline-offset: 2px; }
 
   /* The entry, the same content in every version: who, what was struck, why. In the pin layer, placed by JS every frame. */
   /* Above the annotation layer (#fx, 4, earlier in the DOM), so slots and redlines never cross the card. */

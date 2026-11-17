@@ -776,6 +776,12 @@ function updatePhrases(dt) {
     ph.hold = ph.over ? E_HOLD : Math.max(0, ph.hold - dt);
     ph.c = reduced ? (ph.hold > 0 ? E_DUR : 0) : clamp(ph.c + (ph.hold > 0 ? dt : -dt * E_CLOSE), 0, E_DUR);
     STYLE.update(ph, ph.c / E_DUR, rects);
+    // The twin tells what a tap or a key opened; the mouse's hover is for the eye and stays out of it.
+    const expanded = !!ph.open;
+    if (ph.twin && (ph.twin.getAttribute("aria-expanded") === "true") !== expanded) {
+      ph.twin.setAttribute("aria-expanded", String(expanded));
+      ph.twinNote.hidden = !expanded;
+    }
   }
 }
 
@@ -819,6 +825,9 @@ const Chat = {
     ph.pin.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.26 18.2Q5.66 18.2 5.66 13.34V13.22H9.42V13.64Q9.42 14.34 9.92 14.56Q10.42 14.78 12.26 14.78Q13.9 14.78 14.34 14.63Q14.78 14.48 14.78 14Q14.78 13.64 14.5 13.46Q14.22 13.28 13.42 13.18L9.22 12.62Q5.46 12.1 5.46 8.78Q5.46 6.96 7.03 5.68Q8.6 4.4 11.96 4.4Q15.08 4.4 16.67 5.68Q18.26 6.96 18.26 9.26V9.38H14.5V9.08Q14.5 8.32 13.94 8.06Q13.38 7.8 11.56 7.8Q10.18 7.8 9.7 7.99Q9.22 8.18 9.22 8.64Q9.22 8.96 9.43 9.12Q9.64 9.28 10.18 9.36L14.38 9.98Q18.54 10.58 18.54 13.86Q18.54 15.74 16.99 16.97Q15.44 18.2 12.26 18.2Z"/></svg>';
     ph.card = h("div", "entry chat", null, pinLayer);
     entryBody(ph, ph.card);
+    // Pin and card are for the eye only; a screen reader gets the twin after the headline (see Twin below).
+    ph.pin.setAttribute("aria-hidden", "true");
+    ph.card.setAttribute("aria-hidden", "true");
   },
   update(ph, t, rects) {
     const last = rects[rects.length - 1];
@@ -896,6 +905,41 @@ addEventListener("click", (e) => {
   if (lastPointer === "touch") return;
   if (!touch) { for (const ph of phrases) ph.open = false; return; }
   tapAt(e.clientX, e.clientY);
+});
+
+// --- Twin for keyboard and screen reader (17.11.) -------------------------------------------------
+// The pin layer sits at the end of the body (the zoom fix above), so the pin itself would come after the footer in the
+// tab order and be read apart from its headline. A hidden button right after the headline stands in for it: it carries
+// aria-expanded and its own text, the pin shows its focus ring. Enter or Space opens the entry like a tap (ph.open),
+// Escape closes it. Struck text is not announced by screen readers, so the twin says "Instead of" in words.
+for (const ph of phrases) {
+  const id = `note-${ph.name}`;
+  const btn = h("button", "sr-only", "Note from Sören");
+  btn.type = "button";
+  btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-controls", id);
+  const note = h("div", "sr-only");
+  note.id = id;
+  note.hidden = true;
+  h("p", null, `Instead of: ${ph.entry.struck.map(([text]) => text).join(", ")}.`, note);
+  h("p", null, ph.entry.note, note);
+  ph.head.after(btn, note);
+  ph.twin = btn;
+  ph.twinNote = note;
+  // The state is read from the button, not from ph.open: a tap on a touch device may have closed the entry in the
+  // same event (pointerup before click) before this click arrives.
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation(); // the window's click would close it again
+    const open = btn.getAttribute("aria-expanded") !== "true";
+    for (const other of phrases) other.open = other === ph ? open : false;
+    if (!open) { ph.hold = 0; ph.c = Math.min(ph.c, 0.3 * E_DUR); }
+  });
+  btn.addEventListener("focus", () => ph.pin.classList.toggle("focus", btn.matches(":focus-visible")));
+  btn.addEventListener("blur", () => ph.pin.classList.remove("focus"));
+}
+addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  for (const ph of phrases) if (ph.open) { ph.open = false; ph.hold = 0; ph.c = Math.min(ph.c, 0.3 * E_DUR); }
 });
 
 // --- Calm at the pin --------------------------------------------------------------------------------
