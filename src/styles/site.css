@@ -467,8 +467,10 @@
      full width; hover turns it orange (1 px), the chosen one carries an orange bar of 2 px and is ink, the other one goes
      grey. Before a pick both stay ink, nothing is greyed out yet. Over a tool that is not chosen a ghost of the pot or bag
      hangs at the hand (JS, Ghost), the click turns it into the pointer. */
+  /* Padding 7 / 9 (17.11.): with the icon's own white space and the letters' side bearings each tool shows about 9 px of
+     air left, between icon and label, and right (with 12 px the right showed 12.4 to 12.8, about 40 % more than the rest). */
   .drink { display: inline-flex; gap: var(--space-s); margin-top: var(--space-xs); }
-  .drink button { position: relative; height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 7px; border: 0;
+  .drink button { position: relative; height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 9px 0 7px; border: 0;
     background: transparent; color: var(--color-ink); font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); transition: color .2s; }
   .drink[data-on] button { color: var(--color-muted); }
   .drink button[aria-pressed="true"], :root:not([data-touch]) .drink[data-on] button:hover { color: var(--color-ink); }
@@ -529,8 +531,8 @@
   /* The layer for pins and entries at the document's origin; it takes no space, the pins hang out of it (see placePin). */
   .pins { position: absolute; left: 0; top: 0; }
   .pin { position: absolute; left: 0; top: 0; z-index: 3; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; background: var(--color-primary);
-    display: grid; place-items: center; font-family: var(--font-head); font-size: 20px; line-height: 1; font-weight: 700; color: var(--color-on-primary); cursor: pointer; transform-origin: 0 100%;
-    box-shadow: 0 2px 6px rgb(0,0,0,.14); }
+    cursor: pointer; transform-origin: 0 100%; box-shadow: 0 2px 6px rgb(0,0,0,.14); }
+  .pin svg { display: block; width: 100%; height: 100%; fill: var(--color-on-primary); }
 
   /* The entry, the same content in every version: who, what was struck, why. In the pin layer, placed by JS every frame. */
   /* Above the annotation layer (#fx, 4, earlier in the DOM), so slots and redlines never cross the card. */
@@ -539,7 +541,8 @@
   .entry .head b { color: var(--color-ink); font-weight: 600; }
   /* The role sits at the card's right edge, where Figma's comments put the time. */
   .entry .head b + span { margin-left: auto; font-weight: 600; }
-  .entry .av { width: 22px; height: 22px; border-radius: 50%; background: var(--color-primary); display: grid; place-items: center; font-family: var(--font-head); font-size: 18px; line-height: 1; font-weight: 700; color: var(--color-on-primary); }
+  .entry .av { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--color-primary); }
+  .entry .av svg { display: block; width: 100%; height: 100%; fill: var(--color-on-primary); }
   .entry ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
   .entry li { width: fit-content; }
   .entry .struck { font-weight: 300; }

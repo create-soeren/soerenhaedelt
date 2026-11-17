@@ -782,7 +782,9 @@ function updatePhrases(dt) {
 // The entry's content, built the same in every version.
 function entryBody(ph, parent) {
   const head = h("div", "head", null, parent);
-  h("span", "av", "S", head);
+  // The S as an outline from Clash Display 700 at 18 px, centred in the 22 px circle (17.11., avatar-s.svg, Website
+  // Materials): as text it sat by the font's metrics and moved with the font load, as a path it sits where the geometry says.
+  h("span", "av", null, head).innerHTML = '<svg viewBox="0 0 22 22" aria-hidden="true"><path d="M11.2333 17.21C7.27328 17.21 5.29328 15.752 5.29328 12.836V12.728H8.67728V13.106C8.67728 13.526 8.82728 13.802 9.12728 13.934C9.42728 14.066 10.1293 14.132 11.2333 14.132C12.2173 14.132 12.8413 14.087 13.1053 13.997C13.3693 13.907 13.5013 13.718 13.5013 13.43C13.5013 13.214 13.4173 13.052 13.2493 12.944C13.0813 12.836 12.7573 12.752 12.2773 12.692L8.49728 12.188C6.24128 11.876 5.11328 10.724 5.11328 8.73204C5.11328 7.64004 5.58428 6.71004 6.52628 5.94204C7.46828 5.17404 8.94728 4.79004 10.9633 4.79004C12.8353 4.79004 14.2483 5.17404 15.2023 5.94204C16.1563 6.71004 16.6333 7.78404 16.6333 9.16404V9.27204H13.2493V9.00204C13.2493 8.54604 13.0813 8.24004 12.7453 8.08404C12.4093 7.92804 11.6953 7.85004 10.6033 7.85004C9.77528 7.85004 9.21728 7.90704 8.92928 8.02104C8.64128 8.13504 8.49728 8.33004 8.49728 8.60604C8.49728 8.79804 8.56028 8.94204 8.68628 9.03804C8.81228 9.13404 9.03728 9.20604 9.36128 9.25404L13.1413 9.81204C15.6373 10.172 16.8853 11.336 16.8853 13.304C16.8853 14.432 16.4203 15.365 15.4903 16.103C14.5603 16.841 13.1413 17.21 11.2333 17.21Z"/></svg>';
   h("b", null, "Sören", head);
   h("span", null, "Product Designer", head);
   const ul = h("ul", null, null, parent);
@@ -811,7 +813,10 @@ function placePin(pin, x, y, t) {
 // like Figma's cursor chat and like the cup at the contact: the content appears where the eye already is.
 const Chat = {
   build(ph) {
-    ph.pin = h("div", "pin", "S", pinLayer);
+    // The S as an outline (Clash Display 700, 20 px), like the entry's avatar (17.11.). Where the text S sat on the live
+    // site: centred across, 0.7 px above the box's middle, on the dome's optical centre (pin-s-live.svg, Website Materials).
+    ph.pin = h("div", "pin", null, pinLayer);
+    ph.pin.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.26 18.2Q5.66 18.2 5.66 13.34V13.22H9.42V13.64Q9.42 14.34 9.92 14.56Q10.42 14.78 12.26 14.78Q13.9 14.78 14.34 14.63Q14.78 14.48 14.78 14Q14.78 13.64 14.5 13.46Q14.22 13.28 13.42 13.18L9.22 12.62Q5.46 12.1 5.46 8.78Q5.46 6.96 7.03 5.68Q8.6 4.4 11.96 4.4Q15.08 4.4 16.67 5.68Q18.26 6.96 18.26 9.26V9.38H14.5V9.08Q14.5 8.32 13.94 8.06Q13.38 7.8 11.56 7.8Q10.18 7.8 9.7 7.99Q9.22 8.18 9.22 8.64Q9.22 8.96 9.43 9.12Q9.64 9.28 10.18 9.36L14.38 9.98Q18.54 10.58 18.54 13.86Q18.54 15.74 16.99 16.97Q15.44 18.2 12.26 18.2Z"/></svg>';
     ph.card = h("div", "entry chat", null, pinLayer);
     entryBody(ph, ph.card);
   },
