@@ -35,7 +35,7 @@ blocks:
       - kind: image
         src: ./media/paxa-icons-2026-03.jpg
         alt: "Six line icons in orange on beige: a star, a sun, a thought bubble with bars, a flag, a speech bubble and four circles"
-        caption: 03.2026 · Icons I drew for the home page, alongside a brand extension by a freelance brand designer.
+        caption: 03.2026 · Icons I drew for the home page.
   - type: showcase
     width: half
     portrait: true
