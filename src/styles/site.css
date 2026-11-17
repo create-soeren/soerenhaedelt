@@ -463,21 +463,21 @@
   /* Coffee or tea, a small tool palette in the navbar's glass (see .glass), marked like the navbar: hover turns a
      tool black and draws a thin ink rule from the middle, the chosen one is black with a short orange bar and the
      other one goes grey. Before a pick both stay black, nothing is greyed out yet. */
-  .drink { display: inline-flex; gap: var(--space-2xs); margin-top: var(--space-xs); padding: 3px; }
+  .drink { display: inline-flex; gap: var(--space-s); margin-top: var(--space-xs); }
   .drink button { position: relative; height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px 0 7px; border: 0;
     background: transparent; color: var(--color-ink); font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); transition: color .2s; }
   .drink[data-on] button { color: var(--color-muted); }
   .drink button[aria-pressed="true"], :root:not([data-touch]) .drink[data-on] button:hover { color: var(--color-ink); }
-  .drink button::after { content: ""; position: absolute; left: 7px; right: 12px; bottom: 4px; height: 1px; background: var(--color-ink);
-    transform: scaleX(0); transition: transform .25s cubic-bezier(.3, 1, .4, 1); }
-  :root:not([data-touch]) .drink button:hover::after { transform: none; }
-  .drink button[aria-pressed="true"]::after { height: 2px; bottom: 3px; background: var(--color-primary); transform: none; }
+  /* Flat tools (16.11., Sören's Figma): no glass, no pill. Each tool carries a rule-coloured hairline over its full width,
+     the chosen one an orange bar of 2 px. The three variants differ in what hover and the unchosen state add. */
+  .drink button::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--color-rule); transition: background-color .2s; }
+  .drink button[aria-pressed="true"]::after { height: 2px; background: var(--color-primary); }
   .drink button:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
   /* Coffee | tea (11.11.): the navbar's hairline between the two, at every width. Centred on what is drawn, not on the
      gap: the buttons pad 12 px after the label and 7 px before the glyph, and the tea glyph starts 1.5 px into its box. */
-  .drink button + button::before { content: ""; position: absolute; left: calc(-1 * (var(--space-2xs) + 12px - 7px) / 2 + 1px); top: 10px; bottom: 10px;
-    width: 1px; background: var(--color-rule); }
-  .contact .drink button, .contact .drink button * { cursor: pointer; }
+  /* The hand only on a tool that is not chosen (16.11.): the chosen one carries the pot or bag from the moment of the click,
+     so there the page's rule (.contact[data-drink] *, no cursor) stays. Before a pick every tool is not chosen. */
+  .contact .drink button[aria-pressed="false"], .contact .drink button[aria-pressed="false"] * { cursor: pointer; }
   .drink svg { width: 20px; height: 20px; }
   /* Toolbar with nothing chosen: the glyphs act out what the pointer will do, in turn: the pot tips, the bag dips twice. Still once
      a drink is picked. */
@@ -486,6 +486,30 @@
   .contact .drink:not([data-on]) [data-drink="coffee"] svg { transform-origin: 50% 65%; animation: tool-tip 3.2s ease-in-out infinite; }
   .contact .drink:not([data-on]) [data-drink="tea"] svg { animation: tool-dip 3.2s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce) { .drink svg { animation: none !important; } }
+
+  /* Toolbar variants (16.11., Spielwiese, ?tv=a|b|a1|a2|a3). The base is a, the flat toolbar of Sören's Figma:
+     a  Hover turns the underline orange (1 px, the chosen bar stays 2 px). The glyphs act out the pour in turn until a pick.
+     b  Hover turns the whole tool orange: glyph, label and underline. Orange on cream is 3.1:1, under the 4.5:1 a 13 px label needs.
+     a1 a, and while a tool is hovered its glyph acts out what the click does: the pot tips, the bag dips.
+     a2 a, and the question answers in the visitor's voice, "Coffee, please.", in the place of "Make a choice."
+     a3 a, and a small ghost of the pot or bag hangs at the hand (JS, Ghost): the click turns it into the pointer. */
+  .contact:is([data-tv="b"], [data-tv^="a"]) .drink button:hover::after { background: var(--color-primary); }
+  :root:not([data-touch]) .contact[data-tv="b"] .drink button:hover { color: var(--color-primary); }
+  /* a1 */
+  @keyframes demo-tip { 0%, 100% { transform: none; } 30%, 70% { transform: rotate(-20deg); } }
+  @keyframes demo-dip { 0%, 8%, 40%, 74%, 100% { transform: none; } 18%, 28%, 52%, 62% { transform: translateY(2.5px); } }
+  :root:not([data-touch]) .contact[data-tv="a1"] .drink button[data-drink="coffee"][aria-pressed="false"]:hover svg { transform-origin: 50% 65%; animation: demo-tip 1.3s ease-in-out infinite; }
+  :root:not([data-touch]) .contact[data-tv="a1"] .drink button[data-drink="tea"][aria-pressed="false"]:hover svg { animation: demo-dip 1.3s ease-in-out infinite; }
+  /* a2: both sentences in one grid cell, so the line keeps its height and the swap moves nothing */
+  .ask .a { display: none; }
+  .contact[data-tv="a2"] .ask { display: grid; justify-items: center; }
+  .contact[data-tv="a2"] .ask > span { display: block; grid-area: 1 / 1; transition: opacity .18s; }
+  .contact[data-tv="a2"] .ask .a { opacity: 0; }
+  :root:not([data-touch]) .contact[data-tv="a2"]:has(.drink button[data-drink="coffee"][aria-pressed="false"]:hover) .ask :is(.q, [data-for="tea"]),
+  :root:not([data-touch]) .contact[data-tv="a2"]:has(.drink button[data-drink="tea"][aria-pressed="false"]:hover) .ask :is(.q, [data-for="coffee"]) { opacity: 0; }
+  :root:not([data-touch]) .contact[data-tv="a2"]:has(.drink button[data-drink="coffee"][aria-pressed="false"]:hover) .ask [data-for="coffee"],
+  :root:not([data-touch]) .contact[data-tv="a2"]:has(.drink button[data-drink="tea"][aria-pressed="false"]:hover) .ask [data-for="tea"] { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .contact[data-tv="a2"] .ask > span { transition: none; } }
 
   /* The hero object: one canvas over the hero, under the annotations, over the glow. It scrolls with the hero like the
      headline (11.11.): fixed and placed per frame, it lagged a frame behind a fast scroll and jumped at the overscroll. */
