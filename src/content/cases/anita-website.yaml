@@ -10,12 +10,12 @@ head:
   meta:
     - label: Role
       value: Web Designer (Freelance)
-    - label: Concept
-      value: 4 mockups, color mesh and images by Khaled Mahd, Creative Director at Silicon Allee
     - label: Period
-      value: 2 months
+      value: Since 12.2024, launch in 02.2025 after 2 months
+    - label: Input
+      value: 4 mockups, color mesh and images by Khaled Mahd, Creative Director at Silicon Allee
     - label: Scope
-      value: Desktop layouts for the pages without a mockup, such as the contact page, responsive design of all pages, handoff to the Mosherino Agency, adjustments in Webflow since the launch
+      value: Desktop layouts for the pages without a mockup, responsive design of all pages, handoff to the Mosherino Agency, adjustments in Webflow since the launch
 blocks:
   - type: chapter
     decision: From a rough prototype to a responsive site.
