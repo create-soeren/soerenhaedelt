@@ -274,21 +274,21 @@ const ICONS = {
       el.setAttribute("fill", mixHex(ink, c, seg(p, 0.5, 1)));
     });
   },
-  // Satisfaction, chosen 30.10.: a geometric heart (a square on its corner, two circles) fills up and pops once at the
-  // end. On Sören's 96 grid and his ink-to-orange ramp. Since 11.11. in three bands of equal height like the funnel
-  // (ramp 1 to orange at the top, joints the funnel's 1.5) over the grey ghost. The bottom band is full from the start,
-  // the second and third come in with the run.
+  // Satisfaction, chosen 30.10.: a geometric heart (a square on its corner, two circles) fills up. On Sören's 96 grid and
+  // his ink-to-orange ramp. Since 11.11. in three bands of equal height like the funnel (ramp 1 to orange at the top,
+  // joints the funnel's 1.5) over the grey ghost. The bottom band is full from the start, the second and third come in
+  // with the run. Its pop at the end is the landing every card shares (land, CSS); its own pop is gone since 18.11., the
+  // heart popped twice.
   satisfaction(svg) {
     const g = wideGroup(svg), TOP = 17.86, BOTTOM = 80.28, H = BOTTOM - TOP, id = `heart${++clipId}`, JOINT = 1.5;
     // The square on its corner with a half circle on each upper edge, as one path.
     const D = "M 48 80.28 L 19.72 52 A 20 20 0 0 1 48 23.72 A 20 20 0 0 1 76.28 52 Z";
     const defs = svgEl("defs", {}, g), clip = (cid, attrs) => svgEl("rect", attrs, svgEl("clipPath", { id: cid }, defs));
     const level = clip(id, { x: 0, width: 96 });
-    const pop = svgEl("g", {}, g);
-    svgEl("path", { d: D, fill: RAMP[0], opacity: 0.12 }, pop);
+    svgEl("path", { d: D, fill: RAMP[0], opacity: 0.12 }, g);
     // Band edges from the bottom, thirds of the height.
     const edges = [BOTTOM + 10, BOTTOM - H / 3, BOTTOM - (2 * H) / 3, TOP - 10];
-    const fill = svgEl("g", { "clip-path": `url(#${id})` }, pop);
+    const fill = svgEl("g", { "clip-path": `url(#${id})` }, g);
     RAMP.slice(1).forEach((c, i) => {
       const bid = `${id}b${i}`, y0 = edges[i + 1] + (i < 2 ? JOINT / 2 : 0), y1 = edges[i] - (i > 0 ? JOINT / 2 : 0);
       clip(bid, { x: 0, y: y0.toFixed(2), width: 96, height: (y1 - y0).toFixed(2) });
@@ -297,8 +297,6 @@ const ICONS = {
     return (p) => {
       const h = H * lerp(1 / 3, 1, p);
       level.setAttribute("y", (BOTTOM - h).toFixed(2)); level.setAttribute("height", h.toFixed(2));
-      const s = 1 + 0.12 * Math.sin(Math.PI * seg(p, 0.85, 1));
-      pop.setAttribute("transform", `translate(48 49) scale(${s.toFixed(3)}) translate(-48 -49)`);
     };
   },
   // Sören's redraw 30.10.: four filled bars, black while flat, growing in a staggered run into his ink-to-orange ramp.
