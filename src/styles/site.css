@@ -1,3 +1,10 @@
+  /* Clash Display has no arrow, so the browser took the system's: Helvetica Neue on Apple, other shapes elsewhere. This
+     face adds one to the family (18.11.), drawn from Clash's own ›: Medium's stroke and angle, the cut leg ends, the tip
+     pointed. A glyph, not an SVG, so it is rasterised and snapped like the figures; metrics as Clash's, so the line keeps
+     its height. It loads only where a → is set. Weight 700 only, the figures' weight: a face with other descriptors (a
+     range 300 700) does not join Clash's 700 face, and the digits fall back. Source and generator: plans/user-flow-von-
+     fixit-tender-matsumoto-screens/_pfeil. */
+  @font-face { font-family: "Clash Display"; src: url("../fonts/pfeil.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; unicode-range: U+2192; }
   :root {
     --mono: ui-monospace, "SF Mono", menlo, monospace;
     /* The glow's diameter: 510 px on a 1920 screen, a quarter less on a 1440 laptop. */
@@ -422,9 +429,9 @@
   .stat b { display: block; font-family: var(--font-headline); font-weight: var(--w-headline); font-size: var(--type-headline-size); line-height: 1; }
   .stat > span { display: block; margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
   /* Before and after in two equal columns (18.11.). The arrow is the one of the head's "0 → 700+": the same character in
-     the figures' style, on their baseline (Clash Display has none, Helvetica Neue's steps in). It sits centred between
-     the end of the first figure and the start of the second: the first figure's box reaches over the gap to the second
-     column, auto margins centre the arrow in what is left. */
+     the figures' style, on their baseline (the face at the top of this file). It sits centred between the end of the
+     first figure and the start of the second: the first figure's box reaches over the gap to the second column, auto
+     margins centre the arrow in what is left. */
   .compare { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--space-m); align-items: start; }
   .compare .stat:first-child b { display: flex; align-items: baseline; white-space: nowrap; margin-right: calc(-1 * var(--space-m)); }
   .compare .to { margin-inline: auto; }
