@@ -15,19 +15,13 @@ head:
     - label: Period
       value: 01.2026 – 03.2026
     - label: Scope
-      value: Webflow build, responsive breakpoints, news migration with redirects, CMS system
+      value: Webflow build, responsive design for tablet and phone, animations, news migration with redirects, CMS system
 blocks:
   - type: chapter
-    decision: Fifteen years of news, every old link redirected.
+    decision: From desktop mockups to a responsive Webflow site.
     why:
-      - The news archive ran on its own subdomain, news.siliconallee.com, with dated addresses. In the relaunch it moved into the Webflow CMS under siliconallee.com/news, with a new address for every article.
-      - I audited all 198 articles from 2011 to 2026, extracted the meta title of each and set one 301 redirect from every old address to its new one.
-    evidence:
-      - kind: stat
-        value: "198"
-        label:
-          - Old article URLs, 2011 to 2026.
-          - Each with a 301 redirect to its new address.
+      - Silicon Allee, the startup accelerator of Fraunhofer HHI, moved its website to Webflow. Khaled Mahd, its Creative Director, designed the desktop pages as static mockups.
+      - I built the entire front end in Webflow, designed every page for tablet and phone and created the animations. The old site ranked well, so keeping its search visibility shaped every step of the relaunch.
   - type: showcase
     width: half
     portrait: true
@@ -52,6 +46,17 @@ blocks:
         src: ./media/silicon-allee-mobil-news-2026-11.jpg
         alt: "siliconallee.com news list on a phone: article cards with image, title, author and date, among them Neptune Raises 1.5 Million Dollars to Scale Digital Music Education in the UAE"
         caption: 11.2026 · The news list.
+  - type: chapter
+    decision: Fifteen years of news, every old link redirected.
+    why:
+      - The news archive ran on its own subdomain, news.siliconallee.com, with dated addresses. In the relaunch it moved into the Webflow CMS under siliconallee.com/news, with a new address for every article.
+      - I audited all 198 articles from 2011 to 2026, extracted the meta title of each and set one 301 redirect from every old address to its new one.
+    evidence:
+      - kind: stat
+        value: "198"
+        label:
+          - Old article URLs, 2011 to 2026.
+          - Each with a 301 redirect to its new address.
   - type: chapter
     decision: Publish without a developer.
     why:
