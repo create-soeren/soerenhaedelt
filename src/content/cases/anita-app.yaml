@@ -34,7 +34,7 @@ blocks:
       - kind: pair
         items:
           - src: ./media/anita-suche-2024-01.jpg
-            alt: "iur.crowd home screen, January 2024: two search fields, facts and arguments"
+            alt: "Home screen of Anita, then still called iur.crowd, January 2024: two search fields, facts and arguments"
             caption: 01.2024 · Two fields, no hint what goes where.
           - src: ./media/anita-suche-2024-03.jpg
             alt: "iur.crowd home screen, March 2024: one search field with filters above"
@@ -55,7 +55,7 @@ blocks:
   - type: chapter
     struck:
       label: Our own decision
-      text: A map of every court decision's argument.
+      text: A map of every court decision’s argument.
     decision: Dependable orientation over a structure we could only guess.
     why:
       - We extracted the reasoning of each court decision into argument segments and put them in a navigation bar. German decisions follow no shared structure, so the extraction was unstable from court to court.
@@ -68,8 +68,8 @@ blocks:
   - type: chapter
     decision: Simplicity as a product principle.
     why:
-      - iur.crowd was repositioned and rebranded as Anita within the Silicon Allee accelerator, supported by Fraunhofer HHI. The Creative Director of Silicon Allee led the rebranding and defined the new strategic and visual foundation. Anita stands for radical simplicity within the complex ecosystem of legal research.
-      - "In close collaboration with the Creative Director, I redesigned the application from the ground up on that vision. The redesign was not merely aesthetic: it marked a strategic shift toward simplicity as a product principle."
+      - Within the Silicon Allee accelerator, supported by Fraunhofer HHI, iur.crowd was repositioned and rebranded as Anita. Khaled Mahd, Creative Director at Silicon Allee, led the rebrand and set simplicity as its core idea.
+      - "Together with him, I redesigned the app from the ground up. Simplicity became a rule for every screen: the bookmark list went from folders and cards to a plain list."
     evidence:
       - kind: pair
         items:
@@ -83,10 +83,11 @@ blocks:
     struck:
       label: Earlier version
       text: Summaries alone.
-    decision: An answer built from the decisions' own words.
+    decision: An answer built from the decisions’ own words.
     why:
-      - Even with improved search, users struggled to see how individual court decisions related to their query. Without interpretation, results stayed fragmented, and checking each decision's relevance meant reading it in full.
-      - "The chatbot extracts the quotes from the decisions it found and builds its answer from them. Source markers inside the answer point back to those decisions. Hovering a marker shows the quote the statement rests on and marks the decision in the source list. Participants called it an “evidence layer”: trust came from being able to check, not from the summary. Earlier versions overwhelmed users with information; later iterations improved readability, pacing and the referencing."
+      - Even with improved search, users struggled to see how individual court decisions related to their query. Without interpretation, results stayed fragmented, and checking each decision’s relevance meant reading it in full.
+      - "The chatbot extracts the quotes from the decisions it found and builds its answer from them. Source markers in the answer point back to those decisions: hovering one shows the quote the statement rests on and marks the decision in the source list."
+      - "Participants called it an “evidence layer”: trust came from being able to check, not from the summary. The first versions put too much on the screen at once. Later rounds made the answer easier to read, paced how it appears and tightened the source references."
     evidence:
       - kind: pair
         items:
@@ -97,7 +98,7 @@ blocks:
             alt: "Anita results and chat, October 2025: the quote from the cited court decision in its hover state"
             caption: 10.2025 · The quote from the cited decision in its hover state.
       - kind: finding
-        text: All participants perceive the sources as evidence for the chatbot's answer.
+        text: All participants perceive the sources as evidence for the chatbot’s answer.
         who: Usability test, summer 2025
   - type: learnings
     items:
@@ -110,7 +111,7 @@ blocks:
       - title: AI must reduce cognitive load to create value
         text: "The chatbot succeeded when it acted as an interpretive bridge. A summary alone was not enough. Trust grew when each statement was built from a quote and its marker led to the decision it came from: the answer became checkable. AI created impact through contextualization and evidence."
       - title: Research must guide direction changes
-        text: User testing did not only validate improvements. It invalidated entire concepts. Abandoning structured argument extraction was not a setback, but a strategic correction. Design maturity includes knowing when to stop.
+        text: User testing did not only validate improvements. It invalidated entire concepts. Abandoning structured argument extraction and dropping the dual search bar were not setbacks, but strategic corrections. Design maturity includes knowing when to stop.
   - type: quote
     photo: ../../assets/people/til.jpg
     position: 50% 50%

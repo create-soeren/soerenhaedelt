@@ -11,7 +11,7 @@ head:
     - label: Role
       value: Webflow Designer (Freelance)
     - label: Period
-      value: 07.2025 – 10.2025
+      value: 6 weeks to launch in 11.2025, then structural changes and brand extension until 03.2026
     - label: Input
       value: First draft, texts and photos by the Paxa founders
     - label: Scope
@@ -22,12 +22,12 @@ blocks:
     why:
       - "The founders came with a Lovable draft: structure, texts, photos, a first green and Figtree as their typeface. What it lacked was a system behind sizes and spacing."
       - I darkened the green, toned down the beige and gave the site one type scale and one spacing scale, applied to every page.
-      - The visual language kept growing after the launch. When a freelance brand designer extended the brand with orange in 02.2026 and 03.2026, I drew the icons for the home page.
+      - The visual language kept growing after the launch. When a freelance brand designer extended the brand with orange in February and March 2026, I drew the icons for the home page.
     evidence:
       - kind: pair
         items:
           - src: ./media/paxa-lovable-entwurf-hero.jpg
-            alt: "The Lovable draft of the paxa home page: the headline Wir sind eure Rechtsabteilung in a grotesque typeface, a plain navigation"
+            alt: "The Lovable draft of the paxa home page: the headline Wir sind eure Rechtsabteilung in Figtree, a plain navigation"
             caption: The Lovable draft by the founders.
           - src: ./media/paxa-startseite-hero-2025-11.jpg
             alt: "The paxa home page at launch: the headline Wir sind Ihre Rechtsabteilung in Figtree, dark green on beige"
@@ -78,5 +78,5 @@ blocks:
   - type: quote
     photo: ../../assets/people/konstantin-julian.jpg
     position: 50% 30%
-    text: When we contacted Sören, we wanted to completely restructure our website quickly, but didn't have the resources to implement it ourselves. He was immediately available, executed our vision precisely, and contributed his own ideas. Throughout the process, we were closely involved. Even after the launch, we can always rely on his fast and dependable support.
+    text: When we contacted Sören, we wanted to completely restructure our website quickly, but didn’t have the resources to implement it ourselves. He was immediately available, executed our vision precisely, and contributed his own ideas. Throughout the process, we were closely involved. Even after the launch, we can always rely on his fast and dependable support.
     who: Konstantin and Julian, Partners and Founders at Paxa

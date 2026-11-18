@@ -11,7 +11,7 @@ head:
     - label: Role
       value: Web Designer (Freelance)
     - label: Concept
-      value: Home page, rough prototypes of three more pages, color mesh and images by Khaled Mahd, Creative Director at Silicon Allee
+      value: 4 mockups, color mesh and images by Khaled Mahd, Creative Director at Silicon Allee
     - label: Period
       value: 2 months
     - label: Scope
@@ -20,9 +20,9 @@ blocks:
   - type: chapter
     decision: From a rough prototype to a responsive site.
     why:
-      - Anita was rebranded within the Silicon Allee accelerator. Its Creative Director, Khaled Mahd, designed the new home page in Adobe, with the color mesh and the images, and roughed out how it works, why Anita and about us.
+      - Anita was rebranded within the Silicon Allee accelerator. Its Creative Director, Khaled Mahd, designed the new home page in Adobe, with the color mesh and the images, and roughed out the pages How it works, Why Anita and About us.
       - I rebuilt these pages in Figma, made every page work down to the phone and designed what was still missing, such as the contact page.
-      - The Mosherino Agency built the site in Webflow from my Figma files. It went live in 02.2025 and replaced the old iur.crowd site.
+      - The Mosherino Agency built the site in Webflow from my Figma files. It went live in February 2025 and replaced the old iur.crowd site.
     evidence:
       - kind: image
         src: ./media/anita-website-kontakt-2025-05.jpg
@@ -39,7 +39,7 @@ blocks:
       - kind: image
         src: ./media/anita-website-mobil-stimmen-2026-11.jpg
         alt: "anita.legal on a phone: the headline Anwält:innen die Anita vertrauen above an arched portrait of a lawyer and his quote, on a gradient from navy to orange"
-        caption: 11.2026 · A lawyer's testimonial.
+        caption: 11.2026 · A lawyer’s testimonial.
       - kind: image
         src: ./media/anita-website-mobil-preise-public-2026-11.jpg
         alt: "anita.legal pricing on a phone: the headline Features & Preise and the plan Anita Public as a list of features"
@@ -56,9 +56,9 @@ blocks:
     decision: From handoff to new pages.
     why:
       - "After the launch I kept adjusting the site in Webflow. When the founders wanted their prices on the site, I designed and built the table “Features & Preise”: two plans side by side, a toggle between yearly and monthly payment and one call to action per plan."
-      - In 05.2026 I added a landing page for Anita's API product.
+      - In May 2026 I added a landing page for Anita’s API product.
     evidence:
       - kind: image
         src: ./media/anita-website-preise-2026-11.jpg
         alt: "The pricing table on anita.legal: the plans Anita Public and Anita Private side by side with their features, the price and a button each"
-        caption: 11.2026 · The pricing table, added in 2025 at the founders' request.
+        caption: 11.2026 · The pricing table, added in 2025 at the founders’ request.

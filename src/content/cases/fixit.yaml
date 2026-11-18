@@ -22,12 +22,12 @@ blocks:
     decision: One persona from the interviews.
     why:
       - "Fixit had already interviewed potential users when I joined. I sorted the interviews in an affinity map: motivations, emotional needs, expectations, fears and barriers."
-      - From that came Jesse, Fixit's first persona. Every product decision could be checked against her.
+      - From that came Jesse, Fixit’s first persona. Every product decision could be checked against her.
     evidence:
       - kind: image
         src: ./media/fixit-persona-jesse-2023.jpg
-        alt: "Persona Jesse, a busy journalist in Berlin: motivations and goals, needs, expectations from the service, paint points, barriers and three quotes"
-        caption: 2023 · Jesse, Fixit's first persona.
+        alt: "Persona Jesse, a busy journalist in Berlin: motivations and goals, needs, expectations from the service, pain points, barriers and three quotes"
+        caption: 2023 · Jesse, Fixit’s first persona.
   - type: chapter
     decision: A website on the phone, not an app.
     why:
@@ -78,7 +78,7 @@ blocks:
       - kind: image
         src: ./media/fixit-prototyp-warten-2023.jpg
         rounded: true
-        alt: "Fixit prototype on a phone: a round assistant with a yellow helmet and the text I'm looking for the right fit for you"
+        alt: "Fixit prototype on a phone: a round assistant with a yellow helmet and the text I’m looking for the right fit for you"
         caption: 2023 · Waiting for a free professional.
   - type: quote
     photo: ../../assets/people/zarangez.jpg
