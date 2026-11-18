@@ -36,8 +36,11 @@ blocks:
     evidence:
       - kind: image
         src: ./media/fixit-user-flow-2023.png
-        alt: "Excerpt of the Fixit user flow: after the diagnosis call, a branch to partner offers if the problem is too complicated, then a cost comparison, the list of tools and a second branch to partner offers if the user lacks tools"
-        caption: "2023 · The user flow, with partner offers in two places."
+        alt: "Excerpt of the Fixit user flow: a branch to partner offers if the problem is too complicated, then a cost comparison, the list of tools and a second branch to partner offers if the user lacks tools"
+        caption: "2023 · An excerpt of the user flow, with partner offers in two places."
+        full:
+          src: ./media/fixit-user-flow-komplett-2023.png
+          alt: "The complete Fixit user flow, from the entry screen to feedback. New users pass onboarding, then an AI interaction and a waiting screen. If no handyman is live, the user leaves contact details and gets a notification. After the chat and the diagnosis call, a problem that is too complicated branches to partner offers. Otherwise a cost comparison and the list of tools follow, with a second branch to partner offers if the user lacks tools. Then registration with payment safety and a payment method, or login, the appointment, the video call and automatic payment. If the problem is not solved, the user goes to support and back to the appointment; if it is solved, to feedback."
   - type: chapter
     decision: A website on the phone, not an app.
     why:

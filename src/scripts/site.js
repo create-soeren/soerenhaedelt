@@ -1335,6 +1335,16 @@ const Ghost = {
   },
 };
 
+// --- Complete flow (18.11.) ----------------------------------------------------------------------
+// The preview image or the link in its caption opens the full-screen dialog after the figure (showModal: focus trap,
+// Escape and focus return come from the browser); the close button shuts it. No state of its own.
+document.addEventListener("click", (e) => {
+  const open = e.target.closest("[data-flow-open]");
+  if (open) return open.closest("figure").nextElementSibling.showModal();
+  const close = e.target.closest("[data-flow-close]");
+  if (close) close.closest("dialog").close();
+});
+
 // --- Run ----------------------------------------------------------------------------------------
 
 function start() {

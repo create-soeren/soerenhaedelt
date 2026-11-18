@@ -19,7 +19,8 @@ const cases = defineCollection({
     // rounded: Gerätebild mit schwarzen Ecken im JPG (kein Alpha), der Radius in der CSS deckt sie ab.
     const figure = { src: image(), alt: text, caption: text.optional(), rounded: z.boolean().optional() };
     const evidence = z.discriminatedUnion("kind", [
-      z.object({ kind: z.literal("image"), ...figure }),
+      // full: das ganze Bild, zu groß für die Spalte. Die Seite zeigt den Ausschnitt und öffnet das Original per Button im Vollbild.
+      z.object({ kind: z.literal("image"), ...figure, full: z.object({ src: image(), alt: text }).optional() }),
       z.object({ kind: z.literal("pair"), items: z.array(z.object(figure)).length(2) }),
       z.object({ kind: z.literal("video"), src: video, poster: image(), alt: text, caption: text.optional(), loop: z.boolean().optional() }),
       z.object({ kind: z.literal("stat"), value: text, label: lines }),

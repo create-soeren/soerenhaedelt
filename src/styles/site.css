@@ -381,6 +381,24 @@
      takes 2 px more (70 / 77 px), as a share of width and height so the corner stays circular at every size. */
   .block img.device { border-radius: 10.85% 10.85% 11.94% 11.94% / 5.11% 5.11% 5.62% 5.62%; }
   .block figcaption { margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
+  /* Complete flow (18.11.): the Fixit flow is 865 × 3162, too big for the column and readable only at 1:1. The page shows a
+     tight excerpt at its own size (not stretched to the column); a click on it, or on the link in the caption, opens the
+     whole drawing full screen at its own size. On a phone it is wider than the screen and is panned (or pinched), which
+     keeps the 1:1 reading instead of a shrunken, unreadable overview. */
+  .block img.flow-thumb { width: auto; max-width: 100%; cursor: zoom-in; }
+  .flow-open { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink); cursor: pointer;
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+  .flow-open:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+  /* .case .evidence > * + * would give the dialog a top margin; the selector below outweighs it. */
+  .case dialog.flow { position: fixed; inset: 0; width: 100%; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; color: var(--color-ink); background: var(--color-neutral); }
+  .case dialog.flow::backdrop { background: var(--color-neutral); }
+  .flow-scroll { box-sizing: border-box; height: 100%; overflow: auto; overscroll-behavior: contain; padding: calc(24px + var(--navbar-height) + var(--space-xs)) var(--side) var(--space-xl); }
+  /* The drawing keeps its own size; the image rules of .block (full width, multiply, border) do not apply here. */
+  dialog.flow img { display: block; width: 865px; max-width: none; height: auto; margin: 0 auto; border: 0; mix-blend-mode: normal; background: #fff; }
+  .flow-close { position: fixed; top: 24px; right: var(--side); z-index: 1; display: grid; place-items: center; width: var(--navbar-height); height: var(--navbar-height); padding: 0; border: 0; cursor: pointer; color: var(--color-ink); }
+  .flow-close svg { width: 20px; height: 20px; }
+  .flow-close:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+  html:has(dialog.flow[open]) { overflow: hidden; }
   .decision { display: grid; grid-template-columns: 5fr 6fr; column-gap: var(--space-xl); align-items: start; }
   .dhead { position: sticky; top: 112px; }
   .decision .was, .decision h2 { margin: 0; max-width: none; font-family: var(--font-headline-sm); font-weight: var(--w-headline-sm); font-size: var(--type-headline-sm-size);

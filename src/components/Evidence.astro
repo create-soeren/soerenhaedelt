@@ -8,7 +8,18 @@ const { e, sizes = "100vw" } = Astro.props;
 const clip = e.kind === "video" ? await poster(e.poster) : null;
 ---
 {e.kind === "image" && (
-  <figure><Pic class={e.rounded ? "device" : undefined} src={e.src} alt={e.alt} sizes={sizes} loading="lazy" decoding="async" />{e.caption && <figcaption>{e.caption}</figcaption>}</figure>
+  <Fragment>
+    {/* Mit full ist das Bild eine Vorschau: Klick aufs Bild oder auf den Link in der Caption öffnet das Ganze. Der Link ist
+        der Weg für Tastatur und Screenreader, das Bild nur eine Abkürzung für die Maus. */}
+    <figure><Pic class={[e.rounded && "device", e.full && "flow-thumb"].filter(Boolean).join(" ") || undefined} data-flow-open={e.full ? "" : undefined} src={e.src} alt={e.alt} sizes={e.full ? `${e.src.width}px` : sizes} loading="lazy" decoding="async" />{(e.caption || e.full) && <figcaption>{e.caption}{e.full && <Fragment>{e.caption && " "}<button class="flow-open" type="button" data-flow-open aria-haspopup="dialog">Open the complete flow</button></Fragment>}</figcaption>}</figure>
+    {/* Natives dialog: Fokus, Escape und Fokus-Rückgabe liefert der Browser. Das Bild lädt erst beim Öffnen (lazy im geschlossenen dialog). */}
+    {e.full && (
+      <dialog class="flow" aria-label="The complete user flow">
+        <button class="flow-close glass" type="button" data-flow-close autofocus aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <div class="flow-scroll"><Pic src={e.full.src} alt={e.full.alt} widths={[]} quality={92} sizes={`${e.full.src.width}px`} loading="lazy" decoding="async" /></div>
+      </dialog>
+    )}
+  </Fragment>
 )}
 {e.kind === "pair" && (
   <div class="pair">{e.items.map((i) => (
