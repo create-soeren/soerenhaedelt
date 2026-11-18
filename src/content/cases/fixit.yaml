@@ -29,28 +29,27 @@ blocks:
         alt: "Persona Jesse, a busy journalist in Berlin: motivations and goals, needs, expectations from the service, pain points, barriers and three quotes"
         caption: 2023 · Jesse, Fixit’s first persona.
   - type: chapter
+    decision: Tools from a partner shop.
+    why:
+      - "Before the call, the professional lists the tools the fix needs. I linked that list to a partner shop: Fixit earns on the tools, and the user gets everything for the repair in one place."
+      - "Partner offers appear in two places of the flow: when a problem is too complicated for a remote fix, and when the user lacks the tools."
+    evidence:
+      - kind: image
+        src: ./media/fixit-user-flow-2023.png
+        alt: "Excerpt of the Fixit user flow: after the diagnosis call, a branch to partner offers if the problem is too complicated, then a cost comparison, the list of tools and a second branch to partner offers if the user lacks tools"
+        caption: "2023 · The user flow, with partner offers in two places."
+  - type: chapter
     decision: A website on the phone, not an app.
     why:
-      - "An app raises the barrier on both sides: for people with a broken fuse and for the repair companies Fixit needed on board. The first version ran as a mobile website, on the assumption that people look up a repair on their phone."
-      - "I prototyped the flow in mid fidelity, from the first question to the video call with a professional: an AI chat narrows down the problem, three packages set the length of the call, payment runs on its own. In April 2024 Fixit pitched with this prototype in a competition and won the Female Founder Prize of Berliner Sparkasse, endowed with €10,000."
-  - type: showcase
-    width: full
-    items:
+      - "A native app raises the barrier and makes the first sign-ups harder on both sides: for people with a broken fuse and for the repair companies Fixit needed on board. The first version ran as a mobile website, on the assumption that people look up a repair on their phone."
+      - "I prototyped the flow in mid fidelity, from the first question to the video call with a professional: an AI chat narrows down the problem, three packages set the length of the call, payment runs on its own."
+    evidence:
       - kind: video
         src: fixit-hero-2023.mp4
         poster: ./media/fixit-hero-2023.jpg
         loop: false
         alt: "Fixit prototype on a phone in front of a light gradient: the screens scroll past, from the choice of a package through payment and the chat to the cost comparison"
         caption: Prototype 2023 · Package, payment and chat on the phone.
-  - type: chapter
-    decision: Tools from a partner shop.
-    why:
-      - "Before the call, the professional lists the tools the fix needs. I linked that list to a partner shop: Fixit earns on the tools, and the user gets everything for the repair in one place."
-    evidence:
-      - kind: image
-        src: ./media/fixit-user-flow-2023.png
-        alt: "Excerpt of the Fixit user flow: after the diagnosis call, a branch to partner offers if the problem is too complicated, then a cost comparison, the list of tools and a second branch to partner offers if the user lacks tools"
-        caption: "2023 · The user flow: partner offers where the fix needs more."
   - type: showcase
     width: half
     portrait: true
@@ -66,7 +65,7 @@ blocks:
         alt: "Fixit prototype on a phone: Schedule your call with the date 20.12 and the times 17:30, 18:00 and 09:30 to 14:00"
         caption: 2023 · Schedule the call.
       - kind: image
-        src: ./media/fixit-prototyp-zahlung-2023.jpg
+        src: ./media/fixit-prototyp-bezahlen-2023.jpg
         rounded: true
         alt: "Fixit prototype on a phone: four payment methods, PayPal, card, Apple Pay and Google Pay, above a greyed-out Continue button"
         caption: 2023 · Choose how to pay.
@@ -80,6 +79,11 @@ blocks:
         rounded: true
         alt: "Fixit prototype on a phone: a round assistant with a yellow helmet and the text I’m looking for the right fit for you"
         caption: 2023 · Waiting for a free professional.
+  - type: chapter
+    decision: A roadmap beyond the prototype.
+    why:
+      - Alongside the prototype, we laid out a product roadmap for the next stages of Fixit, including the partnerships the user flow already prepares.
+      - In April 2024 Fixit pitched with this prototype in a competition and won the Female Founder Prize of Berliner Sparkasse, endowed with €10,000.
   - type: quote
     photo: ../../assets/people/zarangez.jpg
     position: 50% 50%
