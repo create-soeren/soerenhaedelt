@@ -16,7 +16,7 @@ head:
     - label: Role
       value: Product Designer (Freelance)
     - label: Period
-      value: 2024 – today
+      value: Since 2024
     - label: Partner
       value: Anita · Silicon Allee by Fraunhofer HHI
     - label: Scope
@@ -47,11 +47,11 @@ blocks:
           - value: 2.8 / 7
             label:
               - Satisfaction before the change.
-              - 205 error points across 6 participants.
+              - "205 error points across 6\u00a0participants."
           - value: 5.0 / 7
             label:
               - Satisfaction after the iteration round.
-              - +79 % after the first 12 weeks.
+              - "+79\u00a0% after the first 12\u00a0weeks."
   - type: chapter
     struck:
       label: Our own decision

@@ -34,8 +34,7 @@ const clip = e.kind === "video" ? await poster(e.poster) : null;
 )}
 {e.kind === "compare" && (
   <div class="compare">{e.items.map((s, n) => (
-    <Fragment>{n > 0 && <svg viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7 H26 M20 1 L26 7 L20 13"/></svg>}
-    <p class="stat"><b>{s.value}</b><span>{s.label.map((l, i) => <Fragment>{i > 0 && <br>}{l}</Fragment>)}</span></p></Fragment>
+    <p class="stat"><b>{s.value}{n === 0 && <span class="to" aria-hidden="true">→</span>}</b><span>{s.label.map((l, i) => <Fragment>{i > 0 && <br>}{l}</Fragment>)}</span></p>
   ))}</div>
 )}
 {e.kind === "quote" && (
