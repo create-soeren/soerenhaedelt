@@ -23,6 +23,7 @@ const cases = defineCollection({
       z.object({ kind: z.literal("pair"), items: z.array(z.object(figure)).length(2) }),
       z.object({ kind: z.literal("video"), src: video, poster: image(), alt: text, caption: text.optional(), loop: z.boolean().optional() }),
       z.object({ kind: z.literal("stat"), value: text, label: lines }),
+      z.object({ kind: z.literal("compare"), items: z.array(z.object({ value: text, label: lines })).length(2) }),
       z.object({ kind: z.literal("quote"), text, who: text }),
       z.object({ kind: z.literal("finding"), text, who: text }),
     ]);

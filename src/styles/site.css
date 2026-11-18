@@ -403,12 +403,18 @@
   .case > header .stat { margin-top: var(--space-m); font-family: var(--font-headline-sm); font-weight: var(--w-headline-sm); font-size: var(--type-headline-sm-size); line-height: var(--type-headline-sm-lh); letter-spacing: var(--type-headline-sm-ls); }
   .stat b { display: block; font-family: var(--font-headline); font-weight: var(--w-headline); font-size: var(--type-headline-size); line-height: 1; }
   .stat span { display: block; margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
+  /* Before and after side by side (18.11.), the arrow of the quote navigation between them, on the middle of the figures:
+     the box middle of the line-height-1 figures, minus .035 em, where Clash Display's digits have their middle (measured). */
+  .compare { display: grid; grid-template-columns: 1fr auto 1fr; column-gap: var(--space-m); align-items: start; }
+  .compare svg { width: 28px; height: 14px; margin-top: calc((var(--type-headline-size) - 14px) / 2 - var(--type-headline-size) * .035); color: var(--color-muted); }
+  .compare .stat span { text-wrap: pretty; }
   /* In the head the figure and its caption run in one line and one style (Figma draft, 16.11.; the style is set on
      .case > header .stat above). In the chapters the stat stays stacked. */
   .case > header .stat b, .case > header .stat span { display: inline; margin: 0; font: inherit; letter-spacing: inherit; color: inherit; }
   .case > header .stat b { margin-right: .3em; }
   .case blockquote { font-size: var(--type-quote-size); }
   .finding { margin: 0; font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-quote-size); line-height: var(--type-quote-lh); max-width: calc(var(--space-measure) * 1ch); }
+  .evidence .who { margin-top: var(--space-2xs); }
   .finding span { display: block; margin-top: var(--space-2xs); font-family: var(--font-caption); font-weight: var(--w-caption); font-size: var(--type-caption-size); line-height: var(--type-caption-lh); color: var(--color-muted); }
   .showcase.is-half .items { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-m); align-items: start; }
   .learnings ol { list-style: none; margin: 0; padding: 0; }

@@ -39,19 +39,19 @@ blocks:
           - src: ./media/anita-suche-2024-03.jpg
             alt: "iur.crowd home screen, March 2024: one search field with filters above"
             caption: 03.2024 · One field, filters when needed.
-      - kind: stat
-        value: 2.8 / 7
-        label:
-          - Satisfaction before the change.
-          - 205 error points across 6 participants.
       - kind: quote
         text: Am I supposed to search for two things at once?
         who: Participant, usability test 2024
-      - kind: stat
-        value: 5.0 / 7
-        label:
-          - Satisfaction after the iteration round.
-          - +79 % in the first 12 weeks.
+      - kind: compare
+        items:
+          - value: 2.8 / 7
+            label:
+              - Satisfaction before the change.
+              - 205 error points across 6 participants.
+          - value: 5.0 / 7
+            label:
+              - Satisfaction after the iteration round.
+              - +79 % after the first 12 weeks.
   - type: chapter
     struck:
       label: Our own decision
@@ -68,7 +68,7 @@ blocks:
   - type: chapter
     decision: Simplicity as a product principle.
     why:
-      - Within the Silicon Allee accelerator, supported by Fraunhofer HHI, iur.crowd was repositioned and rebranded as Anita. Khaled Mahd, Creative Director at Silicon Allee, led the rebrand and set simplicity as its core idea.
+      - Within the Silicon Allee accelerator, supported by Fraunhofer HHI, iur.crowd was repositioned and rebranded as Anita. Khaled Mahd, Creative Director at Silicon Allee, led the rebrand toward a classic identity that does not follow current visual trends, with simplicity at its core.
       - "Together with him, I redesigned the app from the ground up. Simplicity became a rule for every screen: the bookmark list went from folders and cards to a plain list."
     evidence:
       - kind: pair
