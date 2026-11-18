@@ -29,7 +29,7 @@ blocks:
       - kind: image
         src: ./media/silicon-allee-mobil-start-2026-11.jpg
         alt: "siliconallee.com on a phone: the headline We are your unfair advantage in white and lime on black, the Silicon Allee and Fraunhofer HHI logos in the header and the intro text below"
-        caption: 11.2026 · The home page. Desktop designs only, mobile built in Webflow.
+        caption: 11.2026 · The home page.
       - kind: image
         src: ./media/silicon-allee-mobil-stimmen-2026-11.jpg
         alt: "siliconallee.com founder testimonial on a phone: a quote from the co-founder of Neptune next to her portrait, with arrows to switch"
