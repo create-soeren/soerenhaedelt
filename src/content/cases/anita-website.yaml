@@ -4,7 +4,7 @@ head:
   title: Face of a new brand
   media:
     poster: ./media/anita-website-hero-2026-11.jpg
-    video: anita-website-hero-2026-11.mp4
+    video: anita-website-hero-2026-11-v2.mp4
     alt: Screen recording of the anita.legal home page, from the hero down to the footer
   caption: 11.2026 · The home page today, from top to bottom.
   meta:
@@ -15,7 +15,7 @@ head:
     - label: Period
       value: 2 months
     - label: Scope
-      value: Responsive design of all pages, handoff to the Mosherino Agency, adjustments in Webflow since the launch
+      value: Desktop layouts for the pages without a mockup, such as the contact page, responsive design of all pages, handoff to the Mosherino Agency, adjustments in Webflow since the launch
 blocks:
   - type: chapter
     decision: From a rough prototype to a responsive site.
