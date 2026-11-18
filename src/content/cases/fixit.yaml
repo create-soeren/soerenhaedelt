@@ -1,7 +1,7 @@
 head:
   kind: statement
   label: Fixit
-  title: Laying The Foundation
+  title: Laying the foundation
   from: An app to install
   to: A website on the phone
   impact:
