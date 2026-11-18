@@ -6,8 +6,15 @@ import { url } from "../lib/url";
 // tokens.css, Vite gibt beiden dieselbe Adresse.
 import headFont from "../fonts/clash-display-700.woff2?url";
 
-interface Props { page: "home" | "about" | "projects" | "case" | "contact"; title: string }
-const { page, title } = Astro.props;
+// Vorschau beim Teilen (18.11.): ein Bild für alle Seiten, der Hero (public/og.jpg, 1200 × 630, hell, mit Glow). Die Adressen
+// werden aus `site` und `base` gebaut, absolut wie Link-Scraper es verlangen. Der Umzug auf die Domain ändert sie mit.
+const SHARE_DESCRIPTION = "Complex systems need tailored product design. I judge your product from where your users stand. Then I design from there.";
+const SHARE_IMAGE_ALT = "Sören Hädelt: Complex Systems need tailored Product Design.";
+
+interface Props { page: "home" | "about" | "projects" | "case" | "contact"; title: string; description?: string }
+const { page, title, description = SHARE_DESCRIPTION } = Astro.props;
+const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
+const shareImage = new URL(url("og.jpg"), Astro.site).href;
 const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects", "projects/", "Projects"], ["contact", "contact/", "Contact"]];
 ---
 <html lang="en" data-p={page}>
@@ -17,6 +24,17 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <!-- Bis zum Umzug auf soerenhaedelt.com nicht indexieren. -->
     <meta name="robots" content="noindex">
     <title>{title}</title>
+    <meta name="description" content={description}>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Sören Hädelt">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={shareUrl}>
+    <meta property="og:image" content={shareImage}>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content={SHARE_IMAGE_ALT}>
+    <meta name="twitter:card" content="summary_large_image">
     <!-- Favicon (13.11.): the note pin with S, as on the hero. SVG for current browsers, ICO for the rest, and the
          touch icon on the page colour, since iOS fills transparency with black. -->
     <link rel="icon" href={url("favicon.ico")} sizes="32x32">
