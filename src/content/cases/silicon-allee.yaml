@@ -10,10 +10,10 @@ head:
   meta:
     - label: Role
       value: Webflow Designer (Freelance)
-    - label: Design
-      value: Khaled Mahd, Creative Director at Silicon Allee
     - label: Period
       value: 01.2026 – 03.2026
+    - label: Input
+      value: Desktop mockups by Khaled Mahd, Creative Director at Silicon Allee
     - label: Scope
       value: Webflow build, responsive design for tablet and phone, animations, news migration with redirects, CMS system
 blocks:
