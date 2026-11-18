@@ -15,10 +15,10 @@ head:
   meta:
     - label: Role
       value: UX Designer (Freelance)
+    - label: Period
+      value: 11.2023 – 12.2023, 4 weeks
     - label: Client
       value: Fixit, today amendio. Pre-seed startup for remote household repairs
-    - label: Period
-      value: 4 weeks, end of 2023
     - label: Scope
       value: Interview analysis, persona, user flow, information architecture, mid-fidelity prototype
 blocks:
