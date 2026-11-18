@@ -9,7 +9,7 @@ head:
   caption: 11.2025 · The home page at launch, from top to bottom.
   meta:
     - label: Role
-      value: Webflow Designer (Freelance)
+      value: Web Designer (Freelance)
     - label: Period
       value: 6 weeks to launch in 11.2025, then structural changes and brand extension until 03.2026
     - label: Input
@@ -22,7 +22,6 @@ blocks:
     why:
       - "The founders came with a Lovable draft: structure, texts, photos, a first green and Figtree as their typeface. What it lacked was a system behind sizes and spacing."
       - I darkened the green, toned down the beige and gave the site one type scale and one spacing scale, applied to every page.
-      - The visual language kept growing after the launch. When a freelance brand designer extended the brand with orange in February and March 2026, I drew the icons for the home page.
     evidence:
       - kind: pair
         items:
@@ -33,9 +32,9 @@ blocks:
             alt: "The paxa home page at launch: the headline Wir sind Ihre Rechtsabteilung in Figtree, dark green on beige"
             caption: 11.2025 · The same page at launch.
       - kind: image
-        src: ./media/paxa-icons-2026-03.jpg
-        alt: "Six line icons in orange on beige: a star, a sun, a thought bubble with bars, a flag, a speech bubble and four circles"
-        caption: 03.2026 · Icons I drew for the home page.
+        src: ./media/paxa-anwalt-desktop-2026-11.jpg
+        alt: "paxa.law on a large desktop: the profile page of Konstantin Heilmann with his name as headline, a black and white portrait, his profile, expertise and focus industries"
+        caption: 11.2026 · Lawyer profile page on a large desktop.
   - type: showcase
     width: half
     portrait: true
@@ -55,11 +54,11 @@ blocks:
       - kind: image
         src: ./media/paxa-mobil-case-seite-2026-11.jpg
         alt: "paxa.law on a phone: the case study page Data protection as a basis for growth | n8n & Paxa with intro text, the tags Data Protection, Compliance and Commercial Contracts and the date April 29, 2026"
-        caption: 11.2026 · The same case study on its page, built on the CMS template.
+        caption: 11.2026 · Case study article.
       - kind: image
         src: ./media/paxa-mobil-team-2026-11.jpg
         alt: "paxa.law on a phone: the page of Konstantin Heilmann with a black and white portrait and his profile"
-        caption: 11.2026 · A team page.
+        caption: 11.2026 · Lawyer profile page.
   - type: chapter
     decision: Two templates, 25 posts by the team.
     why:
