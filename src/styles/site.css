@@ -543,7 +543,10 @@
      under it stacked, the object above the headline, left-aligned (tablet like the phone since 11.11.; before: from 744). The slot only holds the object's room; its height
      (--obj-h, 160 to 280) is set by the script from the screen height, so headline and lead stay in the first screen. */
   .obj-slot { display: none; }
-  @media (max-width: 1039px) { .obj-slot { display: block; height: var(--obj-h, 200px); margin-top: var(--space-l); } }
+  /* The start height is what fitSlot computes on almost every device (19.11., 8d): 280 on the tablet, 238 = 280 × .85 on the
+     phone. So the headline does not jump after the first paint. Open: 360 × 640 (221, 17 px) and the phone held sideways (160, 78 px). */
+  @media (max-width: 1039px) { .obj-slot { display: block; height: var(--obj-h, 280px); margin-top: var(--space-l); } }
+  @media (max-width: 743px) { .obj-slot { height: var(--obj-h, 238px); } }
   /* Tablet (744 to 1039, 11.11.): the air between navbar and object 30 % shorter, the hero sits higher in the screen. */
   @media (min-width: 744px) and (max-width: 1039px) {
     .hero { padding-top: calc(var(--space-xxl) * .7); }

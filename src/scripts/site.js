@@ -650,7 +650,7 @@ const Obj = {
   // Stacked (under 1040): as much room for the object as the first screen leaves above headline and lead, 160 to 280 px.
   // On the phone (under 744) 15 % less, 136 to 238 px (11.11.).
   fitSlot() {
-    this.hero.style.setProperty("--obj-h", "200px");
+    this.hero.style.removeProperty("--obj-h"); // measure from the CSS start height
     if (!this.slot.offsetHeight) return;
     const px = (el, p) => parseFloat(getComputedStyle(el)[p]) || 0;
     const text = this.lead.getBoundingClientRect().bottom - this.h1.getBoundingClientRect().top;
