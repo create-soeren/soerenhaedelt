@@ -156,8 +156,11 @@
   .win { position: relative; padding: var(--win-padding-y) var(--win-padding-x); }
   .win .icon { width: var(--win-size); height: var(--win-size); margin: 0 auto; }
   .win .icon svg { width: 100%; height: 100%; overflow: visible; fill: none; stroke: var(--color-ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
-  .win p { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; color: var(--color-ink-strong);
+  .win p, .win .run { font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); margin: var(--space-xs) 0 0; color: var(--color-ink-strong);
     text-wrap: balance; }
+  /* The running counter value (site.js, run): beside the paragraph, the end value in the text only turns transparent. */
+  .win .run { position: absolute; margin: 0; pointer-events: none; white-space: nowrap; }
+  .num[data-run] { color: transparent; }
   .win.won .icon { animation: land .5s cubic-bezier(.3, 1.7, .5, 1); }
   @keyframes land { 50% { transform: scale(1.22); } }
 
