@@ -3,8 +3,9 @@
      pointed. A glyph, not an SVG, so it is rasterised and snapped like the figures; metrics as Clash's, so the line keeps
      its height. It loads only where a → is set. Weight 700 only, the figures' weight: a face with other descriptors (a
      range 300 700) does not join Clash's 700 face, and the digits fall back. Source and generator: plans/user-flow-von-
-     fixit-tender-matsumoto-screens/_pfeil. */
-  @font-face { font-family: "Clash Display"; src: url("../fonts/pfeil.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; unicode-range: U+2192; }
+     fixit-tender-matsumoto-screens/_pfeil. The file lives in src/assets/fonts, not in src/fonts: the token kit owns that
+     folder and deletes every woff2 it does not know. */
+  @font-face { font-family: "Clash Display"; src: url("../assets/fonts/pfeil.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; unicode-range: U+2192; }
   :root {
     --mono: ui-monospace, "SF Mono", menlo, monospace;
     /* The glow's diameter: 510 px on a 1920 screen, a quarter less on a 1440 laptop. */
