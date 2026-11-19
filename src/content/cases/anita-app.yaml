@@ -2,6 +2,7 @@ head:
   kind: statement
   label: Anita
   title: Trust through structural evidence
+  description: "Anita, a legal analytics app: one search field instead of two, and every claim traced to the court decision it cites. 0 to 700+ paying customers."
   from: Fragmented search results
   to: Structured evidence
   media:

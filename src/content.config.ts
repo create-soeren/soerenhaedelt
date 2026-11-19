@@ -44,10 +44,11 @@ const cases = defineCollection({
     ]);
 
     const meta = z.array(z.object({ label: text, value: text })).min(1);
+    // description: der Satz für Suchergebnis und Share-Vorschau (meta description, og:description), pro Case eigen.
     const head = z.discriminatedUnion("kind", [
       // media: optionales Bild unter dem Statement. Ohne media bleibt der Kopf rein typografisch.
-      z.object({ kind: z.literal("statement"), label: text, title: text, from: text, to: text, media: z.object({ src: image(), alt: text, caption: text.optional() }).optional(), impact: z.object({ value: text, label: lines }).optional(), meta }),
-      z.object({ kind: z.literal("visual"), label: text, title: text, media: z.object({ poster: image(), video: video.optional(), alt: text }), caption: text.optional(), meta }),
+      z.object({ kind: z.literal("statement"), label: text, title: text, description: text, from: text, to: text, media: z.object({ src: image(), alt: text, caption: text.optional() }).optional(), impact: z.object({ value: text, label: lines }).optional(), meta }),
+      z.object({ kind: z.literal("visual"), label: text, title: text, description: text, media: z.object({ poster: image(), video: video.optional(), alt: text }), caption: text.optional(), meta }),
     ]);
 
     return z.object({ head, blocks: z.array(block).min(1) });

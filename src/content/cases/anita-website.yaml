@@ -2,6 +2,7 @@ head:
   kind: visual
   label: Anita
   title: Face of a new brand
+  description: "The new anita.legal: a rough prototype turned into a responsive design for every page, handed off for Webflow and live since February 2025."
   media:
     poster: ./media/anita-website-hero-2026-11.jpg
     video: anita-website-hero-2026-11-v2.mp4

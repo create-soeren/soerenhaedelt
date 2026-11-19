@@ -2,6 +2,7 @@ head:
   kind: visual
   label: Silicon Allee
   title: SEO-safe website relaunch
+  description: "Silicon Allee on Webflow: desktop mockups became a responsive site, the news archive back to 2011 migrated with redirects to keep its search visibility."
   media:
     poster: ./media/silicon-allee-hero-2026-11.jpg
     video: silicon-allee-hero-2026-11.mp4
