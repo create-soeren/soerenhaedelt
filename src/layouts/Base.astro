@@ -40,6 +40,7 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <link rel="icon" href={url("favicon.svg")} type="image/svg+xml">
     <link rel="apple-touch-icon" href={url("apple-touch-icon.png")}>
     <link rel="preload" href={headFont} as="font" type="font/woff2" crossorigin>
+    <slot name="head" />
     <script is:inline>
       // Scroll position (12.11.): Arc and Chrome on iOS put a reload, even a pull-to-refresh at the top, back to an older
       // position of the page (footer, win cards); Safari did not. The page keeps its own: where it stood on leaving, per

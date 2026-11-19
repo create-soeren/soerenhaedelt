@@ -3,13 +3,11 @@
 import Evidence from "./Evidence.astro";
 import Pic from "./Pic.astro";
 import { asset } from "../lib/url";
-import { poster } from "../lib/poster";
 
-const { head, blocks } = Astro.props.data;
+const { data: { head, blocks }, lead } = Astro.props;
 const of = blocks.filter((b) => b.type === "chapter").length;
 const visual = head.kind === "visual";
 let no = 0;
-const lead = visual && head.media.video ? await poster(head.media.poster) : null;
 // Breite des Bildes auf der Seite je Block (Spalten aus site.css): Kapitel rechte Spalte, Showcase je nach Anordnung.
 const sizesOf = (b) => b.type === "chapter" ? "(min-width: 1020px) 52vw, 100vw"
   : b.items.length > 2 ? "(min-width: 1020px) 20vw, (min-width: 744px) 33vw, 50vw"

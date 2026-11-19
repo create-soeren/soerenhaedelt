@@ -3,6 +3,7 @@
 import Base from "../../layouts/Base.astro";
 import Case from "../../components/Case.astro";
 import { getCollection } from "astro:content";
+import { poster } from "../../lib/poster";
 
 export async function getStaticPaths() {
   const cases = await getCollection("cases");
@@ -10,7 +11,10 @@ export async function getStaticPaths() {
 }
 
 const { data } = Astro.props.entry;
+// Poster des Hero-Videos: einmal berechnet, das Video nimmt es als poster, die Seite lädt es vorab (11h, Annahme: LCP-Kandidat).
+const lead = data.head.kind === "visual" && data.head.media.video ? await poster(data.head.media.poster) : null;
 ---
 <Base page="case" title={`${data.head.title} · ${data.head.label} · Sören Hädelt`} description={data.head.description}>
-  <Case data={data} />
+  {lead && <link slot="head" rel="preload" as="image" href={lead.src} fetchpriority="high" />}
+  <Case data={data} lead={lead} />
 </Base>
