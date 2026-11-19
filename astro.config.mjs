@@ -3,10 +3,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // Token-Kit (prototype-kit) im Dev-Server, nur wo eine lokale kit.json liegt. Im Repo und auf GitHub Actions fehlt sie,
 // der Build braucht das Kit nicht: tokens.css ist eingecheckt.
-const integrations = [];
+// Sitemap: listet die neun Seiten aus `site`, die Weiterleitungsseiten nimmt die Integration selbst heraus.
+const integrations = [sitemap()];
 if (existsSync('kit.json')) {
   const { kit: kitPath } = JSON.parse(readFileSync('kit.json', 'utf8'));
   const { default: kit } = await import(pathToFileURL(resolve(kitPath, 'src/astro.mjs')).href);

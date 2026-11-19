@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://soerenhaedelt.com/sitemap-index.xml
