@@ -2,7 +2,7 @@ head:
   kind: visual
   label: Paxa
   title: Contemporary legal services
-  description: "Paxa's website: from a Lovable draft to one visual language, with a CMS for case studies and blog in German and English."
+  description: "Paxa’s website: from a Lovable draft to one visual language, with a CMS for case studies and blog in German and English."
   media:
     poster: ./media/paxa-hero-2025-11.jpg
     video: paxa-hero-2025-11-v2.mp4
