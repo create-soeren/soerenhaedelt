@@ -11,6 +11,6 @@ export async function getStaticPaths() {
 
 const { data } = Astro.props.entry;
 ---
-<Base page="case" title={`${data.head.title} · ${data.head.label}`} description={data.head.description}>
+<Base page="case" title={`${data.head.title} · ${data.head.label} · Sören Hädelt`} description={data.head.description}>
   <Case data={data} />
 </Base>
