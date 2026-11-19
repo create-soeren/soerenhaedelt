@@ -647,7 +647,7 @@ const Obj = {
     new ResizeObserver(() => this.size()).observe(this.hero);
     this.recolor();
   },
-  // Stacked (under 1020): as much room for the object as the first screen leaves above headline and lead, 160 to 280 px.
+  // Stacked (under 1040): as much room for the object as the first screen leaves above headline and lead, 160 to 280 px.
   // On the phone (under 744) 15 % less, 136 to 238 px (11.11.).
   fitSlot() {
     this.hero.style.setProperty("--obj-h", "200px");
@@ -684,9 +684,9 @@ const Obj = {
     // Measured on the screen like the glow, drawn relative to the hero: the scroll moves the canvas, not the drawing.
     const hr = this.hero.getBoundingClientRect();
     ctx.translate(-hr.left, -hr.top);
-    // The stage, from 1020: the free column right of the longest line, centred on the headline. Should that column be
+    // The stage, from 1040: the free column right of the longest line, centred on the headline. Should that column be
     // narrower than 200 px (it was from 744 to about 918, before the tablet stacked) the object keeps its form and size
-    // and slides over the headline, right-aligned to the content edge, behind the text. Under 1020 (stacked) it fills
+    // and slides over the headline, right-aligned to the content edge, behind the text. Under 1040 (stacked) it fills
     // the slot above the headline, left-aligned with the text (11.11.).
     const hb = this.h1.getBoundingClientRect(), right = innerWidth - parseFloat(getComputedStyle(this.hero).paddingRight);
     let W, cx, cy, R;
@@ -1153,7 +1153,7 @@ function syncDrink() {
 }
 syncDrink();
 
-const NO_POUR = matchMedia("(max-width: 1019px), (hover: none)");
+const NO_POUR = matchMedia("(max-width: 1039px), (hover: none)");
 const Cup = {
   build() {
     if (!contact) return;
@@ -1220,7 +1220,7 @@ const Cup = {
     st.clipPath = `polygon(0% 100%, 0% ${y(0)}, ${pts.join(", ")}, 100% ${y(N - 1)}, 100% 100%)`;
   },
   update(dt, t) {
-    // No drink picked yet: the system's pointer, the button rests. No pour below the 1020 anchor or without hover (12.11.,
+    // No drink picked yet: the system's pointer, the button rests. No pour below the 1040 anchor or without hover (12.11.,
     // see .contact in the CSS): a pot or bag still out from a wider window goes.
     if (!DRINK) return;
     if (NO_POUR.matches) { this.nodes.forEach((n) => n.setAttribute("opacity", 0)); return; }

@@ -286,50 +286,50 @@
   :root {
     --space-xs: 16px;
     --space-s: 20px;
-    --space-m: clamp(28px, calc(17.2174px + 1.4493vw), 32px);
-    --space-l: clamp(56px, calc(34.4348px + 2.8986vw), 64px);
-    --space-xl: clamp(80px, calc(36.8696px + 5.7971vw), 96px);
-    --space-xxl: clamp(112px, calc(68.8696px + 5.7971vw), 128px);
-    --space-gutter: clamp(48px, calc(4.8696px + 5.7971vw), 64px);
+    --space-m: clamp(28px, calc(17.9459px + 1.3514vw), 32px);
+    --space-l: clamp(56px, calc(35.8919px + 2.7027vw), 64px);
+    --space-xl: clamp(80px, calc(39.7838px + 5.4054vw), 96px);
+    --space-xxl: clamp(112px, calc(71.7838px + 5.4054vw), 128px);
+    --space-gutter: clamp(48px, calc(7.7838px + 5.4054vw), 64px);
     --type-body-size: 16px;
     --type-body-lh: 24px;
-    --type-display-size: clamp(48px, calc(23.4157px + 3.3043vw), 57.12px);
-    --type-display-lh: clamp(52px, calc(30.4348px + 2.8986vw), 60px);
-    --type-display-hero-size: clamp(55px, calc(26.1835px + 3.8732vw), 65.69px);
-    --type-display-hero-lh: clamp(56px, calc(23.6522px + 4.3478vw), 68px);
-    --type-headline-size: clamp(28px, calc(23.7409px + 0.5725vw), 29.58px);
-    --type-headline-lh: clamp(32px, calc(21.2174px + 1.4493vw), 36px);
-    --type-headline-sm-size: clamp(23px, calc(19.0104px + 0.5362vw), 24.48px);
+    --type-display-size: clamp(48px, calc(25.0768px + 3.0811vw), 57.12px);
+    --type-display-lh: clamp(52px, calc(31.8919px + 2.7027vw), 60px);
+    --type-display-hero-size: clamp(55px, calc(28.1305px + 3.6115vw), 65.69px);
+    --type-display-hero-lh: clamp(56px, calc(25.8378px + 4.0541vw), 68px);
+    --type-headline-size: clamp(28px, calc(24.0286px + 0.5338vw), 29.58px);
+    --type-headline-lh: clamp(32px, calc(21.9459px + 1.3514vw), 36px);
+    --type-headline-sm-size: clamp(23px, calc(19.28px + 0.5vw), 24.48px);
     --type-headline-sm-lh: 28px;
     --type-quote-size: 16px;
     --type-quote-lh: 28px;
     --photo-width: 240px;
-    --about-gap: clamp(48px, calc(-81.3913px + 17.3913vw), 96px);
+    --about-gap: clamp(48px, calc(-72.6486px + 16.2162vw), 96px);
   }
 }
-@media (min-width: 1020px) {
+@media (min-width: 1040px) {
   :root {
     --space-xs: 16px;
-    --space-s: clamp(20px, calc(10.2857px + 0.9524vw), 24px);
-    --space-m: clamp(32px, calc(12.5714px + 1.9048vw), 40px);
-    --space-l: clamp(64px, calc(25.1429px + 3.8095vw), 80px);
-    --space-xl: clamp(96px, calc(37.7143px + 5.7143vw), 120px);
-    --space-xxl: clamp(128px, calc(50.2857px + 7.619vw), 160px);
-    --space-gutter: clamp(64px, calc(5.7143px + 5.7143vw), 88px);
-    --type-body-size: clamp(16px, calc(13.5714px + 0.2381vw), 17px);
-    --type-body-lh: clamp(24px, calc(14.2857px + 0.9524vw), 28px);
-    --type-display-size: clamp(57.12px, calc(0px + 5.6vw), 80.64px);
-    --type-display-lh: clamp(60px, calc(1.7143px + 5.7143vw), 84px);
-    --type-display-hero-size: clamp(65.69px, calc(-0.0029px + 6.4405vw), 92.74px);
-    --type-display-hero-lh: clamp(68px, calc(0px + 6.6667vw), 96px);
-    --type-headline-size: clamp(29.58px, calc(-0.5829px + 2.9571vw), 42px);
-    --type-headline-lh: clamp(36px, calc(6.8571px + 2.8571vw), 48px);
-    --type-headline-sm-size: clamp(24.48px, calc(0px + 2.4vw), 34.56px);
-    --type-headline-sm-lh: clamp(28px, calc(-1.1429px + 2.8571vw), 40px);
-    --type-quote-size: clamp(16px, calc(13.5714px + 0.2381vw), 17px);
+    --space-s: clamp(20px, calc(9.6px + 1vw), 24px);
+    --space-m: clamp(32px, calc(11.2px + 2vw), 40px);
+    --space-l: clamp(64px, calc(22.4px + 4vw), 80px);
+    --space-xl: clamp(96px, calc(33.6px + 6vw), 120px);
+    --space-xxl: clamp(128px, calc(44.8px + 8vw), 160px);
+    --space-gutter: clamp(64px, calc(1.6px + 6vw), 88px);
+    --type-body-size: clamp(16px, calc(13.4px + 0.25vw), 17px);
+    --type-body-lh: clamp(24px, calc(13.6px + 1vw), 28px);
+    --type-display-size: clamp(57.12px, calc(-4.032px + 5.88vw), 80.64px);
+    --type-display-lh: clamp(60px, calc(-2.4px + 6vw), 84px);
+    --type-display-hero-size: clamp(65.69px, calc(-4.64px + 6.7625vw), 92.74px);
+    --type-display-hero-lh: clamp(68px, calc(-4.8px + 7vw), 96px);
+    --type-headline-size: clamp(29.58px, calc(-2.712px + 3.105vw), 42px);
+    --type-headline-lh: clamp(36px, calc(4.8px + 3vw), 48px);
+    --type-headline-sm-size: clamp(24.48px, calc(-1.728px + 2.52vw), 34.56px);
+    --type-headline-sm-lh: clamp(28px, calc(-3.2px + 3vw), 40px);
+    --type-quote-size: clamp(16px, calc(13.4px + 0.25vw), 17px);
     --type-quote-lh: 28px;
-    --photo-width: clamp(240px, calc(55.4286px + 18.0952vw), 316px);
-    --about-gap: clamp(96px, calc(37.7143px + 5.7143vw), 120px);
+    --photo-width: clamp(240px, calc(42.4px + 19vw), 316px);
+    --about-gap: clamp(96px, calc(33.6px + 6vw), 120px);
   }
 }
 @media (min-width: 1440px) {

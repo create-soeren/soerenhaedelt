@@ -309,7 +309,7 @@
   .about img { grid-area: 2 / 2; display: block; width: var(--photo); height: auto; aspect-ratio: 2 / 3; object-fit: cover; mix-blend-mode: multiply; opacity: var(--opacity-portrait-light); }
   /* Phone (10.11.): text and photo stack; the LinkedIn mark stands at the photo's top right, outside it. The text blocks
      dissolve into the grid (display: contents), so headline and prose take a row each. From the 744 anchor text and photo
-     stand side by side, the gap narrower there (about.gap) and growing to xl's size by 1020. */
+     stand side by side, the gap narrower there (about.gap) and growing to xl's size by 1040. */
   @media (max-width: 743px) {
     .about { --portrait: min(280px, 60vw); grid-template-columns: 1fr; grid-template-rows: none; row-gap: 0; }
     .about > div, .about header { display: contents; }
@@ -343,11 +343,11 @@
   /* Case study (?p=case&c=<slug>), rendered from CASES in the script. Protocol layout (B, set 03.11.): the head of a
      chapter (number, struck assumption, decision) sticks on the left while why and evidence scroll by on the right;
      the next chapter's head pushes it out. Blocks: chapter, showcase (full or half), learnings, quote. Evidence:
-     image, pair, video, stat, quote. The stroke is static (element before motion). Below the 1020 anchor the
+     image, pair, video, stat, quote. The stroke is static (element before motion). Below the 1040 anchor the
      decision runs in the text flow and the notes follow inline. */
   .case { min-height: 0; padding: var(--space-xxl) var(--side) var(--space-xl); }
   /* Pages start the same (10.11.): case, about and projects keep at least the l spacing clear under the fixed nav
-     (24 px from the top plus its height); xxl stays where it is larger, from the 1020 anchor on. */
+     (24 px from the top plus its height); xxl stays where it is larger, from the 1040 anchor on. */
   .case, .about, .projects { --page-top: max(var(--space-xxl), calc(24px + var(--navbar-height) + var(--space-l))); padding-top: var(--page-top); }
   .case::before { display: none; }
   .case > header { margin-bottom: var(--space-xl); }
@@ -454,9 +454,9 @@
   .learnings h3 { margin: 0 0 var(--space-2xs); font-family: var(--font-label-lg); font-weight: var(--w-label-lg); font-size: var(--type-label-lg-size); line-height: var(--type-label-lg-lh); word-spacing: normal; color: var(--color-ink-strong); }
   .case .cquote { margin: 0; display: grid; grid-template-columns: var(--photo) 1fr; gap: var(--space-l); align-items: start; --photo: var(--photo-width); }
   .case .cquote .photo { background: none; border: 0; }
-  /* Breakpoints at the anchors (10.11.): stacked below 1020 where two columns would squeeze the text (decision: 310 px
+  /* Breakpoints at the anchors (10.11.): stacked below 1040 where two columns would squeeze the text (decision: 310 px
      at 744) or the screens (half showcase: 300 px each); side by side from 744 where the text keeps about 45 characters. */
-  @media (max-width: 1019px) {
+  @media (max-width: 1039px) {
     .case .meta { grid-template-columns: repeat(2, 1fr); }
     .decision { grid-template-columns: 1fr; row-gap: var(--space-m); }
     .dhead { position: static; }
@@ -470,9 +470,9 @@
      two columns on the phone. */
   .showcase.is-half.is-portrait .items { grid-template-columns: 1fr 1fr; width: min(100%, calc(var(--space-measure) * 1ch)); }
   /* More than two phone screens (--n set by the renderer): all in one row over the full width, a screen as wide as its
-     column. Three columns below the 1020 anchor, two on the phone. */
+     column. Three columns below the 1040 anchor, two on the phone. */
   .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(var(--n), 1fr); width: 100%; }
-  @media (max-width: 1019px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 1039px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 743px) { .showcase.is-half.is-portrait.is-row .items { grid-template-columns: repeat(2, 1fr); } }
 
     /* A footer, not a page: one step under the sections, xxl above, l below (17.11., Kit-Tausch: the page ends closer
@@ -498,10 +498,10 @@
      is no longer set apart from the pitch, 04.11.), the button stands apart at xl. */
   .contact .intro { margin-top: var(--space-xs); }
   .contact .actions { margin-top: var(--space-xl); }
-  /* No pour where it cannot be played (12.11.): below the 1020 anchor (tablet, phone) and wherever the pointer does not
+  /* No pour where it cannot be played (12.11.): below the 1040 anchor (tablet, phone) and wherever the pointer does not
      hover (an iPad held across is wider). No question, no toolbar, the button is served full in the primary's orange.
      !important against the clip JS writes inline while a drink is poured, should the window narrow mid-pour. */
-  @media (max-width: 1019px), (hover: none) {
+  @media (max-width: 1039px), (hover: none) {
     .contact .ask, .contact .drink { display: none; }
     /* Without the toolbar the button follows the subline directly: l instead of xl (17.11.). */
     .contact .actions { margin-top: var(--space-l); }
@@ -539,13 +539,13 @@
   /* The hero object: one canvas over the hero, under the annotations, over the glow. It scrolls with the hero like the
      headline (11.11.): fixed and placed per frame, it lagged a frame behind a fast scroll and jumped at the overscroll. */
   #obj3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-  /* Hero grid (11.11.): from the anchor 1020 headline and object side by side (the object finds its own column, see Obj),
+  /* Hero grid (11.11.): from the anchor 1040 headline and object side by side (the object finds its own column, see Obj),
      under it stacked, the object above the headline, left-aligned (tablet like the phone since 11.11.; before: from 744). The slot only holds the object's room; its height
      (--obj-h, 160 to 280) is set by the script from the screen height, so headline and lead stay in the first screen. */
   .obj-slot { display: none; }
-  @media (max-width: 1019px) { .obj-slot { display: block; height: var(--obj-h, 200px); margin-top: var(--space-l); } }
-  /* Tablet (744 to 1019, 11.11.): the air between navbar and object 30 % shorter, the hero sits higher in the screen. */
-  @media (min-width: 744px) and (max-width: 1019px) {
+  @media (max-width: 1039px) { .obj-slot { display: block; height: var(--obj-h, 200px); margin-top: var(--space-l); } }
+  /* Tablet (744 to 1039, 11.11.): the air between navbar and object 30 % shorter, the hero sits higher in the screen. */
+  @media (min-width: 744px) and (max-width: 1039px) {
     .hero { padding-top: calc(var(--space-xxl) * .7); }
     .hero .obj-slot { margin-top: calc(var(--space-l) * .7); }
   }

@@ -9,9 +9,9 @@ const of = blocks.filter((b) => b.type === "chapter").length;
 const visual = head.kind === "visual";
 let no = 0;
 // Breite des Bildes auf der Seite je Block (Spalten aus site.css): Kapitel rechte Spalte, Showcase je nach Anordnung.
-const sizesOf = (b) => b.type === "chapter" ? "(min-width: 1020px) 52vw, 100vw"
-  : b.items.length > 2 ? "(min-width: 1020px) 20vw, (min-width: 744px) 33vw, 50vw"
-  : b.portrait ? "(min-width: 1020px) 300px, 50vw" : "(min-width: 1020px) 50vw, 100vw";
+const sizesOf = (b) => b.type === "chapter" ? "(min-width: 1040px) 52vw, 100vw"
+  : b.items.length > 2 ? "(min-width: 1040px) 20vw, (min-width: 744px) 33vw, 50vw"
+  : b.portrait ? "(min-width: 1040px) 300px, 50vw" : "(min-width: 1040px) 50vw, 100vw";
 const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "0");
 ---
 <section class="case" id="case" data-page="case">
