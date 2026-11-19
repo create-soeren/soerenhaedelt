@@ -229,6 +229,8 @@
   .logos-set { display: flex; align-items: center; gap: var(--space-l); padding-right: var(--space-l); }
   .logos img { display: block; height: var(--h, 30px); width: auto; filter: brightness(0); opacity: .55; }
   @keyframes marquee { to { transform: translateX(-50%); } }
+  /* Mobile: 25 % faster (42 s / 1.25), the row is the same length but the screen shows far less of it. */
+  @media (max-width: 743px) { .logos-track { animation-duration: 33.6s; } }
   @media (prefers-reduced-motion: reduce) { .logos-track { animation: none; } }
 
   /* Pages: one file, ?p=about or ?p=projects shows that page instead of the home sections; the contact closes all. */
