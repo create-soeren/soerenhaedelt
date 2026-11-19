@@ -4,7 +4,6 @@ head:
   title: Structured evidence
   description: "Anita, a legal analytics app: one search field instead of two, and every claim traced to the court decision it cites. 0 to 700+ paying customers."
   from: Fragmented search results
-  to: Structured evidence
   media:
     src: ./media/anita-quellenzitat-2025-10.jpg
     alt: "Anita results and chat, October 2025: the quote from the cited court decision in its hover state"

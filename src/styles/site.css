@@ -22,7 +22,7 @@
   /* --ws-head: the headline word space on top of the font's own, in em (the dev bar sets it in %, set 03.11. at 5 %). */
   h1, h2, h3 { font-family: var(--font-head); word-spacing: var(--ws-head, .05em); }
   /* Two inks (16.11.): everything set in the headline face takes the loudest step, text stays on ink. */
-  h1, h2, .case .ctitle, .case > header .stat, .stat b { color: var(--color-ink-strong); }
+  h1, h2, .case > header .stat, .stat b { color: var(--color-ink-strong); }
 
   /* Glass after Sören's Figma settings: 80 % light, frost 4, depth 20. Refraction and dispersion have no CSS
      equivalent; the lit edge, the sheen and the inner depth carry the effect. The light falls straight from above, as
@@ -350,9 +350,8 @@
   .case > header { margin-bottom: var(--space-xl); }
   .case h1 { font-family: var(--font-headline); font-size: var(--type-headline-size); line-height: var(--type-headline-lh); font-weight: var(--w-headline); letter-spacing: var(--type-headline-ls); margin: var(--space-xs) 0 0; max-width: calc(var(--space-measure-headline) * 1ch); }
   .case .no { display: flex; gap: var(--space-xs); margin: 0; font-family: var(--font-label-sm); font-weight: var(--w-label-sm); font-size: var(--type-label-sm-size); line-height: var(--type-label-sm-lh); color: var(--color-muted); }
-  /* Head (hero G, 04.11.): the case's before, struck like the assumptions below, and its after, in the home's H1; the figure
-     follows like the home's subline. Without from/to the title is the H1. */
-  .case .ctitle { margin: var(--space-2xs) 0 0; font-family: var(--font-headline-sm); font-weight: var(--w-headline-sm); font-size: var(--type-headline-sm-size); line-height: var(--type-headline-sm-lh); letter-spacing: var(--type-headline-sm-ls); }
+  /* Head (hero G, 04.11.): the case's before, struck like the assumptions below, and its after (the title), in the home's H1;
+     the figure follows like the home's subline. Without a before (visual head) the title alone is the H1. */
   .case h1.stmt { max-width: 100%; margin-top: var(--space-m); font-family: var(--font-display); font-size: var(--type-display-size); line-height: var(--type-display-lh); font-weight: var(--w-display); letter-spacing: var(--type-display-ls); }
   .case .stmt > span { display: block; width: max-content; max-width: 100%; }
   .case .stmt .was { color: var(--color-muted); }

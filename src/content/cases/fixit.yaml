@@ -4,7 +4,6 @@ head:
   title: Prove it with a prototype
   description: "Fixit, remote household repairs: interviews, persona, user flow and a prototype, part of the pitch that won a €10,000 founder prize."
   from: Build the whole app first
-  to: Prove it with a prototype
   media:
     src: ./media/fixit-hero-2023.jpg
     alt: "Fixit prototype on a phone in front of a light gradient: the choice of a package, Quick Fix, Comfort Fix or Guide, each with its length and price"
