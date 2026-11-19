@@ -49,7 +49,7 @@ async function open(key, add, kit) {
   run("npm", ["run", "fonts"], dir);
   let url = running(dir);
   if (!url) { run("npx", ["astro", "dev", "--background", "--port", String(await freePort(4322))], dir); url = running(dir); }
-  console.log(`\n${key}: ${url}/soerenhaedelt/ ${kit ? "(mit Kit)" : "(ohne Kit)"}\nOrdner: ${dir}`);
+  console.log(`\n${key}: ${url}/ ${kit ? "(mit Kit)" : "(ohne Kit)"}\nOrdner: ${dir}`);
 }
 
 const [cmd, arg] = process.argv.slice(2);
