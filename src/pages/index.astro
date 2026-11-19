@@ -15,8 +15,20 @@ import siliconAllee from "../assets/logos/silicon-allee.svg";
 import fraunhofer from "../assets/logos/fraunhofer.svg";
 // Logos: Anzeigehöhe aus site.css (--h, Standard 30 px), geladen in doppelter Höhe für scharfe Kanten.
 const logos = [[anita, "Anita"], [siliconAllee, "Silicon Allee", 44], [paxa, "Paxa"], [hdt, "HDT Systems", 36], [amendio, "amendio", 24], [fraunhofer, "Fraunhofer", 34], [neptune, "neptune", 28]];
+
+// Strukturierte Daten (11i): nur auf der Startseite. Person und WebSite, über @id verknüpft. Nutzen ist Entitätsklarheit bei
+// der Namenssuche, kein Ranking. Bewusst ohne E-Mail. Der Jobtitel steht so auf About.
+const home = new URL("/", Astro.site).href;
+const graph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Person", "@id": `${home}#person`, name: "Sören Hädelt", jobTitle: "Digital Product Designer", url: home, sameAs: ["https://www.linkedin.com/in/soeren-haedelt/"] },
+    { "@type": "WebSite", "@id": `${home}#website`, name: "Sören Hädelt", url: home, publisher: { "@id": `${home}#person` } },
+  ],
+};
 ---
 <Base page="home" title="Sören Hädelt">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(graph)} />
   <section class="hero" data-page="home">
     <div class="obj-slot" aria-hidden="true"></div>
     <h1><span class="line">Complex Systems</span><span class="line">need <span class="ink" data-ink="hero">tailored</span></span><span class="line"><span class="ink" data-ink="hero">Product Design.</span></span></h1>
