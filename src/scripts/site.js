@@ -1013,23 +1013,6 @@ function updateIndicator(card, p, t) {
   card._ring.setAttribute("opacity", ((1 - beat) * 0.6 * op).toFixed(3));
 }
 
-// The running counter value lies beside the paragraph, not in it (19.11., 8d). Poppins has only proportional digits, so
-// every intermediate value has another width than the end value, and the balanced paragraph flips between two and
-// three lines while it counts. The end value therefore stays in the text and holds the line, it only turns transparent
-// (colour, no layout). The running value is its own span in the card, set on the number's line and right edge,
-// measured every frame so a turned device still gets it right. A box inside the line makes WebKit give up
-// `text-wrap: balance`; a margin to make up for the width moves a word in Chrome. At rest nothing is written.
-function run(n, v) {
-  if (v === null) { if (n._run) { n._run.remove(); n._run = null; delete n.dataset.run; } return; }
-  const card = n.closest(".win");
-  if (!n._run) { n._run = h("span", "run", null, card); n._run.setAttribute("aria-hidden", "true"); n.dataset.run = ""; }
-  const c = card.getBoundingClientRect(), r = n.getBoundingClientRect(), t = n.parentElement.getBoundingClientRect();
-  const lh = parseFloat(getComputedStyle(n).lineHeight);
-  n._run.style.top = `${t.top + Math.floor((r.top - t.top) / lh) * lh - c.top}px`; // top of the number's line box
-  n._run.style.right = `${c.right - r.right}px`;                                   // flush with the number's right edge
-  if (n._run.textContent !== String(v)) n._run.textContent = v;
-}
-
 function updateIcons(dt, t) {
   for (const row of rows) {
     const cs = [...row.children];
@@ -1041,8 +1024,6 @@ function updateIcons(dt, t) {
     cs.forEach((card, i) => {
       const p = touch ? clamp((row._r - i * ICON_GAP) / ICON_DUR) : iconProgress(card, dt), e = smoothstep(p);
       card._upd(p === 1 ? 1 : e);
-      // Unplayed, the number shows its real value: nobody who skips the hover should read "0 %".
-      card.querySelectorAll(".num").forEach((n) => run(n, p > 0 && p < 1 ? Math.round(+n.dataset.to * e) : null));
       card.classList.toggle("won", p === 1);
       if (!touch) updateIndicator(card, p, t);
     });
@@ -1365,7 +1346,6 @@ document.addEventListener("click", (e) => {
 function start() {
   buildFx();
   buildIcons();
-  document.querySelectorAll(".num").forEach((n) => (n.textContent = n.dataset.to));
   rows.forEach((r) => Object.assign(r, { _r: 0, _go: false }));
   phrases.forEach((ph) => { ph.c = 0; ph.hold = 0; });
   DRINK = null; syncDrink();
