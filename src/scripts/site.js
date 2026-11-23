@@ -579,6 +579,9 @@ const Push = {
 // stays, so the cut slices show as rings, and a slight nod about the horizontal axis (± NOD rad, NOD_MS per swing) keeps
 // it reading as a body in space. Three axes at once and a roll about the horizontal axis read too oblique.
 const SPIN_RATE = 6.283 / 40000, NOD = 0.12, NOD_MS = 23000;
+// When the object has to be drawn again (21, C1): how far each number of the picture's signature may drift from the last drawn one
+// (centre and radius in px, angles in rad, glow in px, flags, pointer in px).
+const SIG_TOL = [0.05, 0.05, 0.05, 1e-4, 1e-4, 0.5, 0.5, 0.05, 0.05, 0.05, 0.05, 0.05, 1e-3, 1e-3, 0.05, 0.05, 0.5];
 // The height anchor 500 (design.md, 23.11.): the phone held sideways. Same query as in site.css.
 const LOW = matchMedia("(orientation: landscape) and (max-height: 500px)");
 const Obj = {
@@ -603,29 +606,33 @@ const Obj = {
       const ring = Array.from({ length: M }, (_, j) => {
         const t = (j / M) * 6.283, c = Math.cos(t), s = Math.sin(t);
         const rr = size / Math.pow(Math.abs(c) ** 4 + Math.abs(s) ** 4, 0.25), x = rr * c, z = rr * s;
-        return { x: x * Math.cos(tw) - z * Math.sin(tw), y, z: x * Math.sin(tw) + z * Math.cos(tw), ox: 0, oy: 0, vx: 0, vy: 0, sx: 0, sy: 0, d: 0 };
+        return { x: x * Math.cos(tw) - z * Math.sin(tw), y, z: x * Math.sin(tw) + z * Math.cos(tw), ox: 0, oy: 0, vx: 0, vy: 0, sx: 0, sy: 0, px: 0, py: 0, d: 0 };
       });
       return [...ring, ring[0]];
     });
     this.verts = this.rings.flatMap((r) => r.slice(0, -1));
-    new ResizeObserver(() => this.size()).observe(this.hero);
+    const ro = new ResizeObserver(() => this.size());
+    for (const el of [this.hero, this.h1, this.slot]) ro.observe(el);
+    this.pool = []; this.buckets = new Map(); this.bk = Array.from({ length: 256 }, () => []); this.act = []; this.sig = new Float64Array(SIG_TOL.length); this.next = new Float64Array(SIG_TOL.length);
     this.recolor();
   },
   // Stacked (under 1040): as much room for the object as the first screen leaves above headline and lead, 160 to 280 px.
   // On the phone (under 744) 15 % less, 136 to 238 px (11.11.).
   fitSlot() {
     this.hero.style.removeProperty("--obj-h"); // measure from the CSS start height
-    if (!this.slot.offsetHeight) return;
+    if (!this.slot.offsetHeight) { this.measure(); return; }
     const px = (el, p) => parseFloat(getComputedStyle(el)[p]) || 0;
     const text = this.lead.getBoundingClientRect().bottom - this.h1.getBoundingClientRect().top;
     const used = px(this.hero, "paddingTop") + px(this.slot, "marginTop") + px(this.h1, "marginTop") + text + px(this.lead, "marginTop"); // the lead's margin (s) once more as air at the bottom
     const k = matchMedia("(max-width: 743px)").matches ? 0.85 : 1;
     this.hero.style.setProperty("--obj-h", `${Math.round(clamp(innerHeight - used, 160, 280) * k)}px`);
+    this.measure();
   },
   size() {
     this.dpr = Math.min(2, devicePixelRatio || 1);
     this.w = this.hero.offsetWidth; this.h = this.hero.offsetHeight;
-    this.cv.width = this.w * this.dpr; this.cv.height = this.h * this.dpr;
+    this.cv.width = this.w * this.dpr; this.cv.height = this.h * this.dpr; // resets the canvas
+    this.measure();
   },
   // Grey outside the glow, the background inside it (as the headline's knockout), the middle contour orange and a little
   // transparent. Read from the tokens; a theme change reads them again.
@@ -637,33 +644,42 @@ const Obj = {
     };
     this.grey = rgb("--color-quiet"); this.paper = rgb("--color-neutral");
     this.orange = `rgba(${rgb("--color-primary").join(",")}, .85)`;
+    this.dirty = true;
   },
   // How strongly the glow acts at a screen point, and its knockout there: both as on the headline.
   pull(x, y) { return (touch && !P.press) || reduced ? 0 : Math.max(0, 1 - Math.hypot(x - G.x, y - G.y) / (200 * GS * G.scale)) ** 2 * G.presence * (1 - Calm.k); },
   knock(x, y) { const r = GLOW_R * GS * G.presence * G.scale; return r < 1 ? 0 : 1 - clamp((Math.hypot(x - G.x, y - G.y) / r - 0.45) / 0.3); },
+  // The layout a frame needs, measured when the hero, the headline or the slot changes size and not every frame (21,
+  // C1): positions relative to the hero, so the scroll only moves the hero's own rectangle.
+  measure() {
+    const hr = this.hero.getBoundingClientRect();
+    const rel = (el) => { const r = el.getBoundingClientRect(); return { left: r.left - hr.left, top: r.top - hr.top, height: r.height }; };
+    this.hasSlot = this.slot.offsetHeight > 0;
+    this.slotRel = rel(this.slot); this.h1Rel = rel(this.h1);
+    this.padR = parseFloat(getComputedStyle(this.hero).paddingRight);
+    this.longest = Math.max(...Push.items.map(({ el, x }) => el.getBoundingClientRect().right - x));
+    this.dirty = true;
+  },
   update(dt) {
     const ctx = this.ctx;
-    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
-    ctx.clearRect(0, 0, this.w, this.h);
     // Measured on the screen like the glow, drawn relative to the hero: the scroll moves the canvas, not the drawing.
     const hr = this.hero.getBoundingClientRect();
-    ctx.translate(-hr.left, -hr.top);
     // The stage, from 1040: the free column right of the longest line, centred on the headline. Should that column be
     // narrower than 200 px (it was from 744 to about 918, before the tablet stacked) the object keeps its form and size
     // and slides over the headline, right-aligned to the content edge, behind the text. Under 1040 (stacked) it fills
     // the slot above the headline, left-aligned with the text (11.11.).
-    const hb = this.h1.getBoundingClientRect(), right = innerWidth - parseFloat(getComputedStyle(this.hero).paddingRight);
+    const right = innerWidth - this.padR;
     let W, cx, cy, R;
-    if (this.slot.offsetHeight) {
-      const sr = this.slot.getBoundingClientRect();
-      W = sr.height; R = W * 0.48; cx = sr.left + R * 1.05; cy = sr.top + W / 2;
+    if (this.hasSlot) {
+      const s = this.slotRel;
+      W = s.height; R = W * 0.48; cx = hr.left + s.left + R * 1.05; cy = hr.top + s.top + W / 2;
     } else {
-      const longest = Math.max(...Push.items.map(({ el, x }) => el.getBoundingClientRect().right - x));
-      W = Math.max(Math.min(520, right - longest - 48), Math.min(200, right - hb.left));
-      cx = right - W / 2; cy = hb.top + hb.height / 2; R = Math.min(W * 0.36, 140);
+      const hl = hr.left + this.h1Rel.left, ht = hr.top + this.h1Rel.top, hh = this.h1Rel.height;
+      W = Math.max(Math.min(520, right - this.longest - 48), Math.min(200, right - hl));
+      cx = right - W / 2; cy = ht + hh / 2; R = Math.min(W * 0.36, 140);
       // Phone held sideways (23.11., 8e): the headline is low, so the object keeps the desktop's proportion to it (radius
       // about half the headline's height, 140 to 288 at 1440) instead of reaching into the navbar and the lead.
-      if (LOW.matches) R = Math.min(R, hb.height * 0.5);
+      if (LOW.matches) R = Math.min(R, hh * 0.5);
     }
     if (cy + W < 0 || cy - W > innerHeight) return;
     // Leaning toward the pointer, slowly, within a third of the resting angle. On touch, where nothing points, it turns
@@ -674,33 +690,103 @@ const Obj = {
     if (touch && !reduced) { S.y += dt * SPIN_RATE; S.t += dt; }
     const nod = NOD * Math.sin((S.t / NOD_MS) * 6.283);
     const ay = 0.62 + L.x * 0.3 + S.y, ax = -0.42 + L.y * 0.2 + nod, F = 3.2, n = dt / 16.7;
-    const cyA = Math.cos(ay), syA = Math.sin(ay), cxA = Math.cos(ax), sxA = Math.sin(ax);
+    // Nothing moves, nothing is drawn (21, C1): when everything the picture depends on equals what was drawn last, and no
+    // point is still springing, the canvas keeps its picture. The glow only counts where it acts (pull or knockout).
+    const pullOn = !((touch && !P.press) || reduced), glowR = GLOW_R * GS * G.presence * G.scale;
+    const glowOn = glowR >= 1 || (pullOn && G.presence * (1 - Calm.k) > 0), pin = glowOn && P.inside;
+    const q = this.next;
+    q[0] = cx - hr.left; q[1] = cy - hr.top; q[2] = R; q[3] = ay; q[4] = ax; q[5] = pullOn ? 1 : 0; q[6] = glowOn ? 1 : 0;
+    q[7] = glowOn ? hr.left : 0; q[8] = glowOn ? hr.top : 0; q[9] = glowOn ? G.x : 0; q[10] = glowOn ? G.y : 0;
+    q[11] = glowOn ? glowR : 0; q[12] = glowOn ? G.presence : 0; q[13] = glowOn ? Calm.k : 0;
+    q[14] = pin ? P.x : 0; q[15] = pin ? P.y : 0; q[16] = pin ? 1 : 0;
+    if (!this.dirty && !this.moving) {
+      let same = true;
+      for (let i = 0; i < q.length; i++) if (Math.abs(q[i] - this.sig[i]) > SIG_TOL[i]) { same = false; break; }
+      if (same) return;
+    }
+    this.sig.set(q); this.dirty = false;
+    const cyA = Math.cos(ay), syA = Math.sin(ay), cxA = Math.cos(ax), sxA = Math.sin(ax), damp = Math.pow(0.8, n);
+    let moving = false;
     for (const v of this.verts) {
       const x1 = v.x * cyA + v.z * syA, z1 = -v.x * syA + v.z * cyA;
       const y2 = v.y * cxA - z1 * sxA, z2 = v.y * sxA + z1 * cxA, s = F / (F + z2);
       v.sx = cx + x1 * s * R; v.sy = cy + y2 * s * R; v.d = clamp(z2, -1, 1);
-      // The headline's spring for a point, aimed from where the point sits before its own push.
-      const dx = v.sx - G.x, dy = v.sy - G.y, d = Math.hypot(dx, dy) || 1;
-      const f = P.inside && Math.hypot(P.x - v.sx, P.y - v.sy) < 4 ? 0 : this.pull(v.sx, v.sy);
-      const tx = (dx / d) * 34 * f, ty = (dy / d) * 34 * f * 0.6;
-      v.vx = (v.vx + (tx - v.ox) * 0.14 * n) * Math.pow(0.8, n);
-      v.vy = (v.vy + (ty - v.oy) * 0.14 * n) * Math.pow(0.8, n);
+      // The headline's spring for a point, aimed from where the point sits before its own push. A point at rest that
+      // nothing pushes stays at rest.
+      const f = pullOn && !(P.inside && Math.hypot(P.x - v.sx, P.y - v.sy) < 4) ? this.pull(v.sx, v.sy) : 0;
+      let tx = 0, ty = 0;
+      if (f > 0) {
+        const dx = v.sx - G.x, dy = v.sy - G.y, d = Math.hypot(dx, dy) || 1;
+        tx = (dx / d) * 34 * f; ty = (dy / d) * 34 * f * 0.6;
+      } else if (Math.abs(v.ox) + Math.abs(v.oy) + Math.abs(v.vx) + Math.abs(v.vy) < 0.005) { v.ox = v.oy = v.vx = v.vy = 0; v.px = v.sx; v.py = v.sy; continue; }
+      v.vx = (v.vx + (tx - v.ox) * 0.14 * n) * damp;
+      v.vy = (v.vy + (ty - v.oy) * 0.14 * n) * damp;
       v.ox += v.vx * n; v.oy += v.vy * n;
+      v.px = v.sx + v.ox; v.py = v.sy + v.oy;
+      // Under 0.01 px a frame the spring counts as still: its last stretch toward a steady pull is asymptotic.
+      if (Math.abs(v.vx) + Math.abs(v.vy) > 0.01) moving = true;
     }
-    // Each segment fades with depth and turns to the background under the glow, like the headline's words.
-    const g = this.grey, p = this.paper;
-    this.rings.forEach((r, k) => {
-      ctx.lineWidth = k === 13 ? 1.25 : 1;
-      for (let i = 1; i < r.length; i++) {
-        const a = r[i - 1], b = r[i], ux = a.sx + a.ox, uy = a.sy + a.oy, wx = b.sx + b.ox, wy = b.sy + b.oy;
-        if (k === 13) ctx.strokeStyle = this.orange;
-        else {
-          const t = this.knock((ux + wx) / 2, (uy + wy) / 2), al = lerp(0.1, 0.9, (1 - (a.d + b.d) / 2) / 2);
-          ctx.strokeStyle = `rgba(${Math.round(lerp(g[0], p[0], t))},${Math.round(lerp(g[1], p[1], t))},${Math.round(lerp(g[2], p[2], t))},${al.toFixed(3)})`;
+    this.moving = moving;
+    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    ctx.clearRect(0, 0, this.w, this.h);
+    ctx.translate(-hr.left, -hr.top);
+    // Each segment fades with depth and turns to the background under the glow, like the headline's words. Segments of
+    // one colour (rgba as one number) share a path and one stroke (21, C1): 1792 strokes became about 200. The orange
+    // contour stays between the two halves, as before, so it lies over the grey below and under the grey above.
+    const g = this.grey, p = this.paper, B = this.buckets, pool = this.pool, gr = Math.round(g[0]), gg = Math.round(g[1]), gb = Math.round(g[2]);
+    const collect = (k0, k1) => {
+      ctx.lineWidth = 1;
+      if (glowR < 1) {
+        // No glow, no knockout: the grey, only the depth varies, so one bucket per alpha step (0.1 + 0.8 u, u from the
+        // two points' depths, in 255ths) without hashing or colour maths.
+        const { bk, act } = this;
+        act.length = 0;
+        for (let k = k0; k < k1; k++) {
+          const r = this.rings[k];
+          for (let i = 1; i < r.length; i++) {
+            const a = r[i - 1], b = r[i], a8 = (127.5 - 51 * (a.d + b.d) + 0.5) | 0, seg = bk[a8];
+            if (seg.length === 0) act.push(a8);
+            seg.push(a.px, a.py, b.px, b.py);
+          }
         }
-        ctx.beginPath(); ctx.moveTo(ux, uy); ctx.lineTo(wx, wy); ctx.stroke();
+        for (const a8 of act) {
+          const seg = bk[a8];
+          ctx.strokeStyle = `rgba(${gr},${gg},${gb},${(a8 / 255).toFixed(3)})`;
+          ctx.beginPath();
+          for (let i = 0; i < seg.length; i += 4) { ctx.moveTo(seg[i], seg[i + 1]); ctx.lineTo(seg[i + 2], seg[i + 3]); }
+          ctx.stroke();
+          seg.length = 0;
+        }
+        return;
       }
-    });
+      let used = 0;
+      B.clear();
+      for (let k = k0; k < k1; k++) {
+        const r = this.rings[k];
+        for (let i = 1; i < r.length; i++) {
+          const a = r[i - 1], b = r[i], a8 = (127.5 - 51 * (a.d + b.d) + 0.5) | 0, t = this.knock((a.px + b.px) / 2, (a.py + b.py) / 2);
+          const key = ((a8 << 24) | (Math.round(lerp(g[0], p[0], t)) << 16) | (Math.round(lerp(g[1], p[1], t)) << 8) | Math.round(lerp(g[2], p[2], t))) >>> 0;
+          let seg = B.get(key);
+          if (seg === undefined) { seg = pool[used] ??= []; seg.length = 0; used++; B.set(key, seg); }
+          seg.push(a.px, a.py, b.px, b.py);
+        }
+      }
+      for (const [key, seg] of B) {
+        ctx.strokeStyle = `rgba(${(key >>> 16) & 255},${(key >>> 8) & 255},${key & 255},${((key >>> 24) / 255).toFixed(3)})`;
+        ctx.beginPath();
+        for (let i = 0; i < seg.length; i += 4) { ctx.moveTo(seg[i], seg[i + 1]); ctx.lineTo(seg[i + 2], seg[i + 3]); }
+        ctx.stroke();
+      }
+    };
+    collect(0, 13);
+    ctx.lineWidth = 1.25; ctx.strokeStyle = this.orange; ctx.beginPath();
+    const mid = this.rings[13];
+    for (let i = 1; i < mid.length; i++) {
+      const a = mid[i - 1], b = mid[i];
+      ctx.moveTo(a.px, a.py); ctx.lineTo(b.px, b.py);
+    }
+    ctx.stroke();
+    collect(14, this.rings.length);
   },
 };
 
