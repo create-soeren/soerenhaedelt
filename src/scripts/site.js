@@ -1478,14 +1478,9 @@ addEventListener("keydown", (e) => {
 
 // --- Logos and testimonials -----------------------------------------------------------------------
 
-// The second logo set is a hidden copy, so the row can loop without a seam.
+// Both logo sets are in the markup (the second one hidden from assistive tech): the track has its final width from the first
+// frame on, so the marquee's -50% never refers to a width that changes later.
 if (PAGE === "home") {
-  const logoSet = document.querySelector(".logos-set");
-  const logoCopy = logoSet.cloneNode(true);
-  logoCopy.setAttribute("aria-hidden", "true");
-  logoCopy.querySelectorAll("img").forEach((img) => (img.alt = ""));
-  logoSet.after(logoCopy);
-
   const quotes = [...document.querySelectorAll(".quote")];
   let quoteIdx = 0;
   document.getElementById("nextQuote").addEventListener("click", () => {

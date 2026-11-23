@@ -78,9 +78,11 @@ const graph = {
   <section id="skills" data-page="home">
     <div class="logos" role="group" aria-label="Clients">
       <div class="logos-track">
-        <div class="logos-set">
-          {logos.map(([src, alt, h]) => <Image src={src} alt={alt} height={(h ?? 30) * 2} format={src.format === "svg" ? undefined : "webp"} quality={90} style={h ? `--h: ${h}px` : undefined} />)}
-        </div>
+        {[false, true].map((copy) => (
+          <div class="logos-set" aria-hidden={copy ? "true" : undefined}>
+            {logos.map(([src, alt, h]) => <Image src={src} alt={copy ? "" : alt} height={(h ?? 30) * 2} format={src.format === "svg" ? undefined : "webp"} quality={90} loading="eager" style={h ? `--h: ${h}px` : undefined} />)}
+          </div>
+        ))}
       </div>
     </div>
     <h2>My business and frontend skills allow me<br>to&nbsp;look at products <span class="ink eol" data-ink="skills">from every perspective.</span></h2>
