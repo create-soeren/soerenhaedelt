@@ -1,0 +1,23 @@
+# Ein Sammel-PR pro Monat und Ökosystem. Neue Versionen warten 15 Tage (cooldown), bevor Dependabot sie vorschlägt.
+# Sören ist als Assignee gesetzt und wird bei jedem PR benachrichtigt.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 15
+    assignees: [create-soeren]
+    groups:
+      astro:
+        patterns: [astro, "@astrojs/*"]
+      dev:
+        dependency-type: development
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 15
+    assignees: [create-soeren]
