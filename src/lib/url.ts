@@ -2,4 +2,3 @@
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 export const url = (path = "") => `${base}/${path}`;
-export const asset = (path: string) => `${base}/${path}`;

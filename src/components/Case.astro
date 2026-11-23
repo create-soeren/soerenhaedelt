@@ -2,7 +2,7 @@
 // Ein Case aus der Collection. Markup und Klassen wie im Prototyp (renderCase und BLOCKS), vom Server gebaut.
 import Evidence from "./Evidence.astro";
 import Pic from "./Pic.astro";
-import { asset } from "../lib/url";
+import { url } from "../lib/url";
 
 const { data: { head, blocks }, lead } = Astro.props;
 const of = blocks.filter((b) => b.type === "chapter").length;
@@ -22,7 +22,7 @@ const num = (n) => String(n).padStart(2, "0") + " / " + String(of).padStart(2, "
         <h1 class="stmt vtitle">{head.title}</h1>
         <figure>
           {head.media.video
-            ? <video src={asset(`media/${head.media.video}`)} poster={lead.src} width={lead.width} height={lead.height} aria-label={head.media.alt} controls muted loop playsinline preload="metadata"></video>
+            ? <video src={url(`media/${head.media.video}`)} poster={lead.src} width={lead.width} height={lead.height} aria-label={head.media.alt} controls muted loop playsinline preload="metadata"></video>
             : <Pic src={head.media.poster} alt={head.media.alt} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" />}
           {head.caption && <figcaption>{head.caption}</figcaption>}
         </figure>
