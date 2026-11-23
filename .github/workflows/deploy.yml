@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: withastro/action@v6
         with:
+          node-version: "24.22.2"
           build-cmd: npm run check   # Lint CSS, Build mit Schema-Prüfung, Lint HTML
 
   deploy:
