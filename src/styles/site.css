@@ -90,7 +90,7 @@
   @media (max-width: 743px) { .ticks { display: none; } }
 
   section { min-height: 100svh; padding: var(--space-xxl) var(--side); position: relative; }
-  section + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-divider); }
+  section + section::before, main + section::before { content: ""; position: absolute; left: var(--side); right: var(--side); top: 0; height: 1px; background: var(--color-divider); }
 
   /* Own size step since 11.11.: display × 1.15, the case headlines stay on display.
      Safety net under the smallest anchor (11.11.): the lines do not break, so below about 375 px the headline shrinks to the
@@ -290,7 +290,7 @@
      photo takes the quote's size and, like there, multiplies onto the page, so the glow shows through it. The text
      column grows with the width like the headline, so it keeps its three lines, and stops at its 1920 width (45vw = 864
      px) like the headline; the body text is set like the sublines (see .intro). */
-  .about, .about + .contact { --about-text: min(45vw, 864px); }
+  .about, main:has(> .about) + .contact { --about-text: min(45vw, 864px); }
   .about { min-height: 0; padding: var(--space-xxl) var(--side); display: grid; grid-template-columns: minmax(0, var(--about-text)) var(--photo);
     grid-template-rows: 1fr auto; justify-content: center; align-items: end; column-gap: var(--about-gap); --photo: var(--photo-width); }
   .about::before { display: none; }
@@ -298,7 +298,7 @@
      centred like the grid, never wider than the space between the gutters. On the phone the text runs from gutter to
      gutter, so the section divider already fits there. */
   @media (min-width: 744px) {
-    .about + .contact::before { left: 50%; right: auto; transform: translateX(-50%);
+    main:has(> .about) + .contact::before { left: 50%; right: auto; transform: translateX(-50%);
       width: min(calc(100% - 2 * var(--side)), calc(var(--about-text) + var(--about-gap) + var(--photo-width))); }
   }
   .about > div { grid-area: 1 / 1 / 3; }
