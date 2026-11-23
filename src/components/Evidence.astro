@@ -3,9 +3,11 @@
 import Pic from "./Pic.astro";
 import { url } from "../lib/url";
 import { poster } from "../lib/poster";
+import { checkVideo } from "../lib/video";
 // sizes: wie breit das Bild auf der Seite steht, kommt vom Block (Case.astro).
 const { e, sizes = "100vw" } = Astro.props;
 const clip = e.kind === "video" ? await poster(e.poster) : null;
+if (clip) checkVideo(e.src, clip);
 ---
 {e.kind === "image" && (
   <Fragment>
