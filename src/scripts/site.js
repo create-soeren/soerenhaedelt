@@ -813,6 +813,8 @@ const fromLayer = (x, y) => { const o = pinLayer.getBoundingClientRect(); return
 // x/y is the point the pin refers to (screen coordinates); it grows a little while its entry is open. It never leaves the
 // screen: under about 350 px a phrase that fills its line pushes the pin past the edge, there it overlaps the phrase's end.
 const PIN_GROW = 0.2;
+// The navbar's foot bounds an entry opened by a tap from above (23.11.).
+const NAV = document.querySelector(".nav");
 function placePin(pin, x, y, t) {
   const [lx, ly] = fromLayer(Math.min(x, document.documentElement.clientWidth - 28), y - 24);
   pin.style.transform = `translate(${lx.toFixed(1)}px, ${ly.toFixed(1)}px) scale(${(1 + PIN_GROW * snap(seg(t, 0, 0.3))).toFixed(3)})`;
@@ -852,11 +854,24 @@ const Chat = {
     // Where there is room right of the pin (wide screens, iPad landscape), the entry opens to the right instead, left
     // edges aligned: it then lies beside the phrase's end and does not cover it (11.11.). The phone keeps the left side.
     ph.byTap = ph.open || (ph.byTap && t > 0);
+    // The phone held sideways (23.11., 8e): about 340 px high, the 241 px entry fits neither below nor above the pin; above,
+    // it opened off the screen and under the navbar. Where neither fits it opens beside the pin, right of it where there is
+    // room, else left, centred on the pin and held between the navbar and the screen's foot. Taller than that room, it
+    // keeps its foot 16 px off the bottom and lies over the navbar (lifted) rather than lose its head.
     if (touch || ph.byTap) {
       const r = ph.pin.getBoundingClientRect(), w = ph.card.offsetWidth, hgt = ph.card.offsetHeight;
-      const right = r.left + w <= innerWidth - 16;
-      ph.card.classList.toggle("left", !right);
-      ph.at = { x: right ? r.left : Math.max(16, r.right - w), y: r.bottom + 8 + hgt > innerHeight - 16 ? r.top - 8 - hgt : r.bottom + 8 };
+      const top = NAV.getBoundingClientRect().bottom + 8, foot = innerHeight - 16;
+      const below = r.bottom + 8, above = r.top - 8 - hgt;
+      if (below + hgt <= foot || above >= top) {
+        const right = r.left + w <= innerWidth - 16;
+        ph.card.classList.toggle("left", !right);
+        ph.at = { x: right ? r.left : Math.max(16, r.right - w), y: below + hgt <= foot ? below : above };
+      } else {
+        const side = r.right + 8 + w <= innerWidth - 16;
+        ph.card.classList.toggle("left", !side);
+        ph.at = { x: side ? r.right + 8 : Math.max(16, r.left - 8 - w), y: Math.min(Math.max(r.top + r.height / 2 - hgt / 2, top), foot - hgt) };
+      }
+      ph.card.classList.toggle("lifted", ph.at.y < top);
     } else if (ph.onPin || !ph.at) {
       // The pin grows while the entry opens (from its left edge, see placePin); measured as it renders, its edge moved
       // across the line mid-animation and flipped the card. Its full-grown edge holds still.
