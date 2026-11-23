@@ -617,6 +617,8 @@ const Push = {
 // stays, so the cut slices show as rings, and a slight nod about the horizontal axis (± NOD rad, NOD_MS per swing) keeps
 // it reading as a body in space. Three axes at once and a roll about the horizontal axis read too oblique.
 const SPIN_RATE = 6.283 / 40000, NOD = 0.12, NOD_MS = 23000;
+// The height anchor 500 (design.md, 23.11.): the phone held sideways. Same query as in site.css.
+const LOW = matchMedia("(orientation: landscape) and (max-height: 500px)");
 const Obj = {
   cv: document.getElementById("obj3d"),
   look: { x: 0, y: 0 },
@@ -697,6 +699,9 @@ const Obj = {
       const longest = Math.max(...Push.items.map(({ el, x }) => el.getBoundingClientRect().right - x));
       W = Math.max(Math.min(520, right - longest - 48), Math.min(200, right - hb.left));
       cx = right - W / 2; cy = hb.top + hb.height / 2; R = Math.min(W * 0.36, 140);
+      // Phone held sideways (23.11., 8e): the headline is low, so the object keeps the desktop's proportion to it (radius
+      // about half the headline's height, 140 to 288 at 1440) instead of reaching into the navbar and the lead.
+      if (LOW.matches) R = Math.min(R, hb.height * 0.5);
     }
     if (cy + W < 0 || cy - W > innerHeight) return;
     // Leaning toward the pointer, slowly, within a third of the resting angle. On touch, where nothing points, it turns
