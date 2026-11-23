@@ -11,8 +11,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint:css": "stylelint \"src/**/*.{css,astro}\" --allow-empty-input",
+    "lint:js": "eslint src/scripts",
     "lint:html": "html-validate -c .htmlvalidate.json \"dist/**/*.html\"",
-    "check": "npm run lint:css && npm run build && npm run lint:html",
+    "check": "npm run lint:css && npm run lint:js && npm run build && npm run lint:html",
     "prepare": "simple-git-hooks",
     "fonts": "node scripts/fonts.mjs",
     "spiel": "node scripts/spiel.mjs"
@@ -22,6 +23,9 @@
     "astro": "^7.4.10"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.14.0",
+    "globals": "17.14.0",
     "html-validate": "^11.21.0",
     "postcss-html": "^2.0.0",
     "simple-git-hooks": "^2.14.0",
