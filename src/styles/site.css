@@ -139,13 +139,15 @@
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
 
-  /* Every other text gets the same knockout under the glow, over its own colour (--c, read once by JS). */
+  /* Every other text gets the same knockout under the glow, over its own colour. Only the fill goes transparent, the
+     colour stays and the layer paints with currentColor (23.11.): before, JS read the colour once into --c, and on an iOS
+     reload in dark mode it sometimes caught the light black, which stayed until the next theme change. */
   .knock {
     background-image:
       radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%),
-      linear-gradient(var(--c), var(--c));
+      linear-gradient(currentcolor, currentcolor);
     background-repeat: no-repeat;
-    -webkit-background-clip: text; background-clip: text; color: transparent;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   }
 
   /* The cursor glow from the first sketch. Sits behind all content; text in its core is knocked out. */
@@ -259,12 +261,12 @@
   .projects > ol > li:last-child .project { padding-bottom: 0; }
   .project h2 { max-width: none; cursor: pointer; }
   /* Hover: the title fills primary from left to right, like the scroll ink. Its colour layer (the glow knockout sits on
-     top, see .knock) is twice as wide as the text, primary on the left half and the title's own colour (--c) on the
-     right; sliding it moves the primary in. */
+     top, see .knock) is twice as wide as the text, primary on the left half and the title's own colour (currentColor) on
+     the right; sliding it moves the primary in. */
   .project h2.knock {
     background-image:
       radial-gradient(circle var(--gr, 0) at var(--gx, -999px) var(--gy, -999px), var(--color-neutral) 0 45%, transparent 75%),
-      linear-gradient(90deg, var(--color-primary) 0 50%, var(--c) 50% 100%);
+      linear-gradient(90deg, var(--color-primary) 0 50%, currentcolor 50% 100%);
     background-size: 100% 100%, 200% 100%;
     background-position: 0 0, 100% 0; }
   /* The transition waits for data-live (set two frames after the setup). JS adds .knock to the title after its first
@@ -272,6 +274,9 @@
      draining from every title on load, as if all were hovered. */
   html[data-live] .project h2.knock { transition: background-position .25s cubic-bezier(.3, 1, .4, 1); }
   :root:not([data-touch]) .project:hover h2.knock { background-position: 0 0, 0 0; }
+  /* Forced colours (Windows contrast themes, 23.11.): the system sets the text colour, not surely the fill. The knocked text
+     takes its fill back and the layer goes, so the headlines stay readable there. Inactive everywhere else. */
+  @media (forced-colors: active) { .knock, .project h2.knock { background-image: none; -webkit-text-fill-color: currentcolor; } }
   .project:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 6px; }
   .project .meta { display: flex; gap: var(--space-m); margin: var(--space-xs) 0 0; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
   .project .year { margin-left: auto; }

@@ -115,17 +115,9 @@ function wrapWords(el) {
 document.querySelectorAll("h1, h2").forEach((el) => {
   if (el.querySelector(".ink, .was")) wrapWords(el); else knocked.push(el);
 });
-// Each knocked text keeps its own colour in --c, read with the knockout off (it makes the text transparent). A theme
-// change reads it again.
-function readKnockColors() {
-  knocked.forEach((el) => {
-    el.classList.remove("knock");
-    el.style.removeProperty("--c");
-    el.style.setProperty("--c", getComputedStyle(el).color);
-    el.classList.add("knock");
-  });
-}
-readKnockColors();
+// The knockout paints each text in its own colour straight from the CSS (currentColor, 23.11.). JS no longer reads the
+// colour into --c: read once at the start, an iOS reload in dark mode sometimes caught the light black.
+knocked.forEach((el) => el.classList.add("knock"));
 const buttons = [...document.querySelectorAll(".btn")];
 const updateKnock = () => {
   inkSpans.forEach(setGlowSpot); knocked.forEach(setGlowSpot); buttons.forEach(setGlowSpot);
@@ -1380,7 +1372,6 @@ window.retheme = () => retheme();
 function retheme() {
   RAMP.splice(0, RAMP.length, ...RAMP_VARS.map(cssVar));
   CREAM_POT.handle = CREAM_POT.line = RAMP[0];
-  readKnockColors();
   setKoFilters();
   buildIcons();
   Cup.build();
