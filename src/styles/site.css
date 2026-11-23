@@ -15,7 +15,11 @@
     --side: max(var(--space-gutter), calc((100vw - var(--layout-max-width)) / 2));
   }
   * { box-sizing: border-box; }
-  html { background: var(--color-neutral); }
+  /* iOS WebKit enlarges body copy in landscape on its own unless the adjust is pinned (23.11., iPhone 12 quer: body grew
+     against the headlines, the hero stayed). 100 % keeps the token sizes; pinch zoom still works. Safari on iOS reads only
+     the prefixed property, so it stays; there is no autoprefixer in the build. */
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  html { background: var(--color-neutral); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   /* Colors, spacing and type are tokens from design.md (tokens.css, written by the kit). The page only reads the variables;
      Inter stays in the fallback stacks as the placeholder while the fonts load. */
   body { margin: 0; background: var(--color-neutral); color: var(--color-ink); font-family: var(--font-body); font-weight: var(--w-body); -webkit-font-smoothing: antialiased; }
