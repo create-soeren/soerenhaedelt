@@ -558,11 +558,11 @@
      width anchors. Stacked, the slot pushed headline and lead under the edge. Here the hero takes the composition from 1040:
      no slot, so the object finds the free column right of the longest line (Obj reads the slot's height every frame, so a
      turn of the phone switches without script). The headline also answers to the height, three lines and the lead fit
-     under the navbar; the width terms stay. Centred in the room under the navbar. Tablets never match: upright they are
-     taller than wide, sideways at least 744 high. */
+     under the navbar; the width terms stay. The hero does not fill the screen here: it ends xxl under the lead, the next
+     section starts xxl above its own text, so the divider sits midway between the two, not at the screen's edge (23.11.).
+     Tablets never match: upright they are taller than wide, sideways at least 744 high. */
   @media (orientation: landscape) and (max-height: 500px) {
-    .hero { display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
-      padding-top: calc(24px + var(--navbar-height) + var(--space-s)); padding-bottom: var(--space-s); }
+    .hero { min-height: 0; padding-top: calc(24px + var(--navbar-height) + var(--space-s)); padding-bottom: var(--space-xxl); }
     .obj-slot { display: none; }
     .hero h1 { margin-top: 0;
       font-size: min(var(--type-display-hero-size), calc((100vw - 2 * var(--space-gutter)) * .1113), 13svh);
