@@ -587,6 +587,9 @@
      look is the one we keep. */
   [data-theme="dark"] .photo { mix-blend-mode: normal; }
   [data-theme="dark"] .case .vhero img, [data-theme="dark"] .case .hmedia img, [data-theme="dark"] .block img, [data-theme="dark"] .case .vhero video, [data-theme="dark"] .block video { mix-blend-mode: normal; filter: brightness(.9); }
+  /* The rule above replaces the quote photos' grayscale(1) with brightness(.9), so a colour source showed in colour in dark
+     (Paxa, Fixit, 23.11.). The photos are grayscale files now; this keeps the filter in step with that if one is not. */
+  [data-theme="dark"] .block .photo { filter: grayscale(1) brightness(.9); }
   [data-theme="dark"] .logos img { filter: brightness(0) invert(1); }
   [data-theme="dark"] .glass { --sheen: .16; --edge: .35; --tint: .62; --shadow: 3; }
   [data-theme="dark"] .chat { box-shadow: 0 12px 32px rgb(0,0,0,.5), 0 0 0 1px var(--color-rule); }
