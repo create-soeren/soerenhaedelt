@@ -109,14 +109,6 @@
   /* The large headlines are something the glow plays over, not text to select: the pointer stays an arrow. */
   h1, h2 { cursor: default; }
 
-  /* Prototype 2 pins the hero for a short stretch, so the margin notes have room to play. The first frame is
-     the same as without the pin. */
-  [data-v="2"] .hero { height: 170vh; min-height: 0; padding: 0; }
-  [data-v="2"] .stage { position: sticky; top: 0; height: 100svh; padding: var(--space-xxl) var(--side); }
-  .note { position: absolute; left: 0; top: 0; font-size: 20px; font-weight: 600; white-space: nowrap; text-decoration: none; opacity: 0; }
-  .note::after { content: ""; position: absolute; left: -.08em; right: -.08em; top: 54%; height: 2px; background: var(--color-primary);
-    transform-origin: 0 50%; transform: rotate(-1.5deg) scaleX(var(--s, 0)); }
-
   /* Ink: the accent is orange from the first frame (--p: 1; it stresses a phrase, on the home page some carry an editor's
      entry and its pin, the About page and the contact have none). --p once ran 0..1 with the scroll, from black to orange
      (0..1 slides the gradient); no script sets it any more. The gradient is twice as wide as the text.
