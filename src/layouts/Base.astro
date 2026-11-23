@@ -2,9 +2,10 @@
 import "../styles/tokens.css";
 import "../styles/site.css";
 import { url } from "../lib/url";
-// Die Schrift jeder Überschrift, vorgeladen, damit sie nicht erst nach dem CSS angefragt wird. Dieselbe Datei wie in
-// tokens.css, Vite gibt beiden dieselbe Adresse.
+// Die Schrift jeder Überschrift und die des Fließtexts (Poppins 300), vorgeladen, damit sie nicht erst nach dem CSS
+// angefragt werden. Dieselben Dateien wie in tokens.css, Vite gibt beiden dieselbe Adresse.
 import headFont from "../fonts/clash-display-700.woff2?url";
+import bodyFont from "../fonts/poppins-300-latin.woff2?url";
 
 // Vorschau beim Teilen (18.11.): ein Bild für alle Seiten, der Hero (public/og.jpg, 1200 × 630, hell, mit Glow). Die Adressen
 // werden aus `site` und `base` gebaut, absolut wie Link-Scraper es verlangen. Der Umzug auf die Domain ändert sie mit.
@@ -40,6 +41,7 @@ const links = [["home", "", "Home"], ["about", "about/", "About me"], ["projects
     <link rel="icon" href={url("favicon.svg")} type="image/svg+xml">
     <link rel="apple-touch-icon" href={url("apple-touch-icon.png")}>
     <link rel="preload" href={headFont} as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin>
     <slot name="head" />
     <script is:inline>
       // Scroll position (12.11.): Arc and Chrome on iOS put a reload, even a pull-to-refresh at the top, back to an older
