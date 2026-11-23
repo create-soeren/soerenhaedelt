@@ -455,10 +455,9 @@ const cards = [...document.querySelectorAll(".win")];
 // Redrawn every frame from the real layout, so every number shown is a measured distance, not a label.
 // Orange instead of Figma's red and blue: the annotations belong to the page's own colour of arrival.
 // They are drawn once and shown twice: orange outside the glow, background-coloured inside its core, the same
-// knockout the text gets. Drawing uses currentColor; the two copies set the colour. Pill text stays black.
+// knockout the text gets. Drawing uses currentColor; the two copies set the colour.
 
 const fx = document.getElementById("fx");
-const MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const S = {};
 const layer = (op) => svgEl("g", { opacity: clamp(op).toFixed(3) }, S.ann);
 
@@ -485,30 +484,8 @@ function buildFx() {
   svgEl("use", { href: "#ann", mask: "url(#mIn)", style: "color: var(--color-neutral); --fig: var(--color-neutral)" }, fx);
 }
 
-const pillW = (text) => text.length * 6.1 + 10;
-function pill(g, x, y, text) {
-  const w = pillW(text);
-  svgEl("rect", { x: (x - w / 2).toFixed(1), y: (y - 8).toFixed(1), width: w.toFixed(1), height: 16, rx: 2, fill: "currentColor" }, g);
-  svgEl("text", { x: x.toFixed(1), y: (y + 3.5).toFixed(1), "text-anchor": "middle", "font-size": 10, "font-family": MONO, fill: "#000" }, g).textContent = text;
-}
-const line = (g, x1, y1, x2, y2, extra = {}) => svgEl("line", { x1, y1, x2, y2, stroke: "currentColor", "stroke-width": 1, ...extra }, g);
+const line =(g, x1, y1, x2, y2, extra = {}) => svgEl("line", { x1, y1, x2, y2, stroke: "currentColor", "stroke-width": 1, ...extra }, g);
 
-// A distance between two edges, with end ticks and the value in the middle. When the distance is too short for
-// the pill, the pill steps aside instead of covering the letters.
-function measureH(g, y, x1, x2, text) {
-  if (Math.abs(x2 - x1) < 1) return;
-  text ??= String(Math.round(Math.abs(x2 - x1)));
-  line(g, x1, y, x2, y);
-  line(g, x1, y - 4, x1, y + 4); line(g, x2, y - 4, x2, y + 4);
-  Math.abs(x2 - x1) < pillW(text) + 12 ? pill(g, (x1 + x2) / 2, y - 16, text) : pill(g, (x1 + x2) / 2, y, text);
-}
-function measureV(g, x, y1, y2, text) {
-  if (Math.abs(y2 - y1) < 1) return;
-  text ??= String(Math.round(Math.abs(y2 - y1)));
-  line(g, x, y1, x, y2);
-  line(g, x - 4, y1, x + 4, y1); line(g, x - 4, y2, x + 4, y2);
-  Math.abs(y2 - y1) < 28 ? pill(g, x + pillW(text) / 2 + 8, (y1 + y2) / 2, text) : pill(g, x, (y1 + y2) / 2, text);
-}
 // Smart guide: a hairline along the shared edge, with Figma's small crosses where an element touches it.
 function guideV(g, x, points) {
   if (!points.length) return;
@@ -516,14 +493,7 @@ function guideV(g, x, points) {
   line(g, x, Math.min(...ys) - 12, x, Math.max(...ys) + 12);
   for (const y of ys) { line(g, x - 3, y - 3, x + 3, y + 3); line(g, x - 3, y + 3, x + 3, y - 3); }
 }
-// Selection: frame, four handles, size below.
-function selection(g, r) {
-  svgEl("rect", { x: r.left, y: r.top, width: r.width, height: r.height, fill: "none", stroke: "currentColor", "stroke-width": 1 }, g);
-  for (const [x, y] of [[r.left, r.top], [r.right, r.top], [r.left, r.bottom], [r.right, r.bottom]])
-    svgEl("rect", { x: x - 3.5, y: y - 3.5, width: 7, height: 7, fill: "#fff", stroke: "currentColor", "stroke-width": 1 }, g);
-  pill(g, r.left + r.width / 2, r.bottom + 16, `${Math.round(r.width)} × ${Math.round(r.height)}`);
-}
-const box = (l, t, r, b) => ({ left: l, top: t, right: r, bottom: b, width: r - l, height: b - t });
+const box =(l, t, r, b) => ({ left: l, top: t, right: r, bottom: b, width: r - l, height: b - t });
 
 // --- Hero · Auto Layout -----------------------------------------------------------------------------
 // The glow pushes the hero lines out of line (the lead stays put); they spring back to their slot. A dashed frame marks
@@ -975,12 +945,7 @@ function updateCalm(dt) {
 }
 
 // --- Icons, set off by the cursor ------------------------------------------------------------------
-// Three ways to make the icons discoverable. Each card has its own clock or progress; the number counts in step.
-//   a Puls: a breathing orange dot says "touch me". Hover plays the icon once.
-//   b Nähe: a ring around the icon fills as the cursor comes closer; the icon plays along with the distance until
-//     it reaches the end.
-//   c Entdecken: grey corner brackets frame the unplayed icon. Hover tightens them in orange and plays the icon
-//     once; it stays played, the brackets go, and a counter under the row keeps score.
+// Variant a: a breathing orange dot says "touch me". Hover plays the icon once.
 // On touch the icons fall back to the scroll clock of ink.html. Set off once, every icon keeps its end state.
 
 // ICON_GAP (touch only): the next icon starts at 1100 of the previous one's 1400 ms (12.11., was 700). By then the eased run
@@ -1513,7 +1478,6 @@ document.querySelectorAll(".nav a[aria-current]").forEach((a) => a.addEventListe
   e.preventDefault();
   scrollTo({ top: 0, behavior: "smooth" });
 }));
-document.querySelectorAll('.project[href="#"], .cpage .btn[href="#"]').forEach((a) => a.addEventListener("click", (e) => e.preventDefault()));
 
 document.fonts.ready.then(() => {
   start();
