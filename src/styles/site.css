@@ -343,8 +343,11 @@
   .cpage .mail { display: inline-block; margin-top: var(--space-2xs); color: var(--color-ink); text-decoration: none; font-size: var(--type-body-size); line-height: var(--type-body-lh); }
   :root:not([data-touch]) .cpage .mail:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
   .cpage .mail:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  /* Below 744 the stack is taller than the screen, so centring falls back to the xxl padding and the page starts higher
+     than the others. Here contact takes the shared start under the nav (24.11.); from 744 on it stays centred. */
   @media (max-width: 743px) {
-    .cpage { grid-template-columns: 1fr; row-gap: var(--space-xl); justify-items: center; }
+    .cpage { grid-template-columns: 1fr; row-gap: var(--space-xl); place-items: start center; min-height: 0;
+      padding-top: max(var(--space-xxl), calc(24px + var(--navbar-height) + var(--space-l))); }
     .cpage img { width: min(280px, 60vw); }
   }
 
