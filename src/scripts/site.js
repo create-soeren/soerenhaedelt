@@ -336,7 +336,6 @@ const ICONS = {
       top.setAttribute("transform", `translate(0 ${lerp(-12, 0, k).toFixed(2)})`); bottom.setAttribute("transform", `translate(0 ${lerp(12, 0, k).toFixed(2)})`);
       for (const el of [top, bottom]) el.setAttribute("opacity", (0.12 + 0.88 * seg(p, 0, 0.15)).toFixed(3));
       trend(seg(p, 0.4, 0.75)); code(seg(p, 0.5, 1));
-      popAt(g, p, 48, 48, 0.06);
     };
   },
   // State of mind tool using, chosen 30.10.: the tools as a hand of cards that fans out, Figma, Gemini, WordPress,
@@ -428,11 +427,6 @@ function cardFan(svg, { marks, fills, w, h, angles, py, r, index }) {
     c.setAttribute("opacity", (0.12 + 0.88 * seg(p, 0, 0.12)).toFixed(3));
     c.setAttribute("transform", `rotate(${lerp(0, angles[i], k).toFixed(1)} ${px} ${py}) translate(0 ${lerp(4, 0, clamp(k)).toFixed(2)})`);
   });
-}
-// One pop at the end of the run, scaled around (x, y).
-function popAt(el, p, x, y, amount) {
-  const s = 1 + amount * Math.sin(Math.PI * seg(p, 0.85, 1));
-  el.setAttribute("transform", `translate(${x.toFixed(2)} ${y}) scale(${s.toFixed(3)}) translate(${(-x).toFixed(2)} ${-y})`);
 }
 
 const easeOutBack = (t) => 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t - 1, 2);
@@ -1038,6 +1032,14 @@ function updateCalm(dt) {
 // has 90 % of its movement behind it, so the row reads as one icon after another; at 700 the first icon took its colour
 // while the second already moved, and the two read as one.
 const ICON_DUR = 1400, ICON_GAP = 1100, ROW_TOTAL = ICON_DUR + 2 * ICON_GAP;
+// Speed per icon (24.11., test): simplify and satisfaction ran about 1.5 times longer than the other four (90 % of the
+// movement at ~1150 ms against ~750 ms). The factor shortens the whole icon, the landing pop with it.
+const ICON_SPEED = { simplify: 1.35, satisfaction: 1.35 };
+// The landing pop follows each icon's own movement (24.11., test). ICON_DONE: ms after the start at which 98 % of the
+// movement is done, measured on the icon curves (with ICON_SPEED applied). POP_GAP: pause between that and the pop,
+// 200 ms; customers, marketing and mindset 300 ms, their pop read as too quick at 200 (Sören, test).
+const ICON_DONE = { simplify: 967, satisfaction: 952, customers: 935, marketing: 715, certificates: 960, mindset: 710 };
+const POP_GAP = { customers: 300, marketing: 300, mindset: 300 }, POP_GAP_DEFAULT = 200;
 const rows = [...document.querySelectorAll(".wins")];
 
 function buildIndicator(card, svg) {
@@ -1054,7 +1056,7 @@ function buildIcons() {
     card._upd = ICONS[box.dataset.icon](svg);
     if (!touch) buildIndicator(card, svg);
     iconKnock(svg, KO_RAMP);
-    Object.assign(card, { _c: 0, _p: 0, _go: false, _done: false });
+    Object.assign(card, { _c: 0, _p: 0, _go: false, _done: false, _speed: ICON_SPEED[box.dataset.icon] ?? 1, _pop: ICON_DONE[box.dataset.icon] + (POP_GAP[box.dataset.icon] ?? POP_GAP_DEFAULT) });
     card.classList.remove("won");
     card._upd(0);
   }
@@ -1085,9 +1087,9 @@ function updateIcons(dt, t) {
       row._r = reduced ? (row._go ? ROW_TOTAL : 0) : clamp((row._r || 0) + (row._go ? dt : 0), 0, ROW_TOTAL);
     }
     cs.forEach((card, i) => {
-      const p = touch ? clamp((row._r - i * ICON_GAP) / ICON_DUR) : iconProgress(card, dt), e = smoothstep(p);
-      card._upd(p === 1 ? 1 : e);
-      card.classList.toggle("won", p === 1);
+      const p = touch ? clamp((row._r - i * ICON_GAP) / ICON_DUR) : iconProgress(card, dt), q = clamp(p * card._speed), e = smoothstep(q);
+      card._upd(q === 1 ? 1 : e);
+      card.classList.toggle("won", p * ICON_DUR >= card._pop);
       if (!touch) updateIndicator(card, p, t);
     });
   }
