@@ -1028,10 +1028,10 @@ function updateCalm(dt) {
 // Variant a: a breathing orange dot says "touch me". Hover plays the icon once.
 // On touch the icons fall back to the scroll clock of ink.html. Set off once, every icon keeps its end state.
 
-// ICON_GAP (touch only): the next icon starts at 1100 of the previous one's 1400 ms (12.11., was 700). By then the eased run
-// has 90 % of its movement behind it, so the row reads as one icon after another; at 700 the first icon took its colour
-// while the second already moved, and the two read as one.
-const ICON_DUR = 1400, ICON_GAP = 1100, ROW_TOTAL = ICON_DUR + 2 * ICON_GAP;
+// Touch (scroll run): the next icon starts POP_NEXT after the pop of the previous one has ended (24.11., Sören). Before, it
+// started at a fixed 1100 ms (12.11., was 700): the first icon took its colour while the second already moved, and the two
+// read as one. card._start is that start, per row, from each icon's own pop time.
+const ICON_DUR = 1400;
 // Speed per icon (24.11., test): simplify and satisfaction ran about 1.5 times longer than the other four (90 % of the
 // movement at ~1150 ms against ~750 ms). The factor shortens the whole icon, the landing pop with it.
 const ICON_SPEED = { simplify: 1.35, satisfaction: 1.35 };
@@ -1040,6 +1040,10 @@ const ICON_SPEED = { simplify: 1.35, satisfaction: 1.35 };
 // 200 ms; customers, marketing and mindset 300 ms, their pop read as too quick at 200 (Sören, test).
 const ICON_DONE = { simplify: 967, satisfaction: 952, customers: 935, marketing: 715, certificates: 960, mindset: 710 };
 const POP_GAP = { customers: 300, marketing: 300, mindset: 300 }, POP_GAP_DEFAULT = 200;
+// On touch the pop waits another 100 ms: the row runs one icon after the other, and the pops sat right on the next start.
+const POP_GAP_TOUCH = 100;
+// POP_LEN: how long the soft pop lasts on touch, the `land-soft` animation in site.css (keep the two equal).
+const POP_LEN = 600, POP_NEXT = 100;
 const rows = [...document.querySelectorAll(".wins")];
 
 function buildIndicator(card, svg) {
@@ -1056,9 +1060,15 @@ function buildIcons() {
     card._upd = ICONS[box.dataset.icon](svg);
     if (!touch) buildIndicator(card, svg);
     iconKnock(svg, KO_RAMP);
-    Object.assign(card, { _c: 0, _p: 0, _go: false, _done: false, _speed: ICON_SPEED[box.dataset.icon] ?? 1, _pop: ICON_DONE[box.dataset.icon] + (POP_GAP[box.dataset.icon] ?? POP_GAP_DEFAULT) });
+    Object.assign(card, { _c: 0, _p: 0, _go: false, _done: false, _speed: ICON_SPEED[box.dataset.icon] ?? 1, _pop: ICON_DONE[box.dataset.icon] + (POP_GAP[box.dataset.icon] ?? POP_GAP_DEFAULT) + (touch ? POP_GAP_TOUCH : 0) });
     card.classList.remove("won");
     card._upd(0);
+  }
+  if (!touch) return;
+  for (const row of rows) {
+    let at = 0;
+    for (const card of row.children) { card._start = at; at += card._pop + POP_LEN + POP_NEXT; }
+    row._end = row.lastElementChild._start + ICON_DUR;
   }
 }
 
@@ -1084,10 +1094,10 @@ function updateIcons(dt, t) {
     if (touch) {
       // Scroll fallback, as in ink.html: one clock per row, cards staggered.
       if (row.getBoundingClientRect().top < innerHeight * 0.8) row._go = true;
-      row._r = reduced ? (row._go ? ROW_TOTAL : 0) : clamp((row._r || 0) + (row._go ? dt : 0), 0, ROW_TOTAL);
+      row._r = reduced ? (row._go ? row._end : 0) : clamp((row._r || 0) + (row._go ? dt : 0), 0, row._end);
     }
-    cs.forEach((card, i) => {
-      const p = touch ? clamp((row._r - i * ICON_GAP) / ICON_DUR) : iconProgress(card, dt), q = clamp(p * card._speed), e = smoothstep(q);
+    cs.forEach((card) => {
+      const p = touch ? clamp((row._r - card._start) / ICON_DUR) : iconProgress(card, dt), q = clamp(p * card._speed), e = smoothstep(q);
       card._upd(q === 1 ? 1 : e);
       card.classList.toggle("won", p * ICON_DUR >= card._pop);
       if (!touch) updateIndicator(card, p, t);
